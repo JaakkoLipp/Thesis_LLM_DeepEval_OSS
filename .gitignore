@@ -29,6 +29,7 @@ MANIFEST
 # Custom files added by dev
 .env
 valid_sample.txt
+not_valid_sample.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

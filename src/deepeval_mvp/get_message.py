@@ -1,9 +1,9 @@
 import re
 import json
 
-def get_message() -> dict:
-    """Comment"""
-    with open("src/deepeval_mvp/sample.txt", "rb") as f:
+def get_message(filepath: str) -> dict:
+    """Extracts a JSON payload from a file at the given filepath."""
+    with open(filepath, "rb") as f:
         content = f.read()
 
     match = re.search(rb"value=b'''(.*?)'''", content, re.DOTALL)
