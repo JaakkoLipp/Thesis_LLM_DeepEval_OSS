@@ -8,6 +8,21 @@ from deepeval_mvp.eval import eval_function
 from deepeval_mvp.get_message import get_message
 
 
+def should_evaluate(event: dict) -> bool:
+    allowed_systems = {
+        "enterprise-rag-chatbot",
+        "test-system",
+    }
+    allowed_event_types = {
+        "ai-event",
+    }
+
+    return (
+        event.get("system") in allowed_systems
+        and event.get("event_type") in allowed_event_types
+    )
+
+
 def print_results(results: dict) -> None:
     print("\n=== Evaluation Results ===")
 
@@ -25,16 +40,22 @@ def main():
     """Comment"""
     print("Hello from main!")
 
-    # valid file
-    event_json = get_message("src/deepeval_mvp/valid_sample.txt")
-    results = eval_function(event_json)
-    print_results(results)
 
-    # not valid file
-    event_json2 = get_message("src/deepeval_mvp/not_valid_sample.txt")
-    results2 = eval_function(event_json2)
-    print_results(results2)
+    for path in [
+        "src/deepeval_mvp/valid_sample.txt",
+        "src/deepeval_mvp/not_valid_sample.txt",
+        "src/deepeval_mvp/wrong_system.txt",
+        "src/deepeval_mvp/wrong_event_type.txt",
+    ]:
+        event = get_message(path)
 
+        if not should_evaluate(event):
+            print(f"Skipping event (system={event.get('system')}, type={event.get('event_type')})")
+            continue
+
+        results = eval_function(event)
+        print_results(results)
+    return
 
 if __name__ == "__main__":
     main()
