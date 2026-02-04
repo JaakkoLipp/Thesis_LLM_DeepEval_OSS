@@ -1,98 +1,193 @@
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from deepeval.metrics import (
     AnswerRelevancyMetric,
-    ContextualPrecisionMetric,
-    ContextualRecallMetric,
     ContextualRelevancyMetric,
     FaithfulnessMetric,
+    GEval,
+    PromptAlignmentMetric,
 )
 from deepeval.models import OllamaModel
-from deepeval.test_case import LLMTestCase
+from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 
 
-def _truncate_ctx(event: dict, max_chars: int = 4000) -> list[str]:
-    ctx = (event.get("retrieval_context") or {}).get("output") or ""
-    ctx = str(ctx)[:max_chars]
-    return [ctx] if ctx else []
+def _env_bool(name: str, default: bool = False) -> bool:
+    v = os.getenv(name)
+    if v is None:
+        return default
+    return v.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
-def build_test_case(event: dict) -> LLMTestCase:
-    return LLMTestCase(
-        input=str(event["event_data"]["request"]),
-        actual_output=str(event["event_data"]["response"]["output"]),
-        retrieval_context=_truncate_ctx(event),
-    )
+def _env_float(name: str, default: float) -> float:
+    v = os.getenv(name)
+    if v is None or not v.strip():
+        return default
+    return float(v)
 
 
-def _metric_result(m) -> dict[str, Any]:
+def _parse_csv_env(name: str, default_csv: str = "") -> list[str]:
+    raw = os.getenv(name, default_csv) or ""
+    return [x.strip() for x in raw.split(",") if x.strip()]
+
+
+def _build_judge() -> OllamaModel:
+    model = os.getenv("JUDGE_MODEL")
+    if not model:
+        raise RuntimeError("JUDGE_MODEL is not set in environment (.env).")
+    return OllamaModel(model=model, temperature=_env_float("JUDGE_TEMPERATURE", 0.0))
+
+
+def _metric_result(m, name_override: str | None = None) -> dict[str, Any]:
+    name = name_override or m.__class__.__name__.removesuffix("Metric")
     return {
-        "name": m.__class__.__name__.removesuffix("Metric"),
-        "score": m.score,
-        "threshold": m.threshold,
-        "success": m.is_successful(),
+        "name": name,
+        "score": getattr(m, "score", None),
+        "threshold": getattr(m, "threshold", None),
+        "success": m.is_successful() if hasattr(m, "is_successful") else None,
         "reason": getattr(m, "reason", None),
         "error": getattr(m, "error", None),
     }
 
 
-def run_faithfulness(test_case: LLMTestCase, judge: OllamaModel) -> dict[str, Any]:
-    m = FaithfulnessMetric(threshold=0.7, model=judge, include_reason=True)
+def _run_metric(m, test_case: LLMTestCase, name_override: str | None = None) -> dict[str, Any]:
     m.measure(test_case)
-    return _metric_result(m)
+    return _metric_result(m, name_override=name_override)
 
 
-def run_answer_relevancy(test_case: LLMTestCase, judge: OllamaModel) -> dict[str, Any]:
-    m = AnswerRelevancyMetric(threshold=0.7, model=judge, include_reason=True)
-    m.measure(test_case)
-    return _metric_result(m)
-
-
-def run_contextual_relevancy(test_case: LLMTestCase, judge: OllamaModel) -> dict[str, Any]:
-    m = ContextualRelevancyMetric(threshold=0.7, model=judge, include_reason=True)
-    m.measure(test_case)
-    return _metric_result(m)
-
-
-def run_contextual_precision(test_case: LLMTestCase, judge: OllamaModel) -> dict[str, Any]:
-    m = ContextualPrecisionMetric(threshold=0.7, model=judge, include_reason=True)
-    m.measure(test_case)
-    return _metric_result(m)
-
-
-def run_contextual_recall(test_case: LLMTestCase, judge: OllamaModel) -> dict[str, Any]:
-    m = ContextualRecallMetric(threshold=0.7, model=judge, include_reason=True)
-    m.measure(test_case)
-    return _metric_result(m)
-
-
-def eval_function(event: dict) -> dict[str, Any]:
-    test_case = build_test_case(event)
-
-    judge = OllamaModel(
-        model="qwen3:8b",
-        temperature=0.0,
+def _build_metrics(judge: OllamaModel) -> list[Any]:
+    # Default 5 metrics:
+    # faithfulness, answer_relevancy, contextual_relevancy, completeness (GEval), informativeness (GEval)
+    enabled = set(
+        _parse_csv_env(
+            "ENABLED_METRICS",
+            "faithfulness,answer_relevancy,contextual_relevancy,completeness,informativeness",
+        )
     )
 
-    # sequential execution (avoid concurrency timeouts)
-    metrics = [
-        run_faithfulness(test_case, judge),
-        run_answer_relevancy(test_case, judge),
-        run_contextual_relevancy(test_case, judge),
-        run_contextual_precision(test_case, judge),
-        run_contextual_recall(test_case, judge),
-    ]
+    metrics: list[Any] = []
 
-    overall_success = all(m["success"] for m in metrics)
+    if "faithfulness" in enabled:
+        metrics.append(
+            FaithfulnessMetric(
+                threshold=_env_float("THRESHOLD_FAITHFULNESS", 0.7),
+                model=judge,
+                include_reason=_env_bool("INCLUDE_REASON_FAITHFULNESS", True),
+            )
+        )
+
+    if "answer_relevancy" in enabled:
+        metrics.append(
+            AnswerRelevancyMetric(
+                threshold=_env_float("THRESHOLD_ANSWER_RELEVANCY", 0.7),
+                model=judge,
+                include_reason=_env_bool("INCLUDE_REASON_ANSWER_RELEVANCY", True),
+            )
+        )
+
+    if "contextual_relevancy" in enabled:
+        metrics.append(
+            ContextualRelevancyMetric(
+                threshold=_env_float("THRESHOLD_CONTEXTUAL_RELEVANCY", 0.7),
+                model=judge,
+                include_reason=_env_bool("INCLUDE_REASON_CONTEXTUAL_RELEVANCY", True),
+            )
+        )
+
+    if "completeness" in enabled:
+        metrics.append(
+            GEval(
+                name="Completeness",
+                evaluation_steps=[
+                    "Extract the explicit requirements from the user input.",
+                    "Check whether the actual output addresses each requirement.",
+                    "Penalize missing required parts; ignore style.",
+                    "Return a score between 0 and 10 where 10 means all requirements are fully met and 0 means none are met.",
+                    "Output format exactly: SCORE: <float> REASON: <text>",
+                ],
+                threshold=_env_float("THRESHOLD_COMPLETENESS", 0.7),
+                model=judge,
+                evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+            )
+        )
+
+    if "informativeness" in enabled:
+        metrics.append(
+            GEval(
+                name="Informativeness",
+                evaluation_steps=[
+                    "Determine whether the actual output provides specific, useful information to answer the input.",
+                    "Penalize vague filler or non-answers; reward concrete relevant details.",
+                    "Return a score between 0 and 10 where 10 is highly specific and informative and 0 is not informative.",
+                    "Output format exactly: SCORE: <float> REASON: <text>",
+                ],
+                threshold=_env_float("THRESHOLD_INFORMATIVENESS", 0.7),
+                model=judge,
+                evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+            )
+        )
+
+    # Optional 6th metric
+    if _env_bool("ENABLE_PROMPT_ALIGNMENT", False):
+        instructions = _parse_csv_env("PROMPT_INSTRUCTIONS", "")
+        if not instructions:
+            # Don’t crash the service if enabled but missing instructions; return a clear error metric.
+            metrics.append(
+                GEval(
+                    name="PromptAlignmentConfigError",
+                    evaluation_steps=[
+                        "Return score 0 as PROMPT_INSTRUCTIONS is empty and a short error message",
+                    ],
+                    threshold=1.0,
+                    model=judge,
+                    evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+                )
+            )
+        else:
+            metrics.append(
+                PromptAlignmentMetric(
+                    prompt_instructions=instructions,
+                    threshold=_env_float("PROMPT_ALIGNMENT_THRESHOLD", 0.7),
+                    model=judge,
+                    include_reason=_env_bool("PROMPT_ALIGNMENT_INCLUDE_REASON", True),
+                    strict_mode=_env_bool("PROMPT_ALIGNMENT_STRICT_MODE", False),
+                    async_mode=_env_bool("PROMPT_ALIGNMENT_ASYNC_MODE", False),  # keep sequential by default
+                    verbose_mode=_env_bool("PROMPT_ALIGNMENT_VERBOSE_MODE", False),
+                )
+            )
+
+    return metrics
+
+
+def eval_function(user_input: str, context: str, output: str) -> dict[str, Any]:
+    max_ctx_chars = int(os.getenv("MAX_CONTEXT_CHARS", "4000"))
+
+    test_case = LLMTestCase(
+        input=user_input,
+        actual_output=output,
+        retrieval_context=[context[:max_ctx_chars]] if context else [],
+    )
+
+    judge = _build_judge()
+    metric_objs = _build_metrics(judge)
+
+    results: list[dict[str, Any]] = []
+    for m in metric_objs:
+        name_override = getattr(m, "name", None)
+        results.append(_run_metric(m, test_case, name_override=name_override))
+
+    overall_success = all(
+        bool(r.get("success")) for r in results if r.get("success") is not None
+    )
 
     return {
         "test_case": {
-            "input": test_case.input,
-            "actual_output": test_case.actual_output,
-            "retrieval_context_len": sum(len(c) for c in (test_case.retrieval_context or [])),
+            "input": user_input,
+            "actual_output": output,
+            "retrieval_context_len": len(context),
         },
-        "metrics": metrics,
+        "metrics": results,
         "success": overall_success,
     }
