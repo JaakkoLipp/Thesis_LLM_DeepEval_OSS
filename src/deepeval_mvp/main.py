@@ -37,7 +37,7 @@ def print_results(results: dict) -> None:
 
 
 def main():
-    print("Hello from main!")
+    print("Running Evaluation On Test Files!")
 
     for path in [
         "src/deepeval_mvp/valid_sample.txt",
