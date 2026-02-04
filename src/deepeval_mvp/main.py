@@ -1,45 +1,43 @@
-"""Comment"""
-
-
+import os
 from dotenv import load_dotenv
+
 load_dotenv()
-# custom libraries
-from deepeval_mvp.eval import eval_function
+
 from deepeval_mvp.get_message import get_message
+from deepeval_mvp.eval import eval_function
 
 
-def should_evaluate(event: dict) -> bool:
-    allowed_systems = {
-        "enterprise-rag-chatbot",
-        "test-system",
-    }
-    allowed_event_types = {
-        "ai-event",
-    }
+def _parse_csv_env(name: str, default_csv: str = "") -> set[str]:
+    raw = os.getenv(name, default_csv) or ""
+    return {x.strip() for x in raw.split(",") if x.strip()}
 
+
+ALLOWED_SYSTEMS = _parse_csv_env("ALLOWED_SYSTEMS", "enterprise-rag-chatbot,test-system")
+ALLOWED_EVENT_TYPES = _parse_csv_env("ALLOWED_EVENT_TYPES", "ai-event")
+
+
+def should_evaluate(meta: dict) -> bool:
     return (
-        event.get("system") in allowed_systems
-        and event.get("event_type") in allowed_event_types
+        meta.get("system") in ALLOWED_SYSTEMS
+        and meta.get("event_type") in ALLOWED_EVENT_TYPES
     )
 
 
 def print_results(results: dict) -> None:
     print("\n=== Evaluation Results ===")
-
     for metric in results["metrics"]:
         print(f"\n[{metric['name']}]")
         print(f"  score      : {metric['score']}")
         print(f"  threshold  : {metric['threshold']}")
         print(f"  success    : {metric['success']}")
         print(f"  reason     : {metric['reason']}")
-
+        if metric.get("error"):
+            print(f"  error      : {metric['error']}")
     print("\nOverall success:", results["success"])
 
 
 def main():
-    """Comment"""
-    print("Hello from main!")
-
+    print("Running Evaluation On Test Files!")
 
     for path in [
         "src/deepeval_mvp/valid_sample.txt",
@@ -47,15 +45,15 @@ def main():
         "src/deepeval_mvp/wrong_system.txt",
         "src/deepeval_mvp/wrong_event_type.txt",
     ]:
-        event = get_message(path)
+        meta, (user_input, context, output) = get_message(path)
 
-        if not should_evaluate(event):
-            print(f"Skipping event (system={event.get('system')}, type={event.get('event_type')})")
+        if not should_evaluate(meta):
+            print(f"Skipping event (system={meta.get('system')}, type={meta.get('event_type')})")
             continue
 
-        results = eval_function(event)
+        results = eval_function(user_input, context, output)
         print_results(results)
-    return
+
 
 if __name__ == "__main__":
     main()
