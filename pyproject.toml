@@ -11,3 +11,54 @@ dependencies = [
 
 [tool.uv]
 package = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  "ignore:There is no current event loop:DeprecationWarning",
+]
+env_files = [".env"]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "integration: requires deepeval + model backend configured",
+]
+
+
+
+[tool.poe.tasks]
+# Basic usage tasks, one for demonstrating functionality, one for running as a service
+demo = "uv run python -m deepeval_mvp.main demo --fixtures tests/fixtures"
+service = "uv run python -m deepeval_mvp.main run"
+
+[tool.poe.tasks.test]
+cmd = "uv run pytest -q -m 'not integration'"
+
+[tool.poe.tasks.test-v]
+cmd = "uv run pytest -vv -s -m 'not integration'"
+
+[tool.poe.tasks.test-cov]
+cmd = "uv run pytest -q -m 'not integration' --cov=src --cov-report=term-missing"
+
+[tool.poe.tasks.test-all]
+cmd = "uv run pytest -q"
+env = { RUN_INTEGRATION = "1" }
+
+[tool.poe.tasks.test-integration]
+cmd = "uv run pytest -q -m integration"
+env = { RUN_INTEGRATION = "1" }
+
+
+[tool.coverage.run]
+omit = [
+  "src/deepeval_mvp/main.py",
+]
+
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.41.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-dotenv>=0.5.2",
+    "pytest-mock>=3.15.1",
+]
