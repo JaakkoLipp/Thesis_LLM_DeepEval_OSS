@@ -1,17 +1,21 @@
 from __future__ import annotations
 
 import os
-from typing import Any
+import importlib.util
+from typing import Any, TYPE_CHECKING
 
-from deepeval.metrics import (
-    AnswerRelevancyMetric,
-    ContextualRelevancyMetric,
-    FaithfulnessMetric,
-    GEval,
-    PromptAlignmentMetric,
-)
-from deepeval.models import OllamaModel
-from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+if TYPE_CHECKING:
+    # Only for type checking; these imports do not run at runtime.
+    from deepeval.models import OllamaModel
+    from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+
+
+def _require_deepeval() -> None:
+    if importlib.util.find_spec("deepeval") is None:
+        raise ModuleNotFoundError(
+            "Optional dependency 'deepeval' is not installed. "
+            "Install it to run evaluation (e.g. `uv add deepeval`)."
+        )
 
 
 def _env_bool(name: str, default: bool = False) -> bool:
@@ -33,14 +37,18 @@ def _parse_csv_env(name: str, default_csv: str = "") -> list[str]:
     return [x.strip() for x in raw.split(",") if x.strip()]
 
 
-def _build_judge() -> OllamaModel:
+def _build_judge() -> Any:
+    _require_deepeval()
+    from deepeval.models import OllamaModel  # pylint: disable=import-outside-toplevel
+
     model = os.getenv("JUDGE_MODEL")
     if not model:
         raise RuntimeError("JUDGE_MODEL is not set in environment (.env).")
+
     return OllamaModel(model=model, temperature=_env_float("JUDGE_TEMPERATURE", 0.0))
 
 
-def _metric_result(m, name_override: str | None = None) -> dict[str, Any]:
+def _metric_result(m: Any, name_override: str | None = None) -> dict[str, Any]:
     name = name_override or m.__class__.__name__.removesuffix("Metric")
     return {
         "name": name,
@@ -52,14 +60,22 @@ def _metric_result(m, name_override: str | None = None) -> dict[str, Any]:
     }
 
 
-def _run_metric(m, test_case: LLMTestCase, name_override: str | None = None) -> dict[str, Any]:
+def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dict[str, Any]:
     m.measure(test_case)
     return _metric_result(m, name_override=name_override)
 
 
-def _build_metrics(judge: OllamaModel) -> list[Any]:
-    # Default 5 metrics:
-    # faithfulness, answer_relevancy, contextual_relevancy, completeness (GEval), informativeness (GEval)
+def _build_metrics(judge: Any) -> list[Any]:
+    _require_deepeval()
+    from deepeval.metrics import (  # pylint: disable=import-outside-toplevel
+        AnswerRelevancyMetric,
+        ContextualRelevancyMetric,
+        FaithfulnessMetric,
+        GEval,
+        PromptAlignmentMetric,
+    )
+    from deepeval.test_case import LLMTestCaseParams # pylint: disable=import-outside-toplevel
+
     enabled = set(
         _parse_csv_env(
             "ENABLED_METRICS",
@@ -129,11 +145,9 @@ def _build_metrics(judge: OllamaModel) -> list[Any]:
             )
         )
 
-    # Optional 6th metric
     if _env_bool("ENABLE_PROMPT_ALIGNMENT", False):
         instructions = _parse_csv_env("PROMPT_INSTRUCTIONS", "")
         if not instructions:
-            # Don’t crash the service if enabled but missing instructions; return a clear error metric.
             metrics.append(
                 GEval(
                     name="PromptAlignmentConfigError",
@@ -153,7 +167,7 @@ def _build_metrics(judge: OllamaModel) -> list[Any]:
                     model=judge,
                     include_reason=_env_bool("PROMPT_ALIGNMENT_INCLUDE_REASON", True),
                     strict_mode=_env_bool("PROMPT_ALIGNMENT_STRICT_MODE", False),
-                    async_mode=_env_bool("PROMPT_ALIGNMENT_ASYNC_MODE", False),  # keep sequential by default
+                    async_mode=_env_bool("PROMPT_ALIGNMENT_ASYNC_MODE", False),
                     verbose_mode=_env_bool("PROMPT_ALIGNMENT_VERBOSE_MODE", False),
                 )
             )
@@ -162,6 +176,9 @@ def _build_metrics(judge: OllamaModel) -> list[Any]:
 
 
 def eval_function(user_input: str, context: str, output: str) -> dict[str, Any]:
+    _require_deepeval()
+    from deepeval.test_case import LLMTestCase  # pylint: disable=import-outside-toplevel
+
     max_ctx_chars = int(os.getenv("MAX_CONTEXT_CHARS", "4000"))
 
     test_case = LLMTestCase(

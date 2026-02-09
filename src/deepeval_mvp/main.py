@@ -1,59 +1,60 @@
-import os
-from dotenv import load_dotenv
+from __future__ import annotations
 
-load_dotenv()
+import argparse
+from pathlib import Path
 
-from deepeval_mvp.get_message import get_message
-from deepeval_mvp.eval import eval_function
-
-
-def _parse_csv_env(name: str, default_csv: str = "") -> set[str]:
-    raw = os.getenv(name, default_csv) or ""
-    return {x.strip() for x in raw.split(",") if x.strip()}
+from deepeval_mvp.demo import run_demo
+from deepeval_mvp.service import run_service
 
 
-ALLOWED_SYSTEMS = _parse_csv_env("ALLOWED_SYSTEMS", "enterprise-rag-chatbot,test-system")
-ALLOWED_EVENT_TYPES = _parse_csv_env("ALLOWED_EVENT_TYPES", "ai-event")
+def cmd_demo(fixtures_dir: Path) -> int:
+    return run_demo(fixtures_dir)
 
 
-def should_evaluate(meta: dict) -> bool:
-    return (
-        meta.get("system") in ALLOWED_SYSTEMS
-        and meta.get("event_type") in ALLOWED_EVENT_TYPES
+def cmd_run(fixtures_dir: Path, poll_seconds: float) -> int:
+    return run_service(fixtures_dir=fixtures_dir, poll_seconds=poll_seconds)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="deepeval-mvp")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    demo = sub.add_parser("demo", help="Evaluate local fixture files (development only)")
+    demo.add_argument(
+        "--fixtures",
+        type=Path,
+        default=Path("tests/fixtures"),
+        help="Directory containing fixture .txt files",
     )
 
+    run = sub.add_parser("run", help="Run as a service (Kafka -> eval -> DB)")
+    run.add_argument(
+        "--fixtures",
+        type=Path,
+        default=Path("tests/fixtures"),
+        help="Temporary input source until Kafka is integrated (directory of .txt fixtures)",
+    )
+    run.add_argument(
+        "--poll-seconds",
+        type=float,
+        default=5.0,
+        help="Polling interval for fixture directory in service mode",
+    )
 
-def print_results(results: dict) -> None:
-    print("\n=== Evaluation Results ===")
-    for metric in results["metrics"]:
-        print(f"\n[{metric['name']}]")
-        print(f"  score      : {metric['score']}")
-        print(f"  threshold  : {metric['threshold']}")
-        print(f"  success    : {metric['success']}")
-        print(f"  reason     : {metric['reason']}")
-        if metric.get("error"):
-            print(f"  error      : {metric['error']}")
-    print("\nOverall success:", results["success"])
+    return p
 
 
-def main():
-    print("Running Evaluation On Test Files!")
+def main() -> int:
+    args = build_parser().parse_args()
 
-    for path in [
-        "src/deepeval_mvp/valid_sample.txt",
-        "src/deepeval_mvp/not_valid_sample.txt",
-        "src/deepeval_mvp/wrong_system.txt",
-        "src/deepeval_mvp/wrong_event_type.txt",
-    ]:
-        meta, (user_input, context, output) = get_message(path)
+    if args.cmd == "demo":
+        return cmd_demo(args.fixtures)
 
-        if not should_evaluate(meta):
-            print(f"Skipping event (system={meta.get('system')}, type={meta.get('event_type')})")
-            continue
+    if args.cmd == "run":
+        return cmd_run(args.fixtures, args.poll_seconds)
 
-        results = eval_function(user_input, context, output)
-        print_results(results)
+    raise SystemExit(f"Unknown command: {args.cmd}")
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
