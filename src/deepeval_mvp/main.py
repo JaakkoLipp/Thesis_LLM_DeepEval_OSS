@@ -5,7 +5,9 @@ from pathlib import Path
 
 from deepeval_mvp.demo import run_demo
 from deepeval_mvp.service import run_service
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def cmd_demo(fixtures_dir: Path) -> int:
     return run_demo(fixtures_dir)

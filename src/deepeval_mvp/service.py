@@ -5,6 +5,7 @@ from pathlib import Path
 
 from deepeval_mvp.get_message import get_event
 from deepeval_mvp.pipeline import process_event
+from deepeval_mvp.store_mongo import MongoResultStore
 
 
 def run_service(fixtures_dir: Path, poll_seconds: float = 5.0) -> int:
@@ -13,6 +14,7 @@ def run_service(fixtures_dir: Path, poll_seconds: float = 5.0) -> int:
     This simulates a consumer loop until Kafka integration exists.
     """
     seen: set[str] = set()
+    store = MongoResultStore()
 
     while True:
         if not fixtures_dir.exists():
@@ -27,9 +29,9 @@ def run_service(fixtures_dir: Path, poll_seconds: float = 5.0) -> int:
             event = get_event(str(f))
             res = process_event(event)
 
-            # Replace with DB write later
             if res is not None:
-                print(f"[service] evaluated {f.name}")
+                store_id = store.save(event, res)
+                print(f"[service] evaluated {f.name} -> {store_id}")
             else:
                 print(f"[service] skipped {f.name}")
 
