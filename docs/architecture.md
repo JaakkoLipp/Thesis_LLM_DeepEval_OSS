@@ -28,7 +28,6 @@ Modules:
 * `filtering.py`: `should_evaluate(system, event_type)`
 * `pipeline.py`: `process_event(event)`
 * `eval.py`: DeepEval orchestration (judge + metrics)
-* `demo.py`: one-shot fixture runner
 * `service.py`: directory-polling service loop (temporary input source)
 * `main.py`: CLI wiring only
 

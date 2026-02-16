@@ -6,10 +6,10 @@ import pytest
 from deepeval_mvp.get_message import get_event
 from deepeval_mvp.pipeline import process_event
 
-pytestmark = pytest.mark.integration
+pytestmark = pytest.mark.system
 
 
-@pytest.mark.skipif(os.getenv("RUN_INTEGRATION") != "1", reason="RUN_INTEGRATION!=1")
+@pytest.mark.skipif(os.getenv("RUN_SYSTEM") != "1", reason="RUN_SYSTEM!=1")
 @pytest.mark.skipif(not os.getenv("JUDGE_MODEL"), reason="JUDGE_MODEL not set")
 def test_eval_function_real_stack():
     fixture = Path(__file__).parent / "fixtures" / "valid_sample.txt"
