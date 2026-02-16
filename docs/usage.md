@@ -1,19 +1,12 @@
 # docs/RUNNING.md
 
-The project has two primary modes: `demo` and `run`.
-
-## Demo mode (one-shot)
-
-Evaluates all fixture files in a directory and prints results.
-
-* `uv run python -m deepeval_mvp.main demo --fixtures tests/fixtures`
-* `uv run python -m deepeval_mvp.main demo --fixtures /path/to/fixtures`
+The project runs in service mode by default.
 
 ## Service mode (long-running)
 
 Current implementation polls a fixture directory and processes each file once. This simulates a service loop until Kafka integration is added.
 
-* `uv run python -m deepeval_mvp.main run --fixtures tests/fixtures --poll-seconds 5`
+* `uv run python -m deepeval_mvp.main --fixtures tests/fixtures --poll-seconds 5`
 
 Arguments:
 
@@ -24,6 +17,13 @@ Shutdown:
 
 * Ctrl+C
 
+## Fixture-driven full-system checks
+
+The old demo flow is now covered by tests that run the same service processing path over fixture messages.
+
+* `uv run poe demo` (wet-run, real model backend)
+* `uv run poe demo-dry` (dry-run, mocked evaluation)
+
 ---
 
 # docs/CONFIGURATION.md
@@ -32,7 +32,7 @@ Configuration is via environment variables.
 
 ## Evaluation
 
-`JUDGE_MODEL` (required for integration tests)
+`JUDGE_MODEL` (required for system/wet-run tests)
 
 * model identifier for the judge backend
 * examples (Ollama): `llama3:8b`, `qwen2.5:7b`, etc.
@@ -46,12 +46,12 @@ Example:
 
 * `export MAX_CONTEXT_CHARS=2000`
 
-## Integration test gating
+## System test gating
 
-`RUN_INTEGRATION`
+`RUN_SYSTEM`
 
-* integration tests run only if `RUN_INTEGRATION=1`
-* should be set by `poe test-integration`
+* system tests run only if `RUN_SYSTEM=1`
+* set automatically by `poe demo` and `poe test-system`
 
 ## Azure judge (only if configured/used)
 

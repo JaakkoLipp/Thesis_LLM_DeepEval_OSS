@@ -1,6 +1,6 @@
 # DeepEval_MVP
 
-Engineering master's thesis project module demo repository. 
+Engineering master's thesis project module OSS version with redacted internal details.
 Intended to evaluate LLM output based on input and retrieval context.
 
 ### running the code:
