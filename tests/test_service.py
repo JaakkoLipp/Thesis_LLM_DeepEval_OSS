@@ -18,10 +18,25 @@ def test_process_fixture_file_stored(monkeypatch):
     class FakeStore:
         def __init__(self) -> None:
             self.saved = []
+            self.skipped = []
+            self.errors = []
 
-        def save(self, event, evaluation):
-            self.saved.append((event, evaluation))
-            return "evt-1"
+        def claim_event(self, _event, owner_id):
+            _ = owner_id
+            return "evt-1", True
+
+        def mark_done(self, event_id, event, evaluation):
+            self.saved.append((event_id, event, evaluation))
+
+        def mark_skipped(self, event_id, event):
+            self.skipped.append((event_id, event))
+
+        def mark_error(self, event_id, error_type, error_message):
+            self.errors.append((event_id, error_type, error_message))
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-a"
 
     store = FakeStore()
     monkeypatch.setattr(
@@ -30,7 +45,7 @@ def test_process_fixture_file_stored(monkeypatch):
         lambda event: {"metrics": [], "success": True},
     )
 
-    status = service.process_fixture_file(fixture, store, run_mode="test")
+    status = service.process_fixture_file(fixture, store, owner_id="owner-a", run_mode="test")
 
     assert status == "stored"
     assert len(store.saved) == 1
@@ -40,12 +55,26 @@ def test_process_fixture_file_skipped(monkeypatch):
     fixture = _fixtures_dir() / "valid_sample.txt"
 
     class FakeStore:
-        def save(self, event, evaluation):
-            raise AssertionError("save should not be called for skipped event")
+        def claim_event(self, event, owner_id):
+            _ = (event, owner_id)
+            return "evt-1", True
+
+        def mark_done(self, event_id, event, evaluation):
+            raise AssertionError("mark_done should not be called for skipped event")
+
+        def mark_skipped(self, event_id, event):
+            _ = (event_id, event)
+
+        def mark_error(self, event_id, error_type, error_message):
+            raise AssertionError("mark_error should not be called for skipped event")
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-a"
 
     monkeypatch.setattr(service, "process_event", lambda event: None)
 
-    status = service.process_fixture_file(fixture, FakeStore(), run_mode="test")
+    status = service.process_fixture_file(fixture, FakeStore(), owner_id="owner-a", run_mode="test")
 
     assert status == "skipped"
 
@@ -54,8 +83,22 @@ def test_process_fixture_file_error_on_invalid_fixture(monkeypatch):
     fixture = _fixtures_dir() / "this_file_does_not_exist.txt"
 
     class FakeStore:
-        def save(self, event, evaluation):
-            raise AssertionError("save should not be called on parse error")
+        def claim_event(self, event, owner_id):
+            _ = (event, owner_id)
+            return "evt-1", True
+
+        def mark_done(self, event_id, event, evaluation):
+            raise AssertionError("mark_done should not be called on parse error")
+
+        def mark_skipped(self, event_id, event):
+            raise AssertionError("mark_skipped should not be called on parse error")
+
+        def mark_error(self, event_id, error_type, error_message):
+            _ = (event_id, error_type, error_message)
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-a"
 
     monkeypatch.setattr(
         service,
@@ -63,9 +106,37 @@ def test_process_fixture_file_error_on_invalid_fixture(monkeypatch):
         lambda event: {"metrics": [], "success": True},
     )
 
-    status = service.process_fixture_file(fixture, FakeStore(), run_mode="test")
+    status = service.process_fixture_file(fixture, FakeStore(), owner_id="owner-a", run_mode="test")
 
     assert status == "error"
+
+
+def test_process_fixture_file_skips_when_duplicate_claim(monkeypatch):
+    fixture = _fixtures_dir() / "valid_sample.txt"
+
+    class FakeStore:
+        def claim_event(self, event, owner_id):
+            _ = (event, owner_id)
+            return "evt-1", False
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-existing"
+
+        def mark_done(self, event_id, event, evaluation):
+            raise AssertionError("mark_done should not be called for duplicate")
+
+        def mark_skipped(self, event_id, event):
+            raise AssertionError("mark_skipped should not be called for duplicate")
+
+        def mark_error(self, event_id, error_type, error_message):
+            raise AssertionError("mark_error should not be called for duplicate")
+
+    monkeypatch.setattr(service, "process_event", lambda event: {"metrics": [], "success": True})
+
+    status = service.process_fixture_file(fixture, FakeStore(), owner_id="owner-a", run_mode="test")
+
+    assert status == "skipped"
 
 
 def test_run_service_processes_fixture_files_once(monkeypatch):
@@ -76,8 +147,8 @@ def test_run_service_processes_fixture_files_once(monkeypatch):
 
     processed: list[str] = []
 
-    def fake_process_fixture_file(path, _store, run_mode="service"):
-        _ = run_mode
+    def fake_process_fixture_file(path, _store, owner_id, run_mode="service"):
+        _ = (run_mode, owner_id)
         processed.append(path.name)
         return "stored"
 
@@ -112,10 +183,24 @@ def test_demo_full_integration_fixture_flow_dry_run(monkeypatch):
         def __init__(self):
             self.saved = []
 
-        def save(self, event, evaluation):
+        def claim_event(self, event, owner_id):
+            _ = (event, owner_id)
+            event_id = f"evt-{len(self.saved) + 1}"
+            return event_id, True
+
+        def mark_done(self, event_id, event, evaluation):
             event_id = f"evt-{len(self.saved) + 1}"
             self.saved.append((event, evaluation, event_id))
-            return event_id
+
+        def mark_skipped(self, event_id, event):
+            _ = (event_id, event)
+
+        def mark_error(self, event_id, error_type, error_message):
+            _ = (event_id, error_type, error_message)
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-a"
 
     monkeypatch.setattr(service, "MongoResultStore", FakeStore)
     monkeypatch.setattr(
@@ -141,10 +226,24 @@ def test_demo_full_system_fixture_flow_prints_progress(monkeypatch):
         def __init__(self):
             self.saved = []
 
-        def save(self, event, evaluation):
+        def claim_event(self, event, owner_id):
+            _ = (event, owner_id)
+            event_id = f"evt-{len(self.saved) + 1}"
+            return event_id, True
+
+        def mark_done(self, event_id, event, evaluation):
             event_id = f"evt-{len(self.saved) + 1}"
             self.saved.append((event, evaluation, event_id))
-            return event_id
+
+        def mark_skipped(self, event_id, event):
+            _ = (event_id, event)
+
+        def mark_error(self, event_id, error_type, error_message):
+            _ = (event_id, error_type, error_message)
+
+        def get_owner(self, event_id):
+            _ = event_id
+            return "owner-a"
 
     monkeypatch.setattr(service, "MongoResultStore", FakeStore)
 

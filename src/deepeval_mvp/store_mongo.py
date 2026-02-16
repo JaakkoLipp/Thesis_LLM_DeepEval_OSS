@@ -100,23 +100,23 @@ class MongoResultStore:
         self._coll.create_index("meta.time_stamp")
         self._coll.create_index("evaluation.success")
         self._coll.create_index("stored_at")
+        self._coll.create_index("status")
+        self._coll.create_index("owner_id")
 
-    def save(self, event: AIEvent, evaluation: dict[str, Any]) -> str:
-        store_full_ctx = _env_bool("STORE_FULL_CONTEXT", False)
-        max_chars = int(os.getenv("CONTEXT_STORE_MAX_CHARS", "4000"))
+    def compute_id(self, event: AIEvent) -> str:
+        return self.compute_event_id(event)
 
-        full_ctx = event.context or ""
-        stored_ctx = full_ctx if store_full_ctx else full_ctx[:max_chars]
-        truncated = (not store_full_ctx) and (len(full_ctx) > max_chars)
-
+    def compute_event_id(self, event: AIEvent) -> str:
         kid = _kafka_id(event.raw_meta)
         if kid and _kafka_id_is_usable(kid):
-            _id = kid
-        else:
-            _id = _event_id_from_payload(event.raw_meta, event.user_input, event.output)
+            return kid
+        return _event_id_from_payload(event.raw_meta, event.user_input, event.output)
 
-        doc = {
-            "_id": _id,
+    def exists(self, event_id: str) -> bool:
+        return self._coll.count_documents({"_id": event_id}, limit=1) > 0
+
+    def _build_base_doc(self, event: AIEvent) -> dict[str, Any]:
+        return {
             "kafka": (event.raw_meta.get("kafka") or {}),
             "meta": {
                 "system": event.system,
@@ -126,17 +126,170 @@ class MongoResultStore:
                 "log_type": event.raw_meta.get("log_type", ""),
                 "tcad": event.raw_meta.get("tcad", ""),
             },
-            "payload": {
-                "user_input": event.user_input,
-                "output": event.output,
-                "context": stored_ctx,
-                "context_len": len(full_ctx),
-                "context_truncated": truncated,
-            },
-            "evaluation": evaluation,
-            "stored_at": datetime.now(timezone.utc).isoformat(),
+            "payload": self._build_payload(event),
         }
 
-        # Idempotent insert: on reprocessing, keep the original doc unchanged.
-        self._coll.update_one({"_id": _id}, {"$setOnInsert": doc}, upsert=True)
-        return _id
+    def claim_event(self, event: AIEvent, owner_id: str) -> tuple[str, bool]:
+        event_id = self.compute_event_id(event)
+        now = datetime.now(timezone.utc).isoformat()
+        base_doc = self._build_base_doc(event)
+
+        claim_doc = {
+            "_id": event_id,
+            **base_doc,
+            "status": "processing",
+            "owner_id": owner_id,
+            "started_at": now,
+            "claimed_at": now,
+            "last_updated_at": now,
+            "attempts": 1,
+        }
+
+        result = self._coll.update_one({"_id": event_id}, {"$setOnInsert": claim_doc}, upsert=True)
+        return event_id, bool(result.upserted_id)
+
+    def mark_processing(self, event: AIEvent, event_id: str | None = None, owner_id: str | None = None) -> str:
+        event_id = event_id or self.compute_id(event)
+        now = datetime.now(timezone.utc).isoformat()
+        base_doc = self._build_base_doc(event)
+
+        set_values: dict[str, Any] = {
+            "status": "processing",
+            "started_at": now,
+            "claimed_at": now,
+            "last_updated_at": now,
+        }
+        if owner_id:
+            set_values["owner_id"] = owner_id
+
+        self._coll.update_one(
+            {"_id": event_id},
+            {
+                "$setOnInsert": {"_id": event_id, **base_doc},
+                "$set": set_values,
+            },
+            upsert=True,
+        )
+        return event_id
+
+    def mark_done(self, event_id: str, event: AIEvent, evaluation: dict[str, Any]) -> None:
+        base_doc = self._build_base_doc(event)
+        payload = self._build_payload(event)
+        now = datetime.now(timezone.utc).isoformat()
+        self._coll.update_one(
+            {"_id": event_id},
+            {
+                "$setOnInsert": {
+                    "_id": event_id,
+                    **base_doc,
+                    "started_at": now,
+                },
+                "$set": {
+                    "status": "done",
+                    "payload": payload,
+                    "evaluation": evaluation,
+                    "finished_at": now,
+                    "stored_at": now,
+                    "last_updated_at": now,
+                }
+            },
+            upsert=True,
+        )
+
+    def mark_skipped(self, event_id: str, event: AIEvent) -> None:
+        base_doc = self._build_base_doc(event)
+        payload = self._build_payload(event)
+        now = datetime.now(timezone.utc).isoformat()
+        self._coll.update_one(
+            {"_id": event_id},
+            {
+                "$setOnInsert": {
+                    "_id": event_id,
+                    **base_doc,
+                    "started_at": now,
+                },
+                "$set": {
+                    "status": "skipped",
+                    "payload": payload,
+                    "finished_at": now,
+                    "stored_at": now,
+                    "last_updated_at": now,
+                }
+            },
+            upsert=True,
+        )
+
+    def mark_error(self, event_id: str, *args: Any) -> None:
+        event: AIEvent | None = None
+        traceback_text: str | None = None
+
+        if len(args) == 2:
+            error_type = str(args[0])
+            error_message = str(args[1])
+        elif len(args) >= 4:
+            event = args[0]
+            error_type = str(args[1])
+            error_message = str(args[2])
+            traceback_text = None if args[3] is None else str(args[3])
+        else:
+            raise TypeError("mark_error expects (event_id, error_type, error_message) or (event_id, event, error_type, error_message, traceback_text)")
+
+        now = datetime.now(timezone.utc).isoformat()
+        max_chars = int(os.getenv("ERROR_TRACEBACK_MAX_CHARS", "2000"))
+        traceback_truncated = (traceback_text or "")[:max_chars]
+
+        set_on_insert: dict[str, Any] = {
+            "_id": event_id,
+            "started_at": now,
+        }
+        if isinstance(event, AIEvent):
+            set_on_insert.update(self._build_base_doc(event))
+
+        error_doc: dict[str, Any] = {
+            "type": error_type,
+            "message": error_message,
+        }
+        if traceback_text is not None:
+            error_doc["traceback_truncated"] = traceback_truncated
+
+        self._coll.update_one(
+            {"_id": event_id},
+            {
+                "$setOnInsert": set_on_insert,
+                "$set": {
+                    "status": "error",
+                    "finished_at": now,
+                    "stored_at": now,
+                    "error": error_doc,
+                    "last_updated_at": now,
+                }
+            },
+            upsert=True,
+        )
+
+    def get_owner(self, event_id: str) -> str | None:
+        doc = self._coll.find_one({"_id": event_id}, {"owner_id": 1})
+        if not doc:
+            return None
+        return doc.get("owner_id")
+
+    def _build_payload(self, event: AIEvent) -> dict[str, Any]:
+        store_full_ctx = _env_bool("STORE_FULL_CONTEXT", False)
+        max_chars = int(os.getenv("CONTEXT_STORE_MAX_CHARS", "4000"))
+
+        full_ctx = event.context or ""
+        stored_ctx = full_ctx if store_full_ctx else full_ctx[:max_chars]
+        truncated = (not store_full_ctx) and (len(full_ctx) > max_chars)
+
+        return {
+            "user_input": event.user_input,
+            "output": event.output,
+            "context": stored_ctx,
+            "context_len": len(full_ctx),
+            "context_truncated": truncated,
+        }
+
+    def save(self, event: AIEvent, evaluation: dict[str, Any]) -> str:
+        event_id = self.compute_id(event)
+        self.mark_done(event_id, event, evaluation)
+        return event_id

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.vscode
+.pytest_cache
+.coverage
+.venv
+.env
+.env.*
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+tests/
+docs/
+*.egg-info/
