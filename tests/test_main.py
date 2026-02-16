@@ -22,6 +22,7 @@ def test_main_calls_service_with_cli_args(monkeypatch):
         return 123
 
     monkeypatch.setattr(main, "cmd_run", fake_cmd_run)
+    monkeypatch.setattr(main, "run_preflight", lambda logger: True)
     monkeypatch.setattr(
         sys,
         "argv",
@@ -39,3 +40,12 @@ def test_main_calls_service_with_cli_args(monkeypatch):
     assert rc == 123
     assert captured["fixtures_dir"] == Path("tests/fixtures")
     assert captured["poll_seconds"] == 1.25
+
+
+def test_main_returns_1_when_preflight_fails(monkeypatch):
+    monkeypatch.setattr(main, "run_preflight", lambda logger: False)
+    monkeypatch.setattr(sys, "argv", ["deepeval-mvp"])
+
+    rc = main.main()
+
+    assert rc == 1
