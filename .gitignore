@@ -29,11 +29,11 @@ MANIFEST
 
 # Custom files added by dev
 .env
-valid_sample.txt
-not_valid_sample.txt
-wrong_event_type.txt
-wrong_system.txt
-sample.txt
+#valid_sample.txt
+#not_valid_sample.txt
+#wrong_event_type.txt
+#wrong_system.txt
+#sample.txt
 .vscode
 
 # PyInstaller

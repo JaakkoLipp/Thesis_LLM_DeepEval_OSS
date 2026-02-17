@@ -1,5 +1,10 @@
 # docs/ARCHITECTURE.md
 
+Additional design artifacts:
+
+* [Flowcharts](./flowcharts.md)
+* [UML Design Artifacts](./uml.md)
+
 Core processing flow:
 
 fixture/kafka input → `AIEvent` → filter → evaluate → results
