@@ -3,44 +3,35 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from deepeval_mvp.logging_utils import configure_logging, get_logger
 from deepeval_mvp.preflight import run_preflight
 from deepeval_mvp.service import run_service
-from dotenv import load_dotenv
 
 ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
-load_dotenv(dotenv_path=ENV_PATH)
-configure_logging()
-
-def cmd_run(fixtures_dir: Path, poll_seconds: float) -> int:
-    return run_service(fixtures_dir=fixtures_dir, poll_seconds=poll_seconds)
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="deepeval-mvp")
-    p.add_argument(
-        "--fixtures",
-        type=Path,
-        default=Path("tests/fixtures"),
-        help="Temporary input source until Kafka is integrated (directory of .txt fixtures)",
-    )
-    p.add_argument(
-        "--poll-seconds",
-        type=float,
-        default=5.0,
-        help="Polling interval for fixture directory in service mode",
-    )
+    parser = argparse.ArgumentParser(prog="deepeval-mvp")
+    parser.add_argument("--poll-seconds", type=float, default=5.0)
+    parser.add_argument("--max-cycles", type=int, default=None)
+    return parser
 
-    return p
 
+def cmd_run(poll_seconds: float, max_cycles: int | None) -> int:
+    return run_service(poll_seconds=poll_seconds, max_cycles=max_cycles)
 
 def main() -> int:
-    args = build_parser().parse_args()
+    load_dotenv(dotenv_path=ENV_PATH)
+    configure_logging()
+
     logger = get_logger("startup")
     if not run_preflight(logger):
         return 1
-    return cmd_run(args.fixtures, args.poll_seconds)
 
+    args = build_parser().parse_args()
+    return cmd_run(poll_seconds=args.poll_seconds, max_cycles=args.max_cycles)
 
 if __name__ == "__main__":
     raise SystemExit(main())

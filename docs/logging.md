@@ -4,7 +4,7 @@ This document describes the production-grade logging and error-handling behavior
 
 ## Overview
 
-The service emits structured logs (key=value format) and persists processing status and errors to MongoDB. Logging is configured once at startup in [src/deepeval_mvp/main.py](../src/deepeval_mvp/main.py), and service mode shares the same log schema as demo-related test flows.
+The service emits structured logs (key=value format) and persists processing status and errors to MongoDB. Logging is configured at runtime startup in main.py, and the same schema is used across service, integration, and demo-style flows.
 
 ## Log Format
 
@@ -22,7 +22,7 @@ Example:
 - event_id: computed event identifier (kafka topic/partition/offset when available)
 - system, event_type, session_id, time_stamp: from event metadata
 - topic, partition, offset: Kafka envelope fields when present
-- stage: parse, filter, evaluate, store, or preflight
+- stage: ingest, parse, pipeline, filter, store, or preflight
 - outcome: stored, skipped, or error
 - duration_ms: elapsed time for the event processing step
 - error_type, error_message: populated on error
@@ -30,15 +30,15 @@ Example:
 ## Configuration
 
 - LOG_LEVEL: logging level (default: INFO). Options: DEBUG, INFO, WARNING, ERROR, CRITICAL.
-- EVAL_RETRIES: number of retries for evaluation failures (default: 0). Any non-negative integer.
-- EVAL_RETRY_BACKOFF_MS: backoff per retry (default: 200). Any integer milliseconds (e.g., 100, 500, 1000).
+- EVAL_RETRIES: number of retries for evaluation failures (default: 0).
+- EVAL_RETRY_BACKOFF_MS: backoff per retry in milliseconds (default: 200).
 - ERROR_TRACEBACK_MAX_CHARS: max length for persisted traceback (default: 2000). Any positive integer.
 
 ## Startup Preflight
 
 At startup, the service performs a preflight check and exits non-zero on failure:
 
-- Loads .env from repo root explicitly.
+- Loads .env from repo root.
 - Validates required environment variables: MONGO_URI, MONGO_DB, JUDGE_MODEL.
 - Verifies MongoDB connectivity via ping.
 - Verifies deepeval is installed.
@@ -49,7 +49,12 @@ Preflight results are logged with stage=preflight and outcome=stored or error.
 
 ### Service Loop
 
-In service mode, each fixture file is processed in an isolated try/except block so a single bad input cannot crash the loop. Errors are logged with full context and the loop continues.
+In service mode, each incoming message is processed in isolated error boundaries so one bad message does not crash the loop. Errors are logged with context and processing continues.
+
+Error split:
+
+- message-level parse failure: logged and persisted with deterministic ingest fallback ID
+- event-level processing failure: logged with event context and persisted as event error
 
 ### MongoDB Status Fields
 
@@ -57,10 +62,10 @@ Each event is persisted to the same collection with status tracking:
 
 - status: processing, done, skipped, or error
 - claimed_at: set when processing begins
-- stored_at: set on completion or skip
+- stored_at: set on completion, skip, or error
 - error: {type, message}
 
-A processing marker is written before evaluation. After evaluation, the record is updated to done or skipped. On exceptions, the record is updated to error.
+A processing marker is written by claim_event before evaluation. After evaluation, the record is updated to done or skipped. On exceptions, the record is updated to error.
 
 ### Idempotency and Restart Safety
 
@@ -73,5 +78,5 @@ This allows claim-first deduplication and skipping already-processed events acro
 
 ## Demo vs Service Behavior
 
-- Demo-style test flows still print evaluation results to stdout, and also emit structured logs.
-- Service mode logs summaries while retaining concise progress prints.
+- Service prints metric summaries for evaluated events and logs structured status for all outcomes.
+- Integration and system-style runs share the same logging schema.

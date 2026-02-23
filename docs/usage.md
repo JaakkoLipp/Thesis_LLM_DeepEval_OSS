@@ -1,70 +1,98 @@
-# docs/RUNNING.md
+# Running and Configuration
 
-The project runs in service mode by default.
+## Service mode
 
-## Service mode (long-running)
+Start the service:
 
-Current implementation polls a fixture directory and processes each file once. This simulates a service loop until Kafka integration is added.
+- uv run python -m deepeval_mvp.main
 
-* `uv run python -m deepeval_mvp.main --fixtures tests/fixtures --poll-seconds 5`
+Optional CLI arguments:
 
-Arguments:
+- --poll-seconds FLOAT (default 5.0)
+- --max-cycles INT (default None; useful for local/demo bounded runs)
 
-* `--fixtures`: directory containing `*.txt` fixture files
-* `--poll-seconds`: poll interval
+Example bounded run:
 
-Shutdown:
+- uv run python -m deepeval_mvp.main --poll-seconds 1.0 --max-cycles 1
 
-* Ctrl+C
+## How runtime input is selected
 
-## Fixture-driven full-system checks
+Input mode is selected by environment variable MESSAGE_SOURCE:
 
-The old demo flow is now covered by tests that run the same service processing path over fixture messages.
+- fixture: implemented, reads mock Kafka-style fixture messages
+- kafka: contract exists; adapter implementation pending
 
-* `uv run poe demo` (wet-run, real model backend)
-* `uv run poe demo-dry` (dry-run, mocked evaluation)
+When using fixture mode, the source directory is configured by MESSAGE_FIXTURE_DIR.
 
----
+Defaults:
 
-# docs/CONFIGURATION.md
+- MESSAGE_SOURCE=fixture
+- MESSAGE_FIXTURE_DIR=tests/fixtures
 
-Configuration is via environment variables.
+## Detailed runtime behavior
 
-## Evaluation
+At startup, main.py does the following in order:
 
-`JUDGE_MODEL` (required for system/wet-run tests)
+1. Load .env
+2. Configure logging
+3. Run preflight checks
+4. Start service loop
 
-* model identifier for the judge backend
-* examples (Ollama): `llama3:8b`, `qwen2.5:7b`, etc.
+During service execution:
 
-`MAX_CONTEXT_CHARS` (optional)
+1. service.run_service asks get_message.iter_incoming_messages for the next message
+2. service.process_message calls get_message.parse_incoming_event
+3. service.process_incoming_event claims event ownership in Mongo
+4. pipeline.process_event applies filtering and evaluation
+5. store writes done/skipped/error status
 
-* maximum number of characters from context passed into evaluation
-* default: `4000`
+The service and pipeline layers are source-agnostic.
 
-Example:
+## Environment variables
 
-* `export MAX_CONTEXT_CHARS=2000`
+### Input selection
 
-## System test gating
+- MESSAGE_SOURCE: fixture or kafka
+- MESSAGE_FIXTURE_DIR: path to fixture directory when MESSAGE_SOURCE=fixture
 
-`RUN_SYSTEM`
+### Evaluation
 
-* system tests run only if `RUN_SYSTEM=1`
-* set automatically by `poe demo` and `poe test-system`
+- JUDGE_MODEL
+- ENABLED_METRICS
+- THRESHOLD_FAITHFULNESS
+- THRESHOLD_ANSWER_RELEVANCY
+- THRESHOLD_CONTEXTUAL_RELEVANCY
+- THRESHOLD_COMPLETENESS
+- THRESHOLD_INFORMATIVENESS
+- ENABLE_PROMPT_ALIGNMENT and related PROMPT_ALIGNMENT_* settings
+- MAX_CONTEXT_CHARS
+- JUDGE_TEMPERATURE
 
-## Azure judge (only if configured/used)
+### Filtering
 
-Typical variables:
+- ALLOWED_SYSTEMS
+- ALLOWED_EVENT_TYPES
 
-* `AZURE_OPENAI_ENDPOINT`
-* `AZURE_OPENAI_API_KEY`
-* `AZURE_OPENAI_API_VERSION`
+### Storage
 
-Provide secrets via:
+- MONGO_URI or MONGODB_URI
+- MONGO_DB or MONGODB_DB
+- MONGO_COLLECTION or MONGODB_COLLECTION
+- STORE_FULL_CONTEXT
+- CONTEXT_STORE_MAX_CHARS
 
-* shell environment
-* `.env` (local only)
-* CI secrets
+### Logging and retry/error behavior
 
-Do not commit secrets to the repository.
+- LOG_LEVEL
+- EVAL_RETRIES
+- EVAL_RETRY_BACKOFF_MS
+- ERROR_TRACEBACK_MAX_CHARS
+
+## Common task aliases
+
+- uv run poe service
+- uv run poe test
+- uv run poe test-integration
+- uv run poe test-system
+- uv run poe demo-dry
+- uv run poe demo

@@ -12,110 +12,150 @@ classDiagram
       +output: str
       +raw_meta: dict
     }
+    # UML Design Artifacts
 
-    class MongoResultStore {
-      +compute_id(event) str
-      +exists(event_id) bool
-      +claim_event(event, owner_id) tuple[str,bool]
-      +mark_processing(event, event_id, owner_id) str
-      +mark_done(event_id, event, evaluation) None
-      +mark_skipped(event_id, event) None
-      +mark_error(event_id, ...) None
-      +save(event, evaluation) str
-      -_build_base_doc(event) dict
-      -_build_payload(event) dict
-    }
+    ## UML Class Diagram (Core Modules)
 
-    class Service {
-      +run_service(fixtures_dir, poll_seconds, max_cycles) int
-      +process_fixture_file(fixture_path, store, owner_id, run_mode) str
-      +resolve_owner_id() str
-      -_print_results(results) None
-    }
+    ```mermaid
+    classDiagram
+        class IncomingMessage {
+          +raw: bytes
+          +kafka: dict
+          +source_id: str
+        }
 
-    class Pipeline {
-      +process_event(event) dict|None
-    }
+        class AIEvent {
+          +system: str
+          +event_type: str
+          +user_input: str
+          +context: str
+          +output: str
+          +raw_meta: dict
+        }
 
-    class Eval {
-      +eval_function(user_input, context, output) dict
-    }
+        class MessageAdapter {
+          +iter_incoming_messages(poll_seconds, max_cycles) Iterator
+          +parse_incoming_event(message) AIEvent
+          +get_event(filepath) AIEvent
+          +get_message(filepath) tuple
+        }
 
-    class Preflight {
-      +run_preflight(logger) bool
-    }
+        class Service {
+          +run_service(poll_seconds, max_cycles) int
+          +process_message(message, store, owner_id, run_mode) str
+          +process_incoming_event(event, store, owner_id, run_mode) str
+          +resolve_owner_id() str
+          -_fallback_error_id(message) str
+          -_print_results(results) None
+        }
 
-    class LoggingUtils {
-      +configure_logging() None
-      +get_logger(run_mode) LoggerAdapter
-      +event_log_context(event, event_id) dict
-    }
+        class Pipeline {
+          +run_pipeline(event) PipelineOutcome
+          +process_event(event) dict|None
+        }
 
-    class Main {
-      +build_parser() ArgumentParser
-      +main() int
-    }
+        class Eval {
+          +eval_function(user_input, context, output) dict
+        }
 
-    Main --> Preflight
-    Main --> LoggingUtils
-    Main --> Service
+        class MongoResultStore {
+          +compute_id(event) str
+          +exists(event_id) bool
+          +claim_event(event, owner_id) tuple[str,bool]
+          +mark_processing(event, event_id, owner_id) str
+          +mark_done(event_id, event, evaluation) None
+          +mark_skipped(event_id, event) None
+          +mark_error(event_id, ...) None
+          +save(event, evaluation) str
+        }
 
-    Service --> MongoResultStore
-    Service --> Pipeline
-    Service --> LoggingUtils
+        class Preflight {
+          +run_preflight(logger) bool
+        }
 
-    Pipeline --> Eval
-    Pipeline --> AIEvent
+        class LoggingUtils {
+          +configure_logging() None
+          +get_logger(run_mode) LoggerAdapter
+          +event_log_context(event, event_id) dict
+        }
 
-    MongoResultStore --> AIEvent
-```
+        class Main {
+          +build_parser() ArgumentParser
+          +cmd_run(poll_seconds, max_cycles) int
+          +main() int
+        }
 
-## Sequence Diagram (Single Event)
+        Main --> Preflight
+        Main --> LoggingUtils
+        Main --> Service
 
-```mermaid
-sequenceDiagram
-    participant S as service.py
-    participant GM as get_message.py
-    participant DB as store_mongo.py
-    participant P as pipeline.py
-    participant E as eval.py
+        MessageAdapter --> IncomingMessage
+        MessageAdapter --> AIEvent
 
-    S->>GM: get_event(fixture_path)
-    GM-->>S: AIEvent
+        Service --> MessageAdapter
+        Service --> Pipeline
+        Service --> MongoResultStore
+        Service --> LoggingUtils
 
-    S->>DB: claim_event(event, owner_id)
-    DB-->>S: (event_id, claimed)
+        Pipeline --> Eval
+        Pipeline --> AIEvent
+        MongoResultStore --> AIEvent
+    ```
 
-    alt not claimed
-        S->>S: log duplicate + skip
-    else claimed
-        S->>P: process_event(event)
-        P->>E: eval_function(...)
-        E-->>P: evaluation dict
-        P-->>S: evaluation or None
+    ## Sequence Diagram (Single Event)
 
-        alt filtered (None)
-            S->>DB: mark_skipped(event_id, event)
-        else evaluated
-            S->>S: print evaluation results
-            S->>DB: mark_done(event_id, event, evaluation)
+    ```mermaid
+    sequenceDiagram
+        participant S as service.py
+        participant GM as get_message.py
+        participant DB as store_mongo.py
+        participant P as pipeline.py
+        participant E as eval.py
+
+        S->>GM: iter_incoming_messages()
+        GM-->>S: IncomingMessage
+
+        S->>GM: parse_incoming_event(message)
+        GM-->>S: AIEvent
+
+        S->>DB: claim_event(event, owner_id)
+        DB-->>S: (event_id, claimed)
+
+        alt not claimed
+            S->>S: log duplicate and skip
+        else claimed
+            S->>P: process_event(event)
+            P->>E: eval_function(...)
+            E-->>P: evaluation dict
+            P-->>S: evaluation or None
+
+            alt filtered
+                S->>DB: mark_skipped(event_id, event)
+            else evaluated
+                S->>DB: mark_done(event_id, event, evaluation)
+            end
         end
-    end
-```
 
-## State Diagram (Event Persistence Status)
+        alt parse failure before AIEvent
+            S->>DB: mark_error(fallback_ingest_id, error_type, error_message)
+        end
+    ```
 
-```mermaid
-stateDiagram-v2
-    [*] --> Processing: claim_event success
-    [*] --> DuplicateSkipped: claim_event not claimed
+    ## State Diagram (Event Persistence Status)
 
-    Processing --> Skipped: filter rejects event
-    Processing --> Done: evaluation completed and persisted
-    Processing --> Error: parse/eval/store exception
+    ```mermaid
+    stateDiagram-v2
+        [*] --> ParseError: parse_incoming_event failure
+        [*] --> DuplicateSkipped: claim_event not claimed
+        [*] --> Processing: claim_event success
 
-    DuplicateSkipped --> [*]
-    Skipped --> [*]
-    Done --> [*]
-    Error --> [*]
-```
+        Processing --> Skipped: filter rejects event
+        Processing --> Done: evaluation persisted
+        Processing --> Error: pipeline/store failure
+
+        ParseError --> [*]
+        DuplicateSkipped --> [*]
+        Skipped --> [*]
+        Done --> [*]
+        Error --> [*]
+    ```

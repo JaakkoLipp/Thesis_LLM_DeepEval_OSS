@@ -29,6 +29,7 @@ MANIFEST
 
 # Custom files added by dev
 .env
+todo.txt
 #valid_sample.txt
 #not_valid_sample.txt
 #wrong_event_type.txt
