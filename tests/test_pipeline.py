@@ -2,13 +2,8 @@ from deepeval_mvp.models import AIEvent
 from deepeval_mvp.pipeline import process_event
 
 
-def test_process_event_skips_when_filtered(monkeypatch):
-    monkeypatch.setattr(
-        "deepeval_mvp.pipeline.should_evaluate",
-        lambda system, event_type: False,
-    )
-
-    event = AIEvent(
+def _make_event() -> AIEvent:
+    return AIEvent(
         system="enterprise-rag-chatbot",
         event_type="ai-event",
         user_input="q",
@@ -17,26 +12,41 @@ def test_process_event_skips_when_filtered(monkeypatch):
         raw_meta={},
     )
 
-    assert process_event(event) is None
 
-
-def test_process_event_calls_eval_when_allowed(monkeypatch):
-    monkeypatch.setattr(
-        "deepeval_mvp.pipeline.should_evaluate",
-        lambda system, event_type: True,
-    )
+def test_process_event_calls_eval_function(monkeypatch):
+    """process_event is a pure evaluator — it must call eval_function and return its result."""
     monkeypatch.setattr(
         "deepeval_mvp.pipeline.eval_function",
         lambda user_input, context, output: {"ok": True},
     )
 
+    result = process_event(_make_event())
+
+    assert result == {"ok": True}
+
+
+def test_process_event_forwards_event_fields_to_eval(monkeypatch):
+    """Verify that the correct fields from AIEvent are forwarded to eval_function."""
+    captured: dict = {}
+
+    def _fake_eval(user_input: str, context: str, output: str):
+        captured["user_input"] = user_input
+        captured["context"] = context
+        captured["output"] = output
+        return {"captured": True}
+
+    monkeypatch.setattr("deepeval_mvp.pipeline.eval_function", _fake_eval)
+
     event = AIEvent(
         system="enterprise-rag-chatbot",
         event_type="ai-event",
-        user_input="q",
-        context="c",
-        output="o",
+        user_input="what is X?",
+        context="some context",
+        output="the answer",
         raw_meta={},
     )
+    process_event(event)
 
-    assert process_event(event) == {"ok": True}
+    assert captured["user_input"] == "what is X?"
+    assert captured["context"] == "some context"
+    assert captured["output"] == "the answer"

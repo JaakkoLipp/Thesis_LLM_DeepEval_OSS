@@ -2,7 +2,14 @@ from __future__ import annotations
 
 import logging
 import os
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 from typing import Any
+
+# Guards against calling configure_logging() more than once in the same
+# process (e.g. tests that import main, or libraries with their own root
+# handler already attached at import time).
+_logging_configured: bool = False
 
 _LOG_FIELDS = [
     "run_mode",
@@ -46,16 +53,38 @@ def _format_value(value: Any) -> str:
 
 
 def configure_logging() -> None:
+    global _logging_configured
+    if _logging_configured:
+        return
+    _logging_configured = True
+
     level = os.getenv("LOG_LEVEL", "INFO").upper()
     root = logging.getLogger()
-    if root.handlers:
-        root.setLevel(level)
-        return
 
-    handler = logging.StreamHandler()
-    handler.setFormatter(KeyValueFormatter())
-    root.addHandler(handler)
+    # Only add a StreamHandler if nothing is already writing to stderr/stdout
+    # (avoids duplicate lines when a framework like uvicorn already owns it).
+    if not root.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(KeyValueFormatter())
+        root.addHandler(handler)
+
     root.setLevel(level)
+
+    error_log_dir = os.getenv("ERROR_LOG_DIR", "logs")
+    if error_log_dir:
+        log_path = Path(error_log_dir)
+        log_path.mkdir(parents=True, exist_ok=True)
+        max_bytes = int(os.getenv("ERROR_LOG_MAX_BYTES", str(5 * 1024 * 1024)))  # 5 MB
+        backup_count = int(os.getenv("ERROR_LOG_BACKUP_COUNT", "5"))
+        file_handler = RotatingFileHandler(
+            log_path / "errors.log",
+            maxBytes=max_bytes,
+            backupCount=backup_count,
+            encoding="utf-8",
+        )
+        file_handler.setLevel(logging.ERROR)
+        file_handler.setFormatter(KeyValueFormatter())
+        root.addHandler(file_handler)
 
 
 def get_logger(run_mode: str) -> logging.LoggerAdapter:

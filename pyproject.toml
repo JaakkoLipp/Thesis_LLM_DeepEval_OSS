@@ -34,10 +34,10 @@ service = "uv run python -m deepeval_mvp.main"
 
 [tool.poe.tasks.demo]
 cmd = "uv run pytest -q -s tests/test_service.py::test_demo_full_system_fixture_flow_prints_progress"
-env = { RUN_SYSTEM = "1" }
+env = { RUN_SYSTEM = "1", STREAM_EVAL_OUTPUT = "true" }
 
 [tool.poe.tasks.demo-dry]
-cmd = "uv run pytest -q -s tests/test_service.py::test_demo_full_integration_fixture_flow_dry_run"
+cmd = "uv run pytest -q -s tests/test_service.py::test_service_full_fixture_scan_with_stubbed_pipeline"
 
 [tool.poe.tasks.test]
 cmd = "uv run pytest -q -m 'not integration and not system'"

@@ -1,13 +1,24 @@
 # get_message.py
 from __future__ import annotations
 
-import json
-import re
-from typing import Any
 import ast
 import base64
+import json
+import os
+import re
+import time
+from pathlib import Path
+from typing import Any
+from typing import Iterator
+from typing import TypedDict
 
 from deepeval_mvp.models import AIEvent
+
+
+class IncomingMessage(TypedDict, total=False):
+    raw: bytes
+    kafka: dict[str, Any]
+    source_id: str
 
 
 def _extract_kafka_envelope(raw: bytes) -> dict[str, Any]:
@@ -37,7 +48,7 @@ def _extract_kafka_envelope(raw: bytes) -> dict[str, Any]:
             key_bytes = ast.literal_eval(m.group(1))  # yields bytes
             if isinstance(key_bytes, (bytes, bytearray)):
                 meta["key_b64"] = base64.b64encode(bytes(key_bytes)).decode("ascii")
-        except Exception:
+        except (ValueError, SyntaxError):
             pass
 
     return meta
@@ -70,18 +81,84 @@ def _event_to_aievent(event: dict[str, Any], kafka_meta: dict[str, Any] | None =
 
 
 
+def _extract_json_payload(raw: bytes) -> tuple[dict[str, Any], dict[str, Any]]:
+    try:
+        parsed = json.loads(raw.decode("utf-8"))
+        if isinstance(parsed, dict):
+            return parsed, {}
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        pass
+
+    kafka_meta = _extract_kafka_envelope(raw)
+
+    match = re.search(rb"value=b'''(.*?)'''", raw, re.DOTALL)
+    if not match:
+        raise ValueError("Could not parse incoming message payload.")
+
+    event = json.loads(match.group(1).decode("utf-8"))
+    return event, kafka_meta
+
+
+def parse_incoming_event(message: IncomingMessage) -> AIEvent:
+    raw = message.get("raw")
+    if not isinstance(raw, (bytes, bytearray)):
+        raise TypeError("IncomingMessage.raw must be bytes")
+
+    event, parsed_kafka_meta = _extract_json_payload(bytes(raw))
+    kafka_meta = message.get("kafka") or parsed_kafka_meta or None
+    return _event_to_aievent(event, kafka_meta=kafka_meta)
+
+
+def _iter_fixture_messages(poll_seconds: float, max_cycles: int | None) -> Iterator[IncomingMessage]:
+    fixture_dir = Path(os.getenv("MESSAGE_FIXTURE_DIR", "tests/fixtures"))
+    seen: set[str] = set()
+    cycles = 0
+
+    while True:
+        if not fixture_dir.exists() or not fixture_dir.is_dir():
+            raise FileNotFoundError(f"message source directory not found: {fixture_dir}")
+
+        for fixture_file in sorted(fixture_dir.glob("*.txt")):
+            source_id = str(fixture_file.resolve())
+            if source_id in seen:
+                continue
+
+            seen.add(source_id)
+            yield {"raw": fixture_file.read_bytes(), "source_id": source_id}
+
+        cycles += 1
+        if max_cycles is not None and cycles >= max_cycles:
+            return
+
+        time.sleep(max(0.0, poll_seconds))
+
+
+def _iter_kafka_messages() -> Iterator[IncomingMessage]:
+    raise NotImplementedError(
+        "Kafka source is not implemented yet. "
+        "Provide an iterator that yields IncomingMessage(raw=..., kafka=...)."
+    )
+
+
+def iter_incoming_messages(
+    poll_seconds: float = 5.0,
+    max_cycles: int | None = None,
+) -> Iterator[IncomingMessage]:
+    source = os.getenv("MESSAGE_SOURCE", "fixture").strip().lower()
+    if source == "fixture":
+        yield from _iter_fixture_messages(poll_seconds=poll_seconds, max_cycles=max_cycles)
+        return
+    if source == "kafka":
+        yield from _iter_kafka_messages()
+        return
+    raise ValueError(f"Unsupported MESSAGE_SOURCE={source!r}")
+
+
 def get_message(filepath: str) -> tuple[dict[str, Any], tuple[str, str, str]]:
     with open(filepath, "rb") as f:
         content = f.read()
 
-    kafka_meta = _extract_kafka_envelope(content)
-
-    match = re.search(rb"value=b'''(.*?)'''", content, re.DOTALL)
-    if not match:
-        raise ValueError("Could not extract JSON payload from file (expected value=b'''...''').")
-
-    event = json.loads(match.group(1).decode("utf-8"))
-    aievent = _event_to_aievent(event, kafka_meta=kafka_meta)
+    aievent = parse_incoming_event({"raw": content, "source_id": filepath})
 
     meta = dict(aievent.raw_meta)
     payload = (aievent.user_input, aievent.context, aievent.output)
@@ -92,11 +169,4 @@ def get_event(filepath: str) -> AIEvent:
     with open(filepath, "rb") as f:
         content = f.read()
 
-    kafka_meta = _extract_kafka_envelope(content)
-
-    match = re.search(rb"value=b'''(.*?)'''", content, re.DOTALL)
-    if not match:
-        raise ValueError("Could not extract JSON payload from file (expected value=b'''...''').")
-
-    event = json.loads(match.group(1).decode("utf-8"))
-    return _event_to_aievent(event, kafka_meta=kafka_meta)
+    return parse_incoming_event({"raw": content, "source_id": filepath})

@@ -10,61 +10,77 @@ flowchart TD
     D -->|fail| X[Exit non-zero]
     D -->|ok| E[Start Service Loop]
 
-    E --> F{Fixtures dir exists?}
-    F -->|no| X
-    F -->|yes| G[Find next fixture file]
-    G --> H{Already seen in this process?}
-    H -->|yes| G
-    H -->|no| I[Parse file to AIEvent]
+    E --> SIG{SIGTERM received?}
+    SIG -->|yes| STOP[Log shutdown and exit cleanly]
+    SIG -->|no| F[get_message.iter_incoming_messages]
 
-    I --> J[Claim event in Mongo by event_id]
+    F --> G[Receive IncomingMessage]
+    G --> H[parse_incoming_event to AIEvent]
+
+    H --> FILT{should_evaluate?}
+    FILT -->|no| FSKIP[Log filter-skipped and continue]
+    FSKIP --> E
+
+    FILT -->|yes| J[Claim event in Mongo by event_id]
     J --> K{Claimed?}
-    K -->|no| L[Log duplicate and skip]
-    L --> G
+    K -->|no| L[Log duplicate and continue]
+    L --> E
 
-    K -->|yes| M[Run filtering + evaluation pipeline]
-    M --> N{Result is None?}
-    N -->|yes| O[Mark skipped in Mongo]
-    O --> P[Log skipped]
-    P --> G
+    K -->|yes| M[pipeline.process_event to evaluation dict]
 
-    N -->|no| Q[Print evaluation results]
-    Q --> R[Mark done in Mongo]
+    M --> SOF{STORE_ONLY_FAILS and success?}
+    SOF -->|yes| REL[release_claim and log skipped]
+    REL --> E
+
+    SOF -->|no| Q[Print evaluation results]
+    Q --> R[mark_done in Mongo]
     R --> S[Log stored]
-    S --> G
+    S --> E
 
-    I -->|parse/eval error| T[Mark error in Mongo]
+    H -->|parse error| T[mark_error in Mongo with fallback ingest_id]
+    M -->|pipeline or store error| T
     T --> U[Log error and continue]
-    U --> G
+    U --> E
 ```
 
 ## Claim-First Idempotency Flow
 
 ```mermaid
 flowchart LR
-    A[Incoming Event] --> B[Compute deterministic event_id]
+    A[Incoming AIEvent] --> B[Compute deterministic event_id]
     B --> C[Mongo upsert with $setOnInsert status=processing]
     C --> D{upserted_id present?}
     D -->|yes| E[This worker owns event]
-    E --> F[Proceed to evaluation]
+    E --> F[Proceed to evaluation and persistence]
 
-    D -->|no| G[Another worker already owns/processed event]
+    D -->|no| G[Already claimed or processed]
     G --> H[Skip expensive evaluation]
 ```
 
-## Service Lifecycle
+## Source-Agnostic Service Lifecycle
 
 ```mermaid
 flowchart TD
-    A[Container/Process Start] --> B[main.py]
-    B --> C[preflight.py]
+    A[Process start] --> B[main.py]
+    B --> C[preflight.py - single Mongo ping]
     C -->|ok| D[service.py run_service]
     C -->|fail| E[Exit 1]
 
-    D --> F[Loop over input files]
-    F --> G[process_fixture_file]
-    G --> H[store_mongo.py claim/mark]
-    G --> I[pipeline.py process_event]
-    I --> J[eval.py]
-    J --> K[deepeval backend]
+    subgraph Ingestion Boundary get_message.py
+      F1[fixture mode]
+      F2[kafka mode]
+    end
+
+    F1 --> G[iter_incoming_messages]
+    F2 --> G
+
+    D --> G
+    G --> H[process_message]
+    H --> I[parse_incoming_event]
+    I --> FIL[filtering.should_evaluate]
+    FIL -->|pass| J[store_mongo.claim_event]
+    J --> K[pipeline.process_event]
+    K --> L[eval.py]
+    L --> M[deepeval metrics - sync no asyncio]
+    FIL -->|reject| SKIP[log skipped]
 ```

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
-import os
 import importlib.util
+import os
+from functools import lru_cache
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     # Only for type checking; these imports do not run at runtime.
     from deepeval.models import OllamaModel
     from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+
+from deepeval_mvp.env_utils import env_bool, env_csv, env_float, env_int
 
 
 def _require_deepeval() -> None:
@@ -18,25 +21,6 @@ def _require_deepeval() -> None:
         )
 
 
-def _env_bool(name: str, default: bool = False) -> bool:
-    v = os.getenv(name)
-    if v is None:
-        return default
-    return v.strip().lower() in {"1", "true", "yes", "y", "on"}
-
-
-def _env_float(name: str, default: float) -> float:
-    v = os.getenv(name)
-    if v is None or not v.strip():
-        return default
-    return float(v)
-
-
-def _parse_csv_env(name: str, default_csv: str = "") -> list[str]:
-    raw = os.getenv(name, default_csv) or ""
-    return [x.strip() for x in raw.split(",") if x.strip()]
-
-
 def _build_judge() -> Any:
     _require_deepeval()
     from deepeval.models import OllamaModel  # pylint: disable=import-outside-toplevel
@@ -45,7 +29,141 @@ def _build_judge() -> Any:
     if not model:
         raise RuntimeError("JUDGE_MODEL is not set in environment (.env).")
 
-    return OllamaModel(model=model, temperature=_env_float("JUDGE_TEMPERATURE", 0.0))
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "temperature": env_float("JUDGE_TEMPERATURE", 0.0),
+    }
+
+    base_url = os.getenv("LOCAL_MODEL_BASE_URL")
+    if base_url:
+        kwargs["base_url"] = base_url
+
+    class _SanitizingOllamaModel(OllamaModel):  # type: ignore[misc]
+        """OllamaModel subclass that:
+
+        1. Sanitises raw LLM responses before Pydantic JSON validation
+           (strips markdown code fences and U+00A0 non-breaking spaces).
+        2. Optionally injects a system-level instruction into every Ollama
+           request (via ``JUDGE_SYSTEM_PROMPT`` / ``JUDGE_SYSTEM_PROMPT_FILE``).
+        3. Optionally streams tokens to stderr for live demo visibility
+           (via ``STREAM_EVAL_OUTPUT``).
+
+        When neither a system prompt nor streaming is configured, the call
+        falls through to ``super().generate`` unchanged so there is zero
+        behavioural difference from the stock OllamaModel.
+        """
+
+        _NBSP = str.maketrans({"\xa0": " "})
+
+        @classmethod
+        def _clean(cls, text: str) -> str:
+            """Normalise a raw LLM response string before JSON parsing.
+
+            Strips markdown code fences (```json ... ```) and non-breaking
+            spaces that some models emit around structured JSON outputs.
+            Kept as a defensive fallback even when a system prompt discourages
+            fence usage, because model compliance is not guaranteed.
+            """
+            import re as _re
+            cleaned = text.translate(cls._NBSP).strip()
+            fence = _re.match(r"^```(?:json)?\s*([\s\S]*?)\s*```$", cleaned, _re.DOTALL)
+            if fence:
+                cleaned = fence.group(1).strip()
+            return cleaned
+
+        @staticmethod
+        def _get_system_prompt() -> str | None:
+            """Return the configured judge system prompt, or None if not set.
+
+            Resolution order:
+              1. ``JUDGE_SYSTEM_PROMPT_FILE`` — path to a plain-text file;
+                 useful for multi-line instructions.
+              2. ``JUDGE_SYSTEM_PROMPT`` — inline string in .env.
+
+            Returns None when neither is set, which preserves existing
+            behaviour (no system message sent to Ollama).
+            """
+            from pathlib import Path as _Path
+            file_path = os.getenv("JUDGE_SYSTEM_PROMPT_FILE", "").strip()
+            if file_path:
+                text = _Path(file_path).read_text(encoding="utf-8").strip()
+                return text or None
+            inline = os.getenv("JUDGE_SYSTEM_PROMPT", "").strip()
+            return inline or None
+
+        def _call_ollama(self, prompt: Any, *, stream: bool = False) -> tuple[str, Any]:
+            """Unified Ollama call that injects the system prompt and optionally
+            streams tokens to stderr.
+
+            Used by ``generate`` whenever a system prompt is configured or
+            streaming is enabled.  ``model`` and ``base_url`` come from the
+            enclosing ``_build_judge`` closure.
+            """
+            import sys as _sys
+            import ollama as _ollama  # already a project dependency
+
+            client_kwargs: dict[str, Any] = {}
+            if base_url:
+                client_kwargs["host"] = base_url.rstrip("/")
+            client = _ollama.Client(**client_kwargs)
+
+            messages: list[dict[str, str]] = []
+            system_prompt = self._get_system_prompt()
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": str(prompt)})
+
+            if stream:
+                _sys.stderr.write("\n[judge] ")
+                _sys.stderr.flush()
+                chunks: list[str] = []
+                for chunk in client.chat(model=model, messages=messages, stream=True):
+                    token: str = chunk.message.content or ""
+                    _sys.stderr.write(token)
+                    _sys.stderr.flush()
+                    chunks.append(token)
+                _sys.stderr.write("\n")
+                _sys.stderr.flush()
+                return "".join(chunks), 0
+            else:
+                response = client.chat(model=model, messages=messages)
+                return response.message.content or "", 0
+
+        # ``schema=None`` on the super() call means we get back the raw string
+        # rather than having the parent attempt (and fail) to validate it.
+        # We then sanitise and validate ourselves.
+        def generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
+            streaming = env_bool("STREAM_EVAL_OUTPUT", False)
+            # Use _call_ollama whenever we need to inject a system prompt or
+            # stream tokens.  Otherwise fall through to super() unchanged so
+            # there is zero behavioural difference from the stock OllamaModel.
+            if streaming or self._get_system_prompt() is not None:
+                raw, cost = self._call_ollama(prompt, stream=streaming)
+            else:
+                raw, cost = super().generate(prompt, schema=None)
+            if schema is not None and isinstance(raw, str):
+                return schema.model_validate_json(self._clean(raw)), cost
+            return raw, cost
+
+        async def a_generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
+            raw, cost = await super().a_generate(prompt, schema=None)
+            if schema is not None and isinstance(raw, str):
+                return schema.model_validate_json(self._clean(raw)), cost
+            return raw, cost
+
+    return _SanitizingOllamaModel(**kwargs)
+
+
+@lru_cache(maxsize=1)
+def _get_judge() -> Any:
+    """Return the cached judge instance, building it on first call.
+
+    The judge (OllamaModel) is stateless after construction — it holds no
+    per-measurement state — so it is safe to reuse across events.  The cache
+    is process-scoped; call ``_get_judge.cache_clear()`` in tests that need a
+    fresh instance.
+    """
+    return _build_judge()
 
 
 def _metric_result(m: Any, name_override: str | None = None) -> dict[str, Any]:
@@ -61,11 +179,37 @@ def _metric_result(m: Any, name_override: str | None = None) -> dict[str, Any]:
 
 
 def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dict[str, Any]:
-    m.measure(test_case)
-    return _metric_result(m, name_override=name_override)
+    """Run a single metric with optional retry on exception.
+
+    ``EVAL_RETRIES`` (default 0) controls how many times to retry on failure.
+    ``EVAL_RETRY_BACKOFF_MS`` (default 200) is the initial back-off in ms;
+    each subsequent attempt doubles the delay (exponential back-off).
+    """
+    import time as _time  # local import to keep top-of-file clean
+
+    max_retries = env_int("EVAL_RETRIES", 0)
+    backoff_ms = env_int("EVAL_RETRY_BACKOFF_MS", 200)
+
+    last_exc: Exception | None = None
+    for attempt in range(max_retries + 1):
+        try:
+            m.measure(test_case)
+            return _metric_result(m, name_override=name_override)
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            if attempt < max_retries:
+                _time.sleep((backoff_ms * (2 ** attempt)) / 1000)
+    # All attempts exhausted — raise so the caller stores an error record.
+    raise last_exc  # type: ignore[misc]
 
 
 def _build_metrics(judge: Any) -> list[Any]:
+    """Build fresh metric instances for a single evaluation run.
+
+    Metrics are intentionally NOT cached — each ``measure()`` call mutates
+    instance state (score, reason, is_successful).  Reusing instances across
+    events would mix up results from different events.
+    """
     _require_deepeval()
     from deepeval.metrics import (  # pylint: disable=import-outside-toplevel
         AnswerRelevancyMetric,
@@ -74,10 +218,10 @@ def _build_metrics(judge: Any) -> list[Any]:
         GEval,
         PromptAlignmentMetric,
     )
-    from deepeval.test_case import LLMTestCaseParams # pylint: disable=import-outside-toplevel
+    from deepeval.test_case import LLMTestCaseParams  # pylint: disable=import-outside-toplevel
 
     enabled = set(
-        _parse_csv_env(
+        env_csv(
             "ENABLED_METRICS",
             "faithfulness,answer_relevancy,contextual_relevancy,completeness,informativeness",
         )
@@ -88,27 +232,30 @@ def _build_metrics(judge: Any) -> list[Any]:
     if "faithfulness" in enabled:
         metrics.append(
             FaithfulnessMetric(
-                threshold=_env_float("THRESHOLD_FAITHFULNESS", 0.7),
+                threshold=env_float("THRESHOLD_FAITHFULNESS", 0.7),
                 model=judge,
-                include_reason=_env_bool("INCLUDE_REASON_FAITHFULNESS", True),
+                include_reason=env_bool("INCLUDE_REASON_FAITHFULNESS", True),
+                async_mode=env_bool("METRIC_ASYNC_MODE", False),
             )
         )
 
     if "answer_relevancy" in enabled:
         metrics.append(
             AnswerRelevancyMetric(
-                threshold=_env_float("THRESHOLD_ANSWER_RELEVANCY", 0.7),
+                threshold=env_float("THRESHOLD_ANSWER_RELEVANCY", 0.7),
                 model=judge,
-                include_reason=_env_bool("INCLUDE_REASON_ANSWER_RELEVANCY", True),
+                include_reason=env_bool("INCLUDE_REASON_ANSWER_RELEVANCY", True),
+                async_mode=env_bool("METRIC_ASYNC_MODE", False),
             )
         )
 
     if "contextual_relevancy" in enabled:
         metrics.append(
             ContextualRelevancyMetric(
-                threshold=_env_float("THRESHOLD_CONTEXTUAL_RELEVANCY", 0.7),
+                threshold=env_float("THRESHOLD_CONTEXTUAL_RELEVANCY", 0.7),
                 model=judge,
-                include_reason=_env_bool("INCLUDE_REASON_CONTEXTUAL_RELEVANCY", True),
+                include_reason=env_bool("INCLUDE_REASON_CONTEXTUAL_RELEVANCY", True),
+                async_mode=env_bool("METRIC_ASYNC_MODE", False),
             )
         )
 
@@ -123,9 +270,10 @@ def _build_metrics(judge: Any) -> list[Any]:
                     "Return a score between 0 and 10 where 10 means all requirements are fully met and 0 means none are met.",
                     "Output format exactly: SCORE: <float> REASON: <text>",
                 ],
-                threshold=_env_float("THRESHOLD_COMPLETENESS", 0.7),
+                threshold=env_float("THRESHOLD_COMPLETENESS", 0.7),
                 model=judge,
                 evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+                async_mode=env_bool("METRIC_ASYNC_MODE", False),
             )
         )
 
@@ -139,38 +287,34 @@ def _build_metrics(judge: Any) -> list[Any]:
                     "Return a score between 0 and 10 where 10 is highly specific and informative and 0 is not informative.",
                     "Output format exactly: SCORE: <float> REASON: <text>",
                 ],
-                threshold=_env_float("THRESHOLD_INFORMATIVENESS", 0.7),
+                threshold=env_float("THRESHOLD_INFORMATIVENESS", 0.7),
                 model=judge,
                 evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+                async_mode=env_bool("METRIC_ASYNC_MODE", False),
             )
         )
 
-    if _env_bool("ENABLE_PROMPT_ALIGNMENT", False):
-        instructions = _parse_csv_env("PROMPT_INSTRUCTIONS", "")
+    if env_bool("ENABLE_PROMPT_ALIGNMENT", False):
+        instructions = env_csv("PROMPT_INSTRUCTIONS", "")
         if not instructions:
-            metrics.append(
-                GEval(
-                    name="PromptAlignmentConfigError",
-                    evaluation_steps=[
-                        "Return score 0 as PROMPT_INSTRUCTIONS is empty and a short error message",
-                    ],
-                    threshold=1.0,
-                    model=judge,
-                    evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
-                )
+            # Fail loudly rather than silently poisoning every evaluation with a
+            # fixed-fail metric.  Preflight also catches this before the service starts.
+            raise RuntimeError(
+                "ENABLE_PROMPT_ALIGNMENT=1 but PROMPT_INSTRUCTIONS is empty. "
+                "Set PROMPT_INSTRUCTIONS to a comma-separated list of instruction strings, "
+                "or set ENABLE_PROMPT_ALIGNMENT=0."
             )
-        else:
-            metrics.append(
-                PromptAlignmentMetric(
-                    prompt_instructions=instructions,
-                    threshold=_env_float("PROMPT_ALIGNMENT_THRESHOLD", 0.7),
-                    model=judge,
-                    include_reason=_env_bool("PROMPT_ALIGNMENT_INCLUDE_REASON", True),
-                    strict_mode=_env_bool("PROMPT_ALIGNMENT_STRICT_MODE", False),
-                    async_mode=_env_bool("PROMPT_ALIGNMENT_ASYNC_MODE", False),
-                    verbose_mode=_env_bool("PROMPT_ALIGNMENT_VERBOSE_MODE", False),
-                )
+        metrics.append(
+            PromptAlignmentMetric(
+                prompt_instructions=instructions,
+                threshold=env_float("PROMPT_ALIGNMENT_THRESHOLD", 0.7),
+                model=judge,
+                include_reason=env_bool("PROMPT_ALIGNMENT_INCLUDE_REASON", True),
+                strict_mode=env_bool("PROMPT_ALIGNMENT_STRICT_MODE", False),
+                async_mode=env_bool("PROMPT_ALIGNMENT_ASYNC_MODE", False),
+                verbose_mode=env_bool("PROMPT_ALIGNMENT_VERBOSE_MODE", False),
             )
+        )
 
     return metrics
 
@@ -187,7 +331,7 @@ def eval_function(user_input: str, context: str, output: str) -> dict[str, Any]:
         retrieval_context=[context[:max_ctx_chars]] if context else [],
     )
 
-    judge = _build_judge()
+    judge = _get_judge()
     metric_objs = _build_metrics(judge)
 
     results: list[dict[str, Any]] = []
