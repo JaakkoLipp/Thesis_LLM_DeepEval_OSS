@@ -10,30 +10,37 @@ flowchart TD
     D -->|fail| X[Exit non-zero]
     D -->|ok| E[Start Service Loop]
 
-    E --> F[get_message.iter_incoming_messages]
+    E --> SIG{SIGTERM received?}
+    SIG -->|yes| STOP[Log shutdown and exit cleanly]
+    SIG -->|no| F[get_message.iter_incoming_messages]
+
     F --> G[Receive IncomingMessage]
     G --> H[parse_incoming_event to AIEvent]
 
-    H --> J[Claim event in Mongo by event_id]
+    H --> FILT{should_evaluate?}
+    FILT -->|no| FSKIP[Log filter-skipped and continue]
+    FSKIP --> E
+
+    FILT -->|yes| J[Claim event in Mongo by event_id]
     J --> K{Claimed?}
-    K -->|no| L[Log duplicate and skip]
-    L --> F
+    K -->|no| L[Log duplicate and continue]
+    L --> E
 
-    K -->|yes| M[Run filtering and evaluation pipeline]
-    M --> N{Result is None?}
-    N -->|yes| O[Mark skipped in Mongo]
-    O --> P[Log skipped]
-    P --> F
+    K -->|yes| M[pipeline.process_event to evaluation dict]
 
-    N -->|no| Q[Print evaluation results]
-    Q --> R[Mark done in Mongo]
+    M --> SOF{STORE_ONLY_FAILS and success?}
+    SOF -->|yes| REL[release_claim and log skipped]
+    REL --> E
+
+    SOF -->|no| Q[Print evaluation results]
+    Q --> R[mark_done in Mongo]
     R --> S[Log stored]
-    S --> F
+    S --> E
 
-    H -->|parse error| T[Mark error in Mongo]
-    M -->|pipeline/store error| T
+    H -->|parse error| T[mark_error in Mongo with fallback ingest_id]
+    M -->|pipeline or store error| T
     T --> U[Log error and continue]
-    U --> F
+    U --> E
 ```
 
 ## Claim-First Idempotency Flow
@@ -44,7 +51,7 @@ flowchart LR
     B --> C[Mongo upsert with $setOnInsert status=processing]
     C --> D{upserted_id present?}
     D -->|yes| E[This worker owns event]
-    E --> F[Proceed to pipeline and persistence]
+    E --> F[Proceed to evaluation and persistence]
 
     D -->|no| G[Already claimed or processed]
     G --> H[Skip expensive evaluation]
@@ -55,7 +62,7 @@ flowchart LR
 ```mermaid
 flowchart TD
     A[Process start] --> B[main.py]
-    B --> C[preflight.py]
+    B --> C[preflight.py - single Mongo ping]
     C -->|ok| D[service.py run_service]
     C -->|fail| E[Exit 1]
 
@@ -69,9 +76,11 @@ flowchart TD
 
     D --> G
     G --> H[process_message]
-    H --> I[process_incoming_event]
-    I --> J[store_mongo claim and status writes]
-    I --> K[pipeline process_event]
+    H --> I[parse_incoming_event]
+    I --> FIL[filtering.should_evaluate]
+    FIL -->|pass| J[store_mongo.claim_event]
+    J --> K[pipeline.process_event]
     K --> L[eval.py]
-    L --> M[deepeval backend]
+    L --> M[deepeval metrics - sync no asyncio]
+    FIL -->|reject| SKIP[log skipped]
 ```

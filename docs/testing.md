@@ -30,15 +30,20 @@ Run everything:
 
 * `uv run poe test-all` (runs all markers; system tests still require `JUDGE_MODEL`)
 
-## What changed in test focus
+## Test coverage scope
 
-Service tests now validate message-driven contracts instead of fixture-path orchestration:
+Current test modules and what they cover:
 
-- process_incoming_event(event, ...)
-- process_message(message, ...)
-- run_service(...) consuming iter_incoming_messages(...)
-
-Fixtures are still used as input mocks through get_message boundary, not as service-level file orchestration behavior.
+- test_env_utils.py — env_bool, env_float, env_int, env_csv helpers
+- test_preflight.py — required-var checks, PromptAlignment coherence, deepeval availability, Mongo ping
+- test_filtering.py — allowed_systems/event_types lazy reads, should_evaluate logic
+- test_eval_function.py — eval_function contract; judge and metrics are mocked
+- test_pipeline.py — process_event delegates to eval_function correctly
+- test_service.py — process_incoming_event, process_message, run_service incl. SIGTERM, STORE_ONLY_FAILS, PRINT_EVAL_RESULTS
+- test_store_mongo.py — claim_event idempotency, mark_done/skipped/error, release_claim, payload truncation
+- test_get_message.py — fixture iteration and parse contracts
+- test_main.py — CLI arg parsing, dotenv loading, preflight gate
+- test_integration_eval_real.py — real judge backend test (gated by RUN_SYSTEM=1)
 
 ## Recommended local test progression
 
@@ -67,9 +72,14 @@ System tests assert **result schema**, not exact scores.
 
 ## Targeted module validation examples
 
+- uv run pytest -q tests/test_env_utils.py
+- uv run pytest -q tests/test_preflight.py
 - uv run pytest -q tests/test_get_message.py
+- uv run pytest -q tests/test_filtering.py
+- uv run pytest -q tests/test_eval_function.py
 - uv run pytest -q tests/test_service.py
 - uv run pytest -q tests/test_pipeline.py
+- uv run pytest -q tests/test_store_mongo.py
 - uv run pytest -q tests/test_main.py
 
 ---

@@ -7,14 +7,8 @@ from typing import Any
 
 from pymongo import MongoClient
 
+from deepeval_mvp.env_utils import env_bool, env_int
 from deepeval_mvp.models import AIEvent
-
-
-def _env_bool(name: str, default: bool = False) -> bool:
-    v = os.getenv(name)
-    if v is None:
-        return default
-    return v.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
 def _kafka_id(meta: dict[str, Any]) -> str | None:
@@ -87,10 +81,6 @@ class MongoResultStore:
         )
 
         self._client = MongoClient(uri)
-
-        # Fail fast with a clearer error if auth/host is wrong
-        self._client.admin.command("ping")
-
         self._coll = self._client[db_name][coll_name]
 
         # Minimal helpful indexes for analysis queries
@@ -103,8 +93,9 @@ class MongoResultStore:
         self._coll.create_index("status")
         self._coll.create_index("owner_id")
 
-    def compute_id(self, event: AIEvent) -> str:
-        return self.compute_event_id(event)
+        # Payload config read once at construction — not on every event.
+        self._store_full_context: bool = env_bool("STORE_FULL_CONTEXT", False)
+        self._context_store_max_chars: int = env_int("CONTEXT_STORE_MAX_CHARS", 4000)
 
     def compute_event_id(self, event: AIEvent) -> str:
         kid = _kafka_id(event.raw_meta)
@@ -148,32 +139,16 @@ class MongoResultStore:
         result = self._coll.update_one({"_id": event_id}, {"$setOnInsert": claim_doc}, upsert=True)
         return event_id, bool(result.upserted_id)
 
-    def mark_processing(self, event: AIEvent, event_id: str | None = None, owner_id: str | None = None) -> str:
-        event_id = event_id or self.compute_id(event)
-        now = datetime.now(timezone.utc).isoformat()
-        base_doc = self._build_base_doc(event)
-
-        set_values: dict[str, Any] = {
-            "status": "processing",
-            "started_at": now,
-            "claimed_at": now,
-            "last_updated_at": now,
-        }
-        if owner_id:
-            set_values["owner_id"] = owner_id
-
-        self._coll.update_one(
-            {"_id": event_id},
-            {
-                "$setOnInsert": {"_id": event_id, **base_doc},
-                "$set": set_values,
-            },
-            upsert=True,
-        )
-        return event_id
+    def release_claim(self, event_id: str) -> None:
+        """Delete a previously claimed document so no trace remains in MongoDB."""
+        self._coll.delete_one({"_id": event_id})
 
     def mark_done(self, event_id: str, event: AIEvent, evaluation: dict[str, Any]) -> None:
         base_doc = self._build_base_doc(event)
+        base_doc_without_payload = {
+            "kafka": base_doc["kafka"],
+            "meta": base_doc["meta"],
+        }
         payload = self._build_payload(event)
         now = datetime.now(timezone.utc).isoformat()
         self._coll.update_one(
@@ -181,7 +156,7 @@ class MongoResultStore:
             {
                 "$setOnInsert": {
                     "_id": event_id,
-                    **base_doc,
+                    **base_doc_without_payload,
                     "started_at": now,
                 },
                 "$set": {
@@ -198,6 +173,10 @@ class MongoResultStore:
 
     def mark_skipped(self, event_id: str, event: AIEvent) -> None:
         base_doc = self._build_base_doc(event)
+        base_doc_without_payload = {
+            "kafka": base_doc["kafka"],
+            "meta": base_doc["meta"],
+        }
         payload = self._build_payload(event)
         now = datetime.now(timezone.utc).isoformat()
         self._coll.update_one(
@@ -205,7 +184,7 @@ class MongoResultStore:
             {
                 "$setOnInsert": {
                     "_id": event_id,
-                    **base_doc,
+                    **base_doc_without_payload,
                     "started_at": now,
                 },
                 "$set": {
@@ -219,20 +198,24 @@ class MongoResultStore:
             upsert=True,
         )
 
-    def mark_error(self, event_id: str, *args: Any) -> None:
-        event: AIEvent | None = None
-        traceback_text: str | None = None
+    def mark_error(
+        self,
+        event_id: str,
+        error_type: str,
+        error_message: str,
+        *,
+        event: AIEvent | None = None,
+        traceback_text: str | None = None,
+    ) -> None:
+        """Persist an error record for event_id.
 
-        if len(args) == 2:
-            error_type = str(args[0])
-            error_message = str(args[1])
-        elif len(args) >= 4:
-            event = args[0]
-            error_type = str(args[1])
-            error_message = str(args[2])
-            traceback_text = None if args[3] is None else str(args[3])
-        else:
-            raise TypeError("mark_error expects (event_id, error_type, error_message) or (event_id, event, error_type, error_message, traceback_text)")
+        Args:
+            event_id:       Document _id.
+            error_type:     Exception class name (e.g. ``ValueError``).
+            error_message:  Human-readable error description.
+            event:          Optional AIEvent; when provided, base metadata is persisted.
+            traceback_text: Optional full traceback string (truncated to ERROR_TRACEBACK_MAX_CHARS).
+        """
 
         now = datetime.now(timezone.utc).isoformat()
         max_chars = int(os.getenv("ERROR_TRACEBACK_MAX_CHARS", "2000"))
@@ -274,12 +257,16 @@ class MongoResultStore:
         return doc.get("owner_id")
 
     def _build_payload(self, event: AIEvent) -> dict[str, Any]:
-        store_full_ctx = _env_bool("STORE_FULL_CONTEXT", False)
-        max_chars = int(os.getenv("CONTEXT_STORE_MAX_CHARS", "4000"))
-
+        """Build the payload sub-document.  Config is read from instance vars
+        set at construction time, not from env on every call.
+        """
         full_ctx = event.context or ""
-        stored_ctx = full_ctx if store_full_ctx else full_ctx[:max_chars]
-        truncated = (not store_full_ctx) and (len(full_ctx) > max_chars)
+        if self._store_full_context:
+            stored_ctx = full_ctx
+            truncated = False
+        else:
+            stored_ctx = full_ctx[: self._context_store_max_chars]
+            truncated = len(full_ctx) > self._context_store_max_chars
 
         return {
             "user_input": event.user_input,
@@ -288,8 +275,3 @@ class MongoResultStore:
             "context_len": len(full_ctx),
             "context_truncated": truncated,
         }
-
-    def save(self, event: AIEvent, evaluation: dict[str, Any]) -> str:
-        event_id = self.compute_id(event)
-        self.mark_done(event_id, event, evaluation)
-        return event_id

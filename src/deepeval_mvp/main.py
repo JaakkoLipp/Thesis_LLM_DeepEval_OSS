@@ -31,7 +31,13 @@ def main() -> int:
         return 1
 
     args = build_parser().parse_args()
-    return cmd_run(poll_seconds=args.poll_seconds, max_cycles=args.max_cycles)
+    try:
+        return cmd_run(poll_seconds=args.poll_seconds, max_cycles=args.max_cycles)
+    except KeyboardInterrupt:
+        # Ctrl+C outside the service loop (e.g. during preflight or startup).
+        # The service loop itself handles SIGINT via the graceful-shutdown flag;
+        # this is a safety net for any path not yet inside run_service.
+        return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())

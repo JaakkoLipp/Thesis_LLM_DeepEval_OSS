@@ -30,12 +30,14 @@ MANIFEST
 # Custom files added by dev
 .env
 todo.txt
+logs/
 #valid_sample.txt
 #not_valid_sample.txt
 #wrong_event_type.txt
 #wrong_system.txt
 #sample.txt
 .vscode
+.deepeval/*
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
