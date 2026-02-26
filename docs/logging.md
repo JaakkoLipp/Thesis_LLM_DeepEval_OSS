@@ -4,7 +4,7 @@ This document describes the production-grade logging and error-handling behavior
 
 ## Overview
 
-The service emits structured logs (key=value format) and persists processing status and errors to MongoDB. Logging is configured at runtime startup in main.py, and the same schema is used across service, integration, and demo-style flows.
+The service emits structured logs (key=value format) and persists processing status and errors to the result store. Logging is configured at runtime startup in main.py, and the same schema is used across service, integration, and demo-style flows.
 
 ## Log Format
 
@@ -30,8 +30,9 @@ Example:
 ## Configuration
 
 - LOG_LEVEL: logging level (default: INFO). Options: DEBUG, INFO, WARNING, ERROR, CRITICAL.
-- PRINT_EVAL_RESULTS: print human-readable metric results to stdout after each evaluation (default: true).
-  Set false in container/production environments where structured logs and MongoDB storage are sufficient.
+- PRINT_EVAL_RESULTS: log human-readable metric results after each evaluation (default: true).
+  Output goes through `get_logger("eval_results")`, not `print()`.
+  Set false in container/production environments where structured logs and database storage are sufficient.
 - EVAL_RETRIES: how many times to retry a failing metric call, with exponential back-off (default: 0).
   Back-off formula: EVAL_RETRY_BACKOFF_MS × 2^attempt milliseconds.
 - EVAL_RETRY_BACKOFF_MS: initial retry back-off in milliseconds (default: 200).
@@ -48,7 +49,9 @@ At startup, the service performs a preflight check and exits non-zero on failure
 - Validates required environment variables: MONGO_URI/MONGODB_URI, MONGO_DB/MONGODB_DB, JUDGE_MODEL.
 - Checks ENABLE_PROMPT_ALIGNMENT + PROMPT_INSTRUCTIONS coherence: if ENABLE_PROMPT_ALIGNMENT=1 but PROMPT_INSTRUCTIONS is empty, preflight fails before any evaluation runs.
 - Verifies deepeval is installed.
-- Verifies MongoDB connectivity via ping. This is the only MongoDB ping in the service lifecycle — store_mongo does not ping at construction.
+- Verifies MongoDB connectivity via ping (injectable `db_ping` callable — defaults to
+  pymongo MongoClient ping; production fork passes CosmosDB health check).
+  This is the only database ping in the service lifecycle — the store does not ping at construction.
 
 Preflight results are logged with stage=preflight and outcome=stored or error.
 

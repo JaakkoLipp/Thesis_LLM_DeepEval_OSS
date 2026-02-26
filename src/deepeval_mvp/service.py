@@ -12,13 +12,11 @@ from typing import Any, Literal
 
 from deepeval_mvp.env_utils import env_bool
 from deepeval_mvp.filtering import should_evaluate
-from deepeval_mvp.get_message import IncomingMessage
-from deepeval_mvp.get_message import iter_incoming_messages
-from deepeval_mvp.get_message import parse_incoming_event
 from deepeval_mvp.logging_utils import event_log_context, get_logger
+from deepeval_mvp.message_protocol import IncomingMessage, MessageSource
 from deepeval_mvp.models import AIEvent
 from deepeval_mvp.pipeline import process_event
-from deepeval_mvp.store_mongo import MongoResultStore
+from deepeval_mvp.store_protocol import ResultStore
 
 # ── Graceful-shutdown flag ────────────────────────────────────────────────────
 # Set by both SIGTERM and SIGINT handlers; checked between messages in the loop.
@@ -55,7 +53,7 @@ def _fallback_error_id(message: IncomingMessage) -> str:
 
 def process_incoming_event(
     event: AIEvent,
-    store: Any,
+    store: ResultStore,
     owner_id: str,
     run_mode: str = "service",
     store_only_fails: bool = False,
@@ -166,17 +164,23 @@ def process_incoming_event(
 
 def process_message(
     message: IncomingMessage,
-    store: Any,
+    store: ResultStore,
     owner_id: str,
     run_mode: str = "service",
     store_only_fails: bool = False,
+    *,
+    message_source: MessageSource | None = None,
 ) -> Literal["stored", "skipped", "error"]:
     """Parse a raw IncomingMessage then hand off to process_incoming_event."""
     started = time.monotonic()
     logger = get_logger(run_mode)
 
     try:
-        event = parse_incoming_event(message)
+        if message_source is not None:
+            event = message_source.parse_event(message)
+        else:
+            from deepeval_mvp.get_message import parse_incoming_event
+            event = parse_incoming_event(message)
         return process_incoming_event(
             event,
             store=store,
@@ -204,8 +208,23 @@ def process_message(
         return "error"
 
 
+def _format_results(results: dict[str, Any]) -> str:
+    """Format evaluation results as a human-readable string."""
+    lines = ["=== Evaluation Results ==="]
+    for metric in results["metrics"]:
+        lines.append(f"\n[{metric['name']}]")
+        lines.append(f"  score      : {metric['score']}")
+        lines.append(f"  threshold  : {metric['threshold']}")
+        lines.append(f"  success    : {metric['success']}")
+        lines.append(f"  reason     : {metric['reason']}")
+        if metric.get("error"):
+            lines.append(f"  error      : {metric['error']}")
+    lines.append(f"\nOverall success: {results['success']}")
+    return "\n".join(lines)
+
+
 def _print_results(results: dict[str, Any]) -> None:
-    """Print human-readable evaluation results to stdout.
+    """Log human-readable evaluation results.
 
     Gated by ``PRINT_EVAL_RESULTS`` (default ``1``).  Set to ``0`` in
     container/production environments where structured logs and MongoDB storage
@@ -213,20 +232,43 @@ def _print_results(results: dict[str, Any]) -> None:
     """
     if not env_bool("PRINT_EVAL_RESULTS", True):
         return
-    print("\n=== Evaluation Results ===")
-    for metric in results["metrics"]:
-        print(f"\n[{metric['name']}]")
-        print(f"  score      : {metric['score']}")
-        print(f"  threshold  : {metric['threshold']}")
-        print(f"  success    : {metric['success']}")
-        print(f"  reason     : {metric['reason']}")
-        if metric.get("error"):
-            print(f"  error      : {metric['error']}")
-    print("\nOverall success:", results["success"])
+    logger = get_logger("eval_results")
+    logger.info("\n%s", _format_results(results))
 
 
-def run_service(poll_seconds: float = 5.0, max_cycles: int | None = None) -> int:
+def _default_store() -> ResultStore:
+    """Lazy import of the MVP's concrete MongoDB store.
+
+    The production fork should replace this with its CosmosDB store factory
+    and pass a ``ResultStore``-conforming instance to ``run_service(store=...)``.
+    """
+    from deepeval_mvp.store_mongo import MongoResultStore
+    return MongoResultStore()
+
+
+def _default_message_source() -> MessageSource:
+    """Lazy import of the MVP's fixture-based message source.
+
+    The production fork should replace this with its Kafka adapter
+    and pass a ``MessageSource``-conforming instance to ``run_service(message_source=...)``.
+    """
+    from deepeval_mvp.get_message import FixtureMessageSource
+    return FixtureMessageSource()
+
+
+def run_service(
+    poll_seconds: float = 5.0,
+    max_cycles: int | None = None,
+    *,
+    store: ResultStore | None = None,
+    message_source: MessageSource | None = None,
+) -> int:
     """Main service loop.
+
+    Accepts optional ``store`` and ``message_source`` for dependency injection.
+    When omitted, uses the MVP defaults (``MongoResultStore`` and
+    ``FixtureMessageSource``).  The production fork can supply its Kafka and
+    CosmosDB implementations without modifying this module.
 
     Reads ``STORE_ONLY_FAILS`` once at startup (not per-event) and passes it
     down the call stack.  Installs a SIGTERM handler for graceful shutdown so
@@ -237,11 +279,14 @@ def run_service(poll_seconds: float = 5.0, max_cycles: int | None = None) -> int
 
     owner_id = resolve_owner_id()
     logger = get_logger("service")
-    store = MongoResultStore()
+    if store is None:
+        store = _default_store()
+    if message_source is None:
+        message_source = _default_message_source()
     store_only_fails = env_bool("STORE_ONLY_FAILS", False)
 
     try:
-        for message in iter_incoming_messages(poll_seconds=poll_seconds, max_cycles=max_cycles):
+        for message in message_source.iter_messages(poll_seconds=poll_seconds, max_cycles=max_cycles):
             if _stop_requested.is_set():
                 logger.info(
                     "shutdown requested",
@@ -254,6 +299,7 @@ def run_service(poll_seconds: float = 5.0, max_cycles: int | None = None) -> int
                 owner_id=owner_id,
                 run_mode="service",
                 store_only_fails=store_only_fails,
+                message_source=message_source,
             )
         return 0
     except Exception as exc:

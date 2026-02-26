@@ -3,8 +3,7 @@ from __future__ import annotations
 import importlib.util
 import logging
 import os
-
-from pymongo import MongoClient
+from typing import Any, Callable
 
 
 def _get_env(name: str, fallback: str | None = None) -> str | None:
@@ -16,17 +15,38 @@ def _get_env(name: str, fallback: str | None = None) -> str | None:
     return None
 
 
-def run_preflight(logger: logging.LoggerAdapter | logging.Logger) -> bool:
+def _default_db_ping(uri: str) -> None:
+    """Default database connectivity check using pymongo.
+
+    The production fork should supply its own callable (e.g. CosmosDB health
+    check) via ``run_preflight(db_ping=...)`` instead.
+    """
+    from pymongo import MongoClient
+    client = MongoClient(uri)
+    client.admin.command("ping")
+
+
+def run_preflight(
+    logger: logging.LoggerAdapter | logging.Logger,
+    *,
+    db_ping: Callable[[str], None] | None = None,
+) -> bool:
     """Validate the environment before starting the service.
 
     Checks (in order):
     1. Required env vars are present.
     2. ``ENABLE_PROMPT_ALIGNMENT=1`` implies ``PROMPT_INSTRUCTIONS`` is set.
     3. ``deepeval`` package is importable.
-    4. MongoDB is reachable (single ping — MongoResultStore does NOT re-ping).
+    4. Database is reachable via *db_ping* (defaults to MongoDB ping).
+
+    The *db_ping* callable receives the connection URI and should raise on
+    failure.  Pass a custom function for CosmosDB or any other backend.
 
     Returns True only if *all* checks pass.
     """
+    if db_ping is None:
+        db_ping = _default_db_ping
+
     ok = True
 
     # ── Required env vars ─────────────────────────────────────────────────────
@@ -81,14 +101,13 @@ def run_preflight(logger: logging.LoggerAdapter | logging.Logger) -> bool:
         )
         ok = False
 
-    # ── MongoDB connectivity (authoritative ping — store skips its own ping) ──
+    # ── Database connectivity (authoritative ping — store skips its own) ─────
     if mongo_uri and mongo_db:
         try:
-            client = MongoClient(mongo_uri)
-            client.admin.command("ping")
+            db_ping(mongo_uri)
         except Exception as exc:  # pragma: no cover - depends on env
             logger.error(
-                "preflight failed: mongo ping",
+                "preflight failed: database ping",
                 extra={
                     "stage": "preflight",
                     "outcome": "error",

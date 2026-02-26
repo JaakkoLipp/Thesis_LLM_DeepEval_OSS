@@ -10,15 +10,9 @@ import time
 from pathlib import Path
 from typing import Any
 from typing import Iterator
-from typing import TypedDict
 
+from deepeval_mvp.message_protocol import IncomingMessage  # canonical definition
 from deepeval_mvp.models import AIEvent
-
-
-class IncomingMessage(TypedDict, total=False):
-    raw: bytes
-    kafka: dict[str, Any]
-    source_id: str
 
 
 def _extract_kafka_envelope(raw: bytes) -> dict[str, Any]:
@@ -170,3 +164,24 @@ def get_event(filepath: str) -> AIEvent:
         content = f.read()
 
     return parse_incoming_event({"raw": content, "source_id": filepath})
+
+
+# ── Protocol-conforming adapter ───────────────────────────────────────────────
+
+class FixtureMessageSource:
+    """``MessageSource`` protocol implementation backed by fixture files.
+
+    This is the MVP's default message source.  The production fork should
+    replace this with a Kafka-backed implementation that satisfies the same
+    ``MessageSource`` protocol.
+    """
+
+    def iter_messages(
+        self,
+        poll_seconds: float = 5.0,
+        max_cycles: int | None = None,
+    ) -> Iterator[IncomingMessage]:
+        yield from iter_incoming_messages(poll_seconds=poll_seconds, max_cycles=max_cycles)
+
+    def parse_event(self, message: IncomingMessage) -> AIEvent:
+        return parse_incoming_event(message)

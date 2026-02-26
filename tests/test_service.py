@@ -3,104 +3,17 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 import pytest
 
 # Adjust these imports if your package/module path differs
 from deepeval_mvp import get_message, service
+from deepeval_mvp.message_protocol import IncomingMessage
+from conftest import FakeMongoResultStore
 
 
 # ---------- Helpers ----------
-
-class FakeMongoResultStore:
-    """
-    In-memory stand-in for MongoResultStore.
-
-    Supports the methods used by the new service architecture:
-      - claim_event
-      - mark_done
-      - mark_skipped
-      - mark_error
-    """
-    def __init__(self) -> None:
-        self.claimed_ids: set[str] = set()
-        self.docs: dict[str, dict[str, Any]] = {}
-        self.events: list[tuple[str, str]] = []  # (action, event_id)
-
-    def _event_id(self, event) -> str:
-        # Deterministic enough for tests; mirrors dedupe-by-content/session-ish behavior.
-        meta = getattr(event, "raw_meta", {}) or {}
-        topic = meta.get("kafka", {}).get("topic")
-        partition = meta.get("kafka", {}).get("partition")
-        offset = meta.get("kafka", {}).get("offset")
-
-        if (
-            topic not in (None, "", "REDACTED")
-            and partition is not None
-            and offset is not None
-            and not (partition == 0 and offset == 0)  # reject fixture placeholders, mirrors _kafka_id_is_usable
-        ):
-            return f"kafka:{topic}:{partition}:{offset}"
-
-        # Fallback pseudo-id
-        return (
-            f"evt:{getattr(event, 'system', '')}|"
-            f"{getattr(event, 'event_type', '')}|"
-            f"{getattr(event, 'user_input', '')}|"
-            f"{getattr(event, 'output', '')}"
-        )
-
-    def claim_event(self, event, owner_id: str) -> tuple[str, bool]:
-        event_id = self._event_id(event)
-        if event_id in self.claimed_ids:
-            self.events.append(("duplicate", event_id))
-            return event_id, False
-
-        self.claimed_ids.add(event_id)
-        self.docs[event_id] = {
-            "status": "processing",
-            "owner_id": owner_id,
-            "event": event,
-            "evaluation": None,
-            "error": None,
-        }
-        self.events.append(("claim", event_id))
-        return event_id, True
-
-    def mark_done(self, event_id: str, event, evaluation: dict) -> None:
-        self.docs.setdefault(event_id, {})
-        self.docs[event_id]["status"] = "done"
-        self.docs[event_id]["evaluation"] = evaluation
-        self.events.append(("done", event_id))
-
-    def release_claim(self, event_id: str) -> None:
-        self.claimed_ids.discard(event_id)
-        self.docs.pop(event_id, None)
-        self.events.append(("released", event_id))
-
-    def mark_skipped(self, event_id: str, event, reason: str = "filtered_out") -> None:
-        self.docs.setdefault(event_id, {})
-        self.docs[event_id]["status"] = "skipped"
-        self.docs[event_id]["skip_reason"] = reason
-        self.events.append(("skipped", event_id))
-
-    def mark_error(
-        self,
-        event_id: str,
-        error_type: str,
-        error_message: str,
-        *,
-        event: Any = None,
-        traceback_text: str | None = None,
-    ) -> None:
-        self.docs.setdefault(event_id, {})
-        self.docs[event_id]["status"] = "error"
-        self.docs[event_id]["error"] = {"type": error_type, "message": error_message}
-        if event is not None:
-            self.docs[event_id]["event"] = event
-        self.events.append(("error", event_id))
-
 
 def _fixture_dir() -> Path:
     """
@@ -114,15 +27,33 @@ def _fixture_dir() -> Path:
     return Path(__file__).parent
 
 
+class _FakeMessageSource:
+    """Satisfies the ``MessageSource`` protocol using fixture files."""
+
+    def iter_messages(
+        self,
+        poll_seconds: float = 5.0,
+        max_cycles: int | None = None,
+    ) -> Iterator[IncomingMessage]:
+        yield from get_message.iter_incoming_messages(
+            poll_seconds=poll_seconds, max_cycles=max_cycles
+        )
+
+    def parse_event(self, message: IncomingMessage) -> Any:
+        return get_message.parse_incoming_event(message)
+
+
 def _patch_service_store(monkeypatch):
     holder: dict[str, FakeMongoResultStore] = {}
 
-    def _factory(*args, **kwargs):
+    orig_default_store = service._default_store
+
+    def _factory() -> FakeMongoResultStore:
         inst = FakeMongoResultStore()
         holder["store"] = inst
         return inst
 
-    monkeypatch.setattr(service, "MongoResultStore", _factory)
+    monkeypatch.setattr(service, "_default_store", _factory)
     return holder
 
 
@@ -172,8 +103,7 @@ def test_iter_fixture_messages_does_not_reread_same_path_in_same_process(tmp_pat
 
 
 def test_process_message_parse_error_marks_error(monkeypatch):
-    holder = _patch_service_store(monkeypatch)
-    store = service.MongoResultStore()
+    store = FakeMongoResultStore()
 
     # invalid raw payload
     message = {"raw": b"not-json-and-not-kafka-wrapper", "source_id": "/tmp/bad.txt"}
@@ -187,8 +117,7 @@ def test_process_message_parse_error_marks_error(monkeypatch):
 
 
 def test_process_incoming_event_duplicate_claim_skips(monkeypatch):
-    holder = _patch_service_store(monkeypatch)
-    store = service.MongoResultStore()
+    store = FakeMongoResultStore()
 
     # Build a minimal AIEvent using your models module via parser path is more robust.
     # Use a real parsed fixture if available, otherwise skip.
@@ -204,10 +133,14 @@ def test_process_incoming_event_duplicate_claim_skips(monkeypatch):
     # Monkeypatch process_event so this test does not invoke real DeepEval
     monkeypatch.setattr(service, "process_event", lambda ev: {"success": True, "metrics": []})
 
+    # Ensure filtering passes so the first call reaches the store
+    monkeypatch.setenv("ALLOWED_SYSTEMS", event.system)
+    monkeypatch.setenv("ALLOWED_EVENT_TYPES", event.event_type)
+
     first = service.process_incoming_event(event, store=store, owner_id="ownerA", run_mode="test")
     second = service.process_incoming_event(event, store=store, owner_id="ownerB", run_mode="test")
 
-    assert first in ("stored", "skipped")  # depends on filtering
+    assert first == "stored"
     assert second == "skipped"
 
 
@@ -344,8 +277,7 @@ def test_service_full_fixture_scan_with_stubbed_pipeline(monkeypatch):
 
 def test_store_only_fails_releases_successful_eval(monkeypatch):
     """When store_only_fails=True a passing evaluation must NOT be stored."""
-    holder = _patch_service_store(monkeypatch)
-    store = service.MongoResultStore()
+    store = FakeMongoResultStore()
 
     fixture_dir = _fixture_dir()
     valid_candidates = [p for p in fixture_dir.glob("*.txt") if "valid" in p.name or "sample" in p.name]
@@ -370,8 +302,7 @@ def test_store_only_fails_releases_successful_eval(monkeypatch):
 
 def test_store_only_fails_stores_failed_eval(monkeypatch):
     """When store_only_fails=True a failing evaluation MUST be stored."""
-    holder = _patch_service_store(monkeypatch)
-    store = service.MongoResultStore()
+    store = FakeMongoResultStore()
 
     fixture_dir = _fixture_dir()
     valid_candidates = [p for p in fixture_dir.glob("*.txt") if "valid" in p.name or "sample" in p.name]
@@ -381,41 +312,43 @@ def test_store_only_fails_stores_failed_eval(monkeypatch):
     raw = valid_candidates[0].read_bytes()
     event = get_message.parse_incoming_event({"raw": raw, "source_id": str(valid_candidates[0])})
 
+    # Ensure filtering passes
+    monkeypatch.setenv("ALLOWED_SYSTEMS", event.system)
+    monkeypatch.setenv("ALLOWED_EVENT_TYPES", event.event_type)
+
     monkeypatch.setattr(service, "process_event", lambda ev: {"success": False, "metrics": []})
 
     outcome = service.process_incoming_event(
         event, store=store, owner_id="owner", run_mode="test", store_only_fails=True
     )
-    # Filters may skip it; if it passes filtering it must be stored
-    assert outcome in ("stored", "skipped")
-    if outcome == "stored":
-        statuses = [doc.get("status") for doc in store.docs.values()]
-        assert "done" in statuses
+    assert outcome == "stored"
+    statuses = [doc.get("status") for doc in store.docs.values()]
+    assert "done" in statuses
 
 
 # ---------- PRINT_EVAL_RESULTS gate ----------
 
-def test_print_results_suppressed_when_env_zero(monkeypatch, capsys):
+def test_print_results_suppressed_when_env_zero(monkeypatch, caplog):
     monkeypatch.setenv("PRINT_EVAL_RESULTS", "0")
     results = {
         "success": True,
         "metrics": [{"name": "M", "score": 1.0, "threshold": 0.7, "success": True, "reason": "ok", "error": None}],
     }
-    service._print_results(results)
-    captured = capsys.readouterr()
-    assert captured.out == ""
+    with caplog.at_level("INFO", logger="deepeval_mvp"):
+        service._print_results(results)
+    assert "Evaluation Results" not in caplog.text
 
 
-def test_print_results_shown_by_default(monkeypatch, capsys):
+def test_print_results_shown_by_default(monkeypatch, caplog):
     monkeypatch.delenv("PRINT_EVAL_RESULTS", raising=False)
     results = {
         "success": True,
         "metrics": [{"name": "Faithfulness", "score": 0.9, "threshold": 0.7, "success": True, "reason": "good", "error": None}],
     }
-    service._print_results(results)
-    captured = capsys.readouterr()
-    assert "Faithfulness" in captured.out
-    assert "Overall success" in captured.out
+    with caplog.at_level("INFO", logger="deepeval_mvp"):
+        service._print_results(results)
+    assert "Faithfulness" in caplog.text
+    assert "Overall success" in caplog.text
 
 
 # ---------- SIGTERM / SIGINT graceful shutdown ----------

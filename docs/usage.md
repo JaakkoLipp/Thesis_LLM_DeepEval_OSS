@@ -21,7 +21,10 @@ Example bounded run:
 Input mode is selected by environment variable MESSAGE_SOURCE:
 
 - fixture: implemented, reads mock Kafka-style fixture messages from MESSAGE_FIXTURE_DIR
-- kafka: contract exists; adapter implementation pending
+- kafka: contract exists; adapter implementation pending (production fork)
+
+The service layer depends on the `MessageSource` protocol, not on a concrete module.
+The MVP ships `FixtureMessageSource`; the production fork supplies a `KafkaMessageSource`.
 
 Defaults:
 
@@ -42,18 +45,19 @@ Preflight checks:
 - Required env vars present (MONGO_URI/MONGODB_URI, MONGO_DB/MONGODB_DB, JUDGE_MODEL)
 - ENABLE_PROMPT_ALIGNMENT=1 implies PROMPT_INSTRUCTIONS is non-empty
 - deepeval package importable
-- MongoDB reachable via ping (only ping in the whole service lifecycle)
+- Database reachable via injectable `db_ping` callable (defaults to pymongo ping;
+  production fork passes its CosmosDB health check)
 
 During service execution, per message:
 
 1. service.run_service checks SIGTERM flag and exits cleanly if set
-2. service.run_service asks get_message.iter_incoming_messages for the next message
-3. service.process_message calls get_message.parse_incoming_event
+2. service.run_service asks MessageSource.iter_messages for the next message
+3. service.process_message calls MessageSource.parse_event
 4. service.process_incoming_event applies filtering (should_evaluate) — before any DB interaction
-5. If filter passes, claims event ownership in Mongo (idempotency guard)
+5. If filter passes, claims event ownership via ResultStore.claim_event (idempotency guard)
 6. pipeline.process_event runs eval_function and returns evaluation dict
-7. STORE_ONLY_FAILS gate: if enabled and evaluation passed, release_claim removes Mongo document
-8. Otherwise store writes done/skipped/error status
+7. STORE_ONLY_FAILS gate: if enabled and evaluation passed, ResultStore.release_claim removes document
+8. Otherwise store writes done/skipped/error status via ResultStore
 
 ## Environment variables
 
@@ -105,7 +109,7 @@ During service execution, per message:
 
 - ALLOWED_SYSTEMS: comma-separated system names that should be evaluated (default: enterprise-rag-chatbot,test-system)
 - ALLOWED_EVENT_TYPES: comma-separated event types (default: ai-event)
-  Events not matching both lists are logged as filter-skipped and never claimed in Mongo.
+  Events not matching both lists are logged as filter-skipped and never claimed in the store.
 
 ### Storage
 
@@ -114,8 +118,10 @@ During service execution, per message:
 - MONGO_COLLECTION / MONGODB_COLLECTION: collection name (default: evaluation_results)
 - STORE_FULL_CONTEXT: store full context string in payload (default: false)
 - CONTEXT_STORE_MAX_CHARS: max context chars stored when STORE_FULL_CONTEXT=false (default: 4000)
-- STORE_ONLY_FAILS: when true, delete the Mongo document for events that pass evaluation
+- STORE_ONLY_FAILS: when true, delete the document for events that pass evaluation
   and only retain failures (default: false). Read once at service startup, not per-event.
+- MONGO_ENSURE_INDEXES: when true, MongoResultStore creates indexes at construction (default: true).
+  Set false in environments where index management is handled externally.
 - EVAL_VERSION: version label stored in evaluation records (optional)
 
 ### Worker identity
@@ -135,7 +141,8 @@ During service execution, per message:
 ### Logging and error handling
 
 - LOG_LEVEL: logging level (default: INFO). Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
-- PRINT_EVAL_RESULTS: print human-readable metric results to stdout (default: true)
+- PRINT_EVAL_RESULTS: log human-readable metric results after each evaluation (default: true).
+  Output goes through the logging system (`get_logger("eval_results")`), not `print()`.
   Set false in container/production environments where structured logs are sufficient.
 - ERROR_TRACEBACK_MAX_CHARS: max characters for persisted traceback strings (default: 2000)
 - ERROR_LOG_DIR: directory for rotating error log files (default: logs; set empty to disable)
@@ -153,3 +160,5 @@ During service execution, per message:
 - uv run poe test-all         — all tests including system
 - uv run poe demo-dry         — dry-run demo with stubbed pipeline
 - uv run poe demo             — live demo run with real judge
+- uv run poe lint             — run ruff linter and mypy type checks
+- uv run poe lint-fix         — auto-fix ruff lint issues
