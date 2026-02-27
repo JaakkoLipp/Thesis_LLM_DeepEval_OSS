@@ -225,6 +225,26 @@ These modules are **not touched** when swapping input/storage:
 - `message_protocol.py` — MessageSource protocol definition
 - `store_protocol.py` — ResultStore protocol definition
 
+## Built-in file output (no database)
+
+For local development, demos, or CI runs you can skip the database entirely
+and write evaluation results to individual text files:
+
+```bash
+OUTPUT_TO_FILE=1        # enable file-based output
+OUTPUT_DIR=output       # optional, defaults to <repo_root>/output
+```
+
+When `OUTPUT_TO_FILE=1`, the service creates a `FileResultStore` (defined in
+`store_file.py`) instead of `MongoResultStore`.  Each processed event produces
+a human-readable `.txt` file in the output directory named after its event ID.
+
+- The `output/` folder is git-ignored by default.
+- All `ResultStore` protocol methods (`claim_event`, `release_claim`,
+  `mark_done`, `mark_error`) are implemented, so the switch is fully
+  transparent to the rest of the pipeline.
+- Duplicate detection uses file existence on disk.
+
 ## What can be deleted
 
 In the production fork, these MVP-only files can be safely removed:

@@ -237,11 +237,18 @@ def _print_results(results: dict[str, Any]) -> None:
 
 
 def _default_store() -> ResultStore:
-    """Lazy import of the MVP's concrete MongoDB store.
+    """Lazy import of the MVP's concrete store.
+
+    When ``OUTPUT_TO_FILE`` is truthy the :class:`FileResultStore` is used
+    instead of MongoDB, writing evaluation results to individual text files
+    in the directory specified by ``OUTPUT_DIR`` (default ``output/``).
 
     The production fork should replace this with its CosmosDB store factory
     and pass a ``ResultStore``-conforming instance to ``run_service(store=...)``.
     """
+    if env_bool("OUTPUT_TO_FILE", False):
+        from deepeval_mvp.store_file import FileResultStore
+        return FileResultStore()
     from deepeval_mvp.store_mongo import MongoResultStore
     return MongoResultStore()
 
