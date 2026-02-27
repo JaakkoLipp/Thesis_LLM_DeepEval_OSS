@@ -1,0 +1,12 @@
+KafkaMessage(
+    value=b'''{
+  "system": "not-enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "x",
+    "response": {
+      "output": "y"
+    }
+  }
+}'''
+)

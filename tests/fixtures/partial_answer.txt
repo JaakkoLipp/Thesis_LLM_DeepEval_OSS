@@ -1,0 +1,15 @@
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What are the three states of matter and how do they differ?",
+    "response": {
+      "output": "The three states of matter are solid, liquid, and gas."
+    }
+  },
+  "retrieval_context": {
+    "output": "Matter exists in three classical states: solid, liquid, and gas. In solids, particles are tightly packed in a fixed arrangement, giving them a definite shape and volume. Liquids have particles that are close together but can move freely, so they have a definite volume but take the shape of their container. Gases have widely spaced particles that move rapidly, so they have neither a definite shape nor a definite volume."
+  }
+}'''
+)

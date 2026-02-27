@@ -1,0 +1,15 @@
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "When was penicillin discovered and by whom?",
+    "response": {
+      "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery."
+    }
+  },
+  "retrieval_context": {
+    "output": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  }
+}'''
+)

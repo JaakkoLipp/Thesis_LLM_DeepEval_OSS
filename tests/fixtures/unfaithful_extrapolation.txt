@@ -1,0 +1,15 @@
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the boiling point of water?",
+    "response": {
+      "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius."
+    }
+  },
+  "retrieval_context": {
+    "output": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  }
+}'''
+)

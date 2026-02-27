@@ -1,0 +1,15 @@
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is photosynthesis?",
+    "response": {
+      "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output."
+    }
+  },
+  "retrieval_context": {
+    "output": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  }
+}'''
+)

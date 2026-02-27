@@ -1,0 +1,15 @@
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the speed of light in a vacuum?",
+    "response": {
+      "output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories."
+    }
+  },
+  "retrieval_context": {
+    "output": "The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second). This value is denoted by the symbol c and is a fundamental physical constant."
+  }
+}'''
+)
