@@ -7,9 +7,9 @@ import json
 import os
 import re
 import time
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
-from typing import Iterator
 
 from deepeval_mvp.message_protocol import IncomingMessage  # canonical definition
 from deepeval_mvp.models import AIEvent
@@ -127,13 +127,6 @@ def _iter_fixture_messages(poll_seconds: float, max_cycles: int | None) -> Itera
         time.sleep(max(0.0, poll_seconds))
 
 
-def _iter_kafka_messages() -> Iterator[IncomingMessage]:
-    raise NotImplementedError(
-        "Kafka source is not implemented yet. "
-        "Provide an iterator that yields IncomingMessage(raw=..., kafka=...)."
-    )
-
-
 def iter_incoming_messages(
     poll_seconds: float = 5.0,
     max_cycles: int | None = None,
@@ -142,10 +135,11 @@ def iter_incoming_messages(
     if source == "fixture":
         yield from _iter_fixture_messages(poll_seconds=poll_seconds, max_cycles=max_cycles)
         return
-    if source == "kafka":
-        yield from _iter_kafka_messages()
-        return
-    raise ValueError(f"Unsupported MESSAGE_SOURCE={source!r}")
+    raise ValueError(
+        f"Unsupported MESSAGE_SOURCE={source!r}. "
+        "Production sources should implement the MessageSource protocol "
+        "and be injected via run_service(message_source=...)."
+    )
 
 
 def get_message(filepath: str) -> tuple[dict[str, Any], tuple[str, str, str]]:

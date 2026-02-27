@@ -9,7 +9,8 @@ the new module only needs to expose a class that satisfies ``MessageSource``.
 """
 from __future__ import annotations
 
-from typing import Any, Iterator, Protocol, TypedDict
+from collections.abc import Iterator
+from typing import Any, Protocol, TypedDict
 
 from deepeval_mvp.models import AIEvent
 

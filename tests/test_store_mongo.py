@@ -49,24 +49,6 @@ def test_mark_done_does_not_conflict_update_paths():
     assert "payload" in update["$set"]
 
 
-def test_mark_skipped_does_not_conflict_update_paths():
-    store, coll = _build_store_with_fake_collection()
-
-    store.mark_skipped("evt-1", _sample_event())
-
-    _, update, _ = coll.calls[-1]
-    assert "payload" not in update["$setOnInsert"]
-    assert "payload" in update["$set"]
-
-
-def test_dead_methods_removed():
-    """Ensure removed dead-code methods are no longer accessible."""
-    store, _ = _build_store_with_fake_collection()
-    assert not hasattr(store, "mark_processing"), "mark_processing should have been removed"
-    assert not hasattr(store, "save"), "save should have been removed"
-    assert not hasattr(store, "compute_id"), "compute_id alias should have been removed"
-
-
 def test_payload_context_truncated(monkeypatch):
     store, _ = _build_store_with_fake_collection()
     store._store_full_context = False

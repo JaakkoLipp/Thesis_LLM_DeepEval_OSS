@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from pymongo import MongoClient
@@ -46,10 +46,7 @@ def _kafka_id_is_usable(kafka_id: str) -> bool:
         return False
 
     # common fixture placeholder
-    if partition == 0 and offset == 0:
-        return False
-
-    return True
+    return not (partition == 0 and offset == 0)
 
 
 def _event_id_from_payload(meta: dict[str, Any], user_input: str, output: str) -> str:
@@ -125,7 +122,7 @@ class MongoResultStore:
 
     def claim_event(self, event: AIEvent, owner_id: str) -> tuple[str, bool]:
         event_id = self.compute_event_id(event)
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         base_doc = self._build_base_doc(event)
 
         claim_doc = {
@@ -153,7 +150,7 @@ class MongoResultStore:
             "meta": base_doc["meta"],
         }
         payload = self._build_payload(event)
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         eval_version = os.getenv("EVAL_VERSION", "unknown")
         self._coll.update_one(
             {"_id": event_id},
@@ -168,33 +165,6 @@ class MongoResultStore:
                     "payload": payload,
                     "evaluation": evaluation,
                     "eval_version": eval_version,
-                    "finished_at": now,
-                    "stored_at": now,
-                    "last_updated_at": now,
-                }
-            },
-            upsert=True,
-        )
-
-    def mark_skipped(self, event_id: str, event: AIEvent) -> None:
-        base_doc = self._build_base_doc(event)
-        base_doc_without_payload = {
-            "kafka": base_doc["kafka"],
-            "meta": base_doc["meta"],
-        }
-        payload = self._build_payload(event)
-        now = datetime.now(timezone.utc).isoformat()
-        self._coll.update_one(
-            {"_id": event_id},
-            {
-                "$setOnInsert": {
-                    "_id": event_id,
-                    **base_doc_without_payload,
-                    "started_at": now,
-                },
-                "$set": {
-                    "status": "skipped",
-                    "payload": payload,
                     "finished_at": now,
                     "stored_at": now,
                     "last_updated_at": now,
@@ -222,7 +192,7 @@ class MongoResultStore:
             traceback_text: Optional full traceback string (truncated to ERROR_TRACEBACK_MAX_CHARS).
         """
 
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         max_chars = int(os.getenv("ERROR_TRACEBACK_MAX_CHARS", "2000"))
         traceback_truncated = (traceback_text or "")[:max_chars]
 

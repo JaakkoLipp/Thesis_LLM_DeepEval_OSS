@@ -1,15 +1,11 @@
 """Tests for the event-ID computation and Kafka-ID validation in store_mongo.py."""
 from __future__ import annotations
 
-import pytest
-
-from deepeval_mvp.models import AIEvent
 from deepeval_mvp.store_mongo import (
     _event_id_from_payload,
     _kafka_id,
     _kafka_id_is_usable,
 )
-
 
 # ── _kafka_id ─────────────────────────────────────────────────────────────────
 

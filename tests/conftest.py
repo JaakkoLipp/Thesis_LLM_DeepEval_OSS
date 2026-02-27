@@ -1,13 +1,11 @@
 """Shared fixtures for the deepeval-mvp test suite."""
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 import pytest
 
 from deepeval_mvp.models import AIEvent
-
 
 # ── Common AIEvent factory ────────────────────────────────────────────────────
 
@@ -48,19 +46,6 @@ def sample_aievent_no_kafka() -> AIEvent:
     )
 
 
-# ── Fixture file paths ───────────────────────────────────────────────────────
-
-@pytest.fixture
-def fixtures_dir() -> Path:
-    """Path to the tests/fixtures directory."""
-    return Path(__file__).parent / "fixtures"
-
-
-@pytest.fixture
-def valid_fixture_path(fixtures_dir: Path) -> Path:
-    return fixtures_dir / "valid_sample.txt"
-
-
 # ── FakeMongoResultStore ─────────────────────────────────────────────────────
 
 class FakeMongoResultStore:
@@ -88,9 +73,9 @@ class FakeMongoResultStore:
         """
         try:
             from deepeval_mvp.store_mongo import (
+                _event_id_from_payload,
                 _kafka_id,
                 _kafka_id_is_usable,
-                _event_id_from_payload,
             )
             kid = _kafka_id(event.raw_meta)
             if kid and _kafka_id_is_usable(kid):
@@ -129,12 +114,6 @@ class FakeMongoResultStore:
         self.docs.pop(event_id, None)
         self.events.append(("released", event_id))
 
-    def mark_skipped(self, event_id: str, event: AIEvent, reason: str = "filtered_out") -> None:
-        self.docs.setdefault(event_id, {})
-        self.docs[event_id]["status"] = "skipped"
-        self.docs[event_id]["skip_reason"] = reason
-        self.events.append(("skipped", event_id))
-
     def mark_error(
         self,
         event_id: str,
@@ -150,9 +129,3 @@ class FakeMongoResultStore:
         if event is not None:
             self.docs[event_id]["event"] = event
         self.events.append(("error", event_id))
-
-
-@pytest.fixture
-def fake_store() -> FakeMongoResultStore:
-    """Return a fresh FakeMongoResultStore."""
-    return FakeMongoResultStore()

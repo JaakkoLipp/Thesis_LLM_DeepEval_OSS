@@ -3,14 +3,10 @@ from __future__ import annotations
 import importlib.util
 import os
 import re
+import time
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    # Only for type checking; these imports do not run at runtime.
-    from deepeval.models import OllamaModel
-    from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+from typing import Any
 
 from deepeval_mvp.env_utils import env_bool, env_csv, env_float, env_int
 
@@ -96,6 +92,7 @@ class _SanitizingOllamaModel:
         streaming is enabled.
         """
         import sys as _sys
+
         import ollama as _ollama  # already a project dependency
 
         client_kwargs: dict[str, Any] = {}
@@ -231,8 +228,6 @@ def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dic
     ``EVAL_RETRY_BACKOFF_MS`` (default 200) is the initial back-off in ms;
     each subsequent attempt doubles the delay (exponential back-off).
     """
-    import time as _time  # local import to keep top-of-file clean
-
     max_retries = env_int("EVAL_RETRIES", 0)
     backoff_ms = env_int("EVAL_RETRY_BACKOFF_MS", 200)
 
@@ -241,10 +236,10 @@ def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dic
         try:
             m.measure(test_case)
             return _metric_result(m, name_override=name_override)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             last_exc = exc
             if attempt < max_retries:
-                _time.sleep((backoff_ms * (2 ** attempt)) / 1000)
+                time.sleep((backoff_ms * (2 ** attempt)) / 1000)
     # All attempts exhausted — raise so the caller stores an error record.
     raise last_exc  # type: ignore[misc]
 

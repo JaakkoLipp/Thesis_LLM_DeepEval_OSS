@@ -5,10 +5,7 @@ so they run fast and deterministically.
 """
 from __future__ import annotations
 
-import pytest
-
 from deepeval_mvp.eval import _SanitizingOllamaModel
-
 
 # ── _clean ────────────────────────────────────────────────────────────────────
 

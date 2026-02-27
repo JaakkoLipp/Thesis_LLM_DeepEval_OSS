@@ -4,8 +4,6 @@ from __future__ import annotations
 import importlib
 import logging
 
-import pytest
-
 from deepeval_mvp import preflight
 
 
@@ -77,7 +75,7 @@ def test_preflight_passes_when_prompt_alignment_disabled(monkeypatch):
 
     monkeypatch.setattr(importlib.util, "find_spec", lambda name: object())
 
-    logger, records = _make_logger()
+    logger, _records = _make_logger()
     result = preflight.run_preflight(logger, db_ping=_noop_db_ping)
 
     assert result is True
@@ -90,7 +88,7 @@ def test_preflight_passes_when_prompt_alignment_enabled_with_instructions(monkey
 
     monkeypatch.setattr(importlib.util, "find_spec", lambda name: object())
 
-    logger, records = _make_logger()
+    logger, _records = _make_logger()
     result = preflight.run_preflight(logger, db_ping=_noop_db_ping)
 
     assert result is True
