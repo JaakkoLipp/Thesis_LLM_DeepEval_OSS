@@ -39,6 +39,7 @@ output/
 #sample.txt
 .vscode
 .deepeval/*
+tests/fixtures/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
