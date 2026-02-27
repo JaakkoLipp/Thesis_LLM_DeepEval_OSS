@@ -5,10 +5,10 @@ description = "service for evaluating LLM output"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "deepeval>=3.8.1",
-    "ollama>=0.6.1",
-    "pymongo>=4.16.0",
-    "python-dotenv>=1.2.1",
+    "deepeval>=3.8.1,<4",
+    "ollama>=0.6.1,<1",
+    "pymongo>=4.16.0,<5",
+    "python-dotenv>=1.2.1,<2",
 ]
 
 [tool.uv]
@@ -31,6 +31,10 @@ markers = [
 [tool.poe.tasks]
 # Basic usage task for running as a service
 service = "uv run python -m deepeval_mvp.main"
+
+# Lint
+lint = "uv run ruff check src/ tests/"
+lint-fix = "uv run ruff check --fix src/ tests/"
 
 [tool.poe.tasks.demo]
 cmd = "uv run pytest -q -s tests/test_service.py::test_demo_full_system_fixture_flow_prints_progress"
@@ -66,6 +70,37 @@ omit = [
 ]
 
 
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "F",    # pyflakes
+  "I",    # isort
+  "UP",   # pyupgrade
+  "B",    # flake8-bugbear
+  "SIM",  # flake8-simplify
+  "RUF",  # ruff-specific rules
+]
+ignore = [
+  "E501",   # line length handled by formatter
+  "SIM108", # ternary operator — readability preference
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["deepeval_mvp"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+
 [dependency-groups]
 dev = [
     "poethepoet>=0.41.0",
@@ -73,4 +108,5 @@ dev = [
     "pytest-cov>=7.0.0",
     "pytest-dotenv>=0.5.2",
     "pytest-mock>=3.15.1",
+    "ruff>=0.9.0",
 ]

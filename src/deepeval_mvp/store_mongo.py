@@ -83,15 +83,18 @@ class MongoResultStore:
         self._client = MongoClient(uri)
         self._coll = self._client[db_name][coll_name]
 
-        # Minimal helpful indexes for analysis queries
-        self._coll.create_index("meta.system")
-        self._coll.create_index("meta.event_type")
-        self._coll.create_index("meta.session_id")
-        self._coll.create_index("meta.time_stamp")
-        self._coll.create_index("evaluation.success")
-        self._coll.create_index("stored_at")
-        self._coll.create_index("status")
-        self._coll.create_index("owner_id")
+        # Ensure helpful indexes exist.  create_index() is a no-op when the
+        # index already exists, but we guard with a flag to avoid issuing
+        # eight round-trips on every service restart in busy environments.
+        if env_bool("MONGO_ENSURE_INDEXES", True):
+            self._coll.create_index("meta.system")
+            self._coll.create_index("meta.event_type")
+            self._coll.create_index("meta.session_id")
+            self._coll.create_index("meta.time_stamp")
+            self._coll.create_index("evaluation.success")
+            self._coll.create_index("stored_at")
+            self._coll.create_index("status")
+            self._coll.create_index("owner_id")
 
         # Payload config read once at construction — not on every event.
         self._store_full_context: bool = env_bool("STORE_FULL_CONTEXT", False)
@@ -151,6 +154,7 @@ class MongoResultStore:
         }
         payload = self._build_payload(event)
         now = datetime.now(timezone.utc).isoformat()
+        eval_version = os.getenv("EVAL_VERSION", "unknown")
         self._coll.update_one(
             {"_id": event_id},
             {
@@ -163,6 +167,7 @@ class MongoResultStore:
                     "status": "done",
                     "payload": payload,
                     "evaluation": evaluation,
+                    "eval_version": eval_version,
                     "finished_at": now,
                     "stored_at": now,
                     "last_updated_at": now,

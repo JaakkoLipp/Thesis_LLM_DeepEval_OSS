@@ -7,15 +7,15 @@ from deepeval_mvp.env_utils import env_bool, env_csv, env_float, env_int
 
 
 class TestEnvBool:
-    def test_truthy_values(self, monkeypatch):
-        for val in ("1", "true", "True", "TRUE", "yes", "Yes", "y", "Y", "on", "ON"):
-            monkeypatch.setenv("_TEST_BOOL", val)
-            assert env_bool("_TEST_BOOL") is True, f"Expected True for {val!r}"
+    @pytest.mark.parametrize("val", ["1", "true", "True", "TRUE", "yes", "Yes", "y", "Y", "on", "ON"])
+    def test_truthy_values(self, monkeypatch, val):
+        monkeypatch.setenv("_TEST_BOOL", val)
+        assert env_bool("_TEST_BOOL") is True
 
-    def test_falsy_values(self, monkeypatch):
-        for val in ("0", "false", "False", "no", "off", "n", "nope", ""):
-            monkeypatch.setenv("_TEST_BOOL", val)
-            assert env_bool("_TEST_BOOL") is False, f"Expected False for {val!r}"
+    @pytest.mark.parametrize("val", ["0", "false", "False", "no", "off", "n", "nope", ""])
+    def test_falsy_values(self, monkeypatch, val):
+        monkeypatch.setenv("_TEST_BOOL", val)
+        assert env_bool("_TEST_BOOL") is False
 
     def test_missing_returns_default_false(self, monkeypatch):
         monkeypatch.delenv("_TEST_BOOL", raising=False)

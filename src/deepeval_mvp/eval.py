@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import re
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -21,16 +23,172 @@ def _require_deepeval() -> None:
         )
 
 
-def _build_judge() -> Any:
+# ── _SanitizingOllamaModel ───────────────────────────────────────────────────
+# Moved to module level so it can be unit-tested and subclassed independently.
+# Config (model name, base_url) is passed via __init__ rather than captured
+# from a closure.  The class is constructed by _build_judge() below.
+
+class _SanitizingOllamaModel:
+    """OllamaModel wrapper that:
+
+    1. Sanitises raw LLM responses before Pydantic JSON validation
+       (strips markdown code fences and U+00A0 non-breaking spaces).
+    2. Optionally injects a system-level instruction into every Ollama
+       request (via ``JUDGE_SYSTEM_PROMPT`` / ``JUDGE_SYSTEM_PROMPT_FILE``).
+    3. Optionally streams tokens to stderr for live demo visibility
+       (via ``STREAM_EVAL_OUTPUT``).
+
+    When neither a system prompt nor streaming is configured, the call
+    falls through to ``super().generate`` unchanged so there is zero
+    behavioural difference from the stock OllamaModel.
+
+    Note: the actual base class (``deepeval.models.OllamaModel``) is mixed
+    in dynamically by ``_build_sanitizing_model_class()`` to avoid importing
+    ``deepeval`` at module load time.
+    """
+
+    _NBSP = str.maketrans({"\xa0": " "})
+
+    def __init__(self, *, model_name: str, base_url: str | None = None, **kwargs: Any) -> None:
+        self._model_name = model_name
+        self._base_url = base_url
+        super().__init__(**kwargs)
+
+    @classmethod
+    def _clean(cls, text: str) -> str:
+        """Normalise a raw LLM response string before JSON parsing.
+
+        Strips markdown code fences (```json ... ```) and non-breaking
+        spaces that some models emit around structured JSON outputs.
+        Kept as a defensive fallback even when a system prompt discourages
+        fence usage, because model compliance is not guaranteed.
+        """
+        cleaned = text.translate(cls._NBSP).strip()
+        fence = re.match(r"^```(?:json)?\s*([\s\S]*?)\s*```$", cleaned, re.DOTALL)
+        if fence:
+            cleaned = fence.group(1).strip()
+        return cleaned
+
+    @staticmethod
+    def _get_system_prompt() -> str | None:
+        """Return the configured judge system prompt, or None if not set.
+
+        Resolution order:
+          1. ``JUDGE_SYSTEM_PROMPT_FILE`` — path to a plain-text file;
+             useful for multi-line instructions.
+          2. ``JUDGE_SYSTEM_PROMPT`` — inline string in .env.
+
+        Returns None when neither is set, which preserves existing
+        behaviour (no system message sent to Ollama).
+        """
+        file_path = os.getenv("JUDGE_SYSTEM_PROMPT_FILE", "").strip()
+        if file_path:
+            text = Path(file_path).read_text(encoding="utf-8").strip()
+            return text or None
+        inline = os.getenv("JUDGE_SYSTEM_PROMPT", "").strip()
+        return inline or None
+
+    def _call_ollama(self, prompt: Any, *, stream: bool = False) -> tuple[str, Any]:
+        """Unified Ollama call that injects the system prompt and optionally
+        streams tokens to stderr.
+
+        Used by ``generate`` whenever a system prompt is configured or
+        streaming is enabled.
+        """
+        import sys as _sys
+        import ollama as _ollama  # already a project dependency
+
+        client_kwargs: dict[str, Any] = {}
+        if self._base_url:
+            client_kwargs["host"] = self._base_url.rstrip("/")
+        client = _ollama.Client(**client_kwargs)
+
+        messages: list[dict[str, str]] = []
+        system_prompt = self._get_system_prompt()
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": str(prompt)})
+
+        if stream:
+            _sys.stderr.write("\n[judge] ")
+            _sys.stderr.flush()
+            chunks: list[str] = []
+            for chunk in client.chat(model=self._model_name, messages=messages, stream=True):
+                token: str = chunk.message.content or ""
+                _sys.stderr.write(token)
+                _sys.stderr.flush()
+                chunks.append(token)
+            _sys.stderr.write("\n")
+            _sys.stderr.flush()
+            return "".join(chunks), 0
+        else:
+            response = client.chat(model=self._model_name, messages=messages)
+            return response.message.content or "", 0
+
+    # ``schema=None`` on the super() call means we get back the raw string
+    # rather than having the parent attempt (and fail) to validate it.
+    # We then sanitise and validate ourselves.
+    def generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
+        streaming = env_bool("STREAM_EVAL_OUTPUT", False)
+        # Use _call_ollama whenever we need to inject a system prompt or
+        # stream tokens.  Otherwise fall through to super() unchanged so
+        # there is zero behavioural difference from the stock OllamaModel.
+        if streaming or self._get_system_prompt() is not None:
+            raw, cost = self._call_ollama(prompt, stream=streaming)
+        else:
+            raw, cost = super().generate(prompt, schema=None)  # type: ignore[misc]
+        if schema is not None and isinstance(raw, str):
+            return schema.model_validate_json(self._clean(raw)), cost
+        return raw, cost
+
+    async def a_generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
+        # NOTE: async path does NOT support system-prompt injection or streaming
+        # yet. If a system prompt is configured, warn loudly rather than
+        # silently dropping it.
+        if self._get_system_prompt() is not None:
+            import warnings
+            warnings.warn(
+                "JUDGE_SYSTEM_PROMPT is configured but a_generate() does not "
+                "support system-prompt injection.  The system prompt will be "
+                "ignored for async metrics.  Use METRIC_ASYNC_MODE=false or "
+                "implement async _call_ollama.",
+                UserWarning,
+                stacklevel=2,
+            )
+        raw, cost = await super().a_generate(prompt, schema=None)  # type: ignore[misc]
+        if schema is not None and isinstance(raw, str):
+            return schema.model_validate_json(self._clean(raw)), cost
+        return raw, cost
+
+
+def _build_sanitizing_model_class() -> type:
+    """Dynamically build the concrete class with OllamaModel as a base.
+
+    This avoids importing ``deepeval`` at module load time (which would break
+    environments where ``deepeval`` is not installed, e.g. lightweight CI).
+    """
     _require_deepeval()
     from deepeval.models import OllamaModel  # pylint: disable=import-outside-toplevel
 
+    # Create a new class that inherits from both _SanitizingOllamaModel (for
+    # our custom logic) and OllamaModel (for the deepeval interface).
+    # MRO: SanitizingJudge -> _SanitizingOllamaModel -> OllamaModel -> ...
+    cls = type(
+        "SanitizingJudge",
+        (_SanitizingOllamaModel, OllamaModel),  # type: ignore[misc]
+        {},
+    )
+    return cls
+
+
+def _build_judge() -> Any:
     model = os.getenv("JUDGE_MODEL")
     if not model:
         raise RuntimeError("JUDGE_MODEL is not set in environment (.env).")
 
     kwargs: dict[str, Any] = {
         "model": model,
+        "model_name": model,
         "temperature": env_float("JUDGE_TEMPERATURE", 0.0),
     }
 
@@ -38,120 +196,8 @@ def _build_judge() -> Any:
     if base_url:
         kwargs["base_url"] = base_url
 
-    class _SanitizingOllamaModel(OllamaModel):  # type: ignore[misc]
-        """OllamaModel subclass that:
-
-        1. Sanitises raw LLM responses before Pydantic JSON validation
-           (strips markdown code fences and U+00A0 non-breaking spaces).
-        2. Optionally injects a system-level instruction into every Ollama
-           request (via ``JUDGE_SYSTEM_PROMPT`` / ``JUDGE_SYSTEM_PROMPT_FILE``).
-        3. Optionally streams tokens to stderr for live demo visibility
-           (via ``STREAM_EVAL_OUTPUT``).
-
-        When neither a system prompt nor streaming is configured, the call
-        falls through to ``super().generate`` unchanged so there is zero
-        behavioural difference from the stock OllamaModel.
-        """
-
-        _NBSP = str.maketrans({"\xa0": " "})
-
-        @classmethod
-        def _clean(cls, text: str) -> str:
-            """Normalise a raw LLM response string before JSON parsing.
-
-            Strips markdown code fences (```json ... ```) and non-breaking
-            spaces that some models emit around structured JSON outputs.
-            Kept as a defensive fallback even when a system prompt discourages
-            fence usage, because model compliance is not guaranteed.
-            """
-            import re as _re
-            cleaned = text.translate(cls._NBSP).strip()
-            fence = _re.match(r"^```(?:json)?\s*([\s\S]*?)\s*```$", cleaned, _re.DOTALL)
-            if fence:
-                cleaned = fence.group(1).strip()
-            return cleaned
-
-        @staticmethod
-        def _get_system_prompt() -> str | None:
-            """Return the configured judge system prompt, or None if not set.
-
-            Resolution order:
-              1. ``JUDGE_SYSTEM_PROMPT_FILE`` — path to a plain-text file;
-                 useful for multi-line instructions.
-              2. ``JUDGE_SYSTEM_PROMPT`` — inline string in .env.
-
-            Returns None when neither is set, which preserves existing
-            behaviour (no system message sent to Ollama).
-            """
-            from pathlib import Path as _Path
-            file_path = os.getenv("JUDGE_SYSTEM_PROMPT_FILE", "").strip()
-            if file_path:
-                text = _Path(file_path).read_text(encoding="utf-8").strip()
-                return text or None
-            inline = os.getenv("JUDGE_SYSTEM_PROMPT", "").strip()
-            return inline or None
-
-        def _call_ollama(self, prompt: Any, *, stream: bool = False) -> tuple[str, Any]:
-            """Unified Ollama call that injects the system prompt and optionally
-            streams tokens to stderr.
-
-            Used by ``generate`` whenever a system prompt is configured or
-            streaming is enabled.  ``model`` and ``base_url`` come from the
-            enclosing ``_build_judge`` closure.
-            """
-            import sys as _sys
-            import ollama as _ollama  # already a project dependency
-
-            client_kwargs: dict[str, Any] = {}
-            if base_url:
-                client_kwargs["host"] = base_url.rstrip("/")
-            client = _ollama.Client(**client_kwargs)
-
-            messages: list[dict[str, str]] = []
-            system_prompt = self._get_system_prompt()
-            if system_prompt:
-                messages.append({"role": "system", "content": system_prompt})
-            messages.append({"role": "user", "content": str(prompt)})
-
-            if stream:
-                _sys.stderr.write("\n[judge] ")
-                _sys.stderr.flush()
-                chunks: list[str] = []
-                for chunk in client.chat(model=model, messages=messages, stream=True):
-                    token: str = chunk.message.content or ""
-                    _sys.stderr.write(token)
-                    _sys.stderr.flush()
-                    chunks.append(token)
-                _sys.stderr.write("\n")
-                _sys.stderr.flush()
-                return "".join(chunks), 0
-            else:
-                response = client.chat(model=model, messages=messages)
-                return response.message.content or "", 0
-
-        # ``schema=None`` on the super() call means we get back the raw string
-        # rather than having the parent attempt (and fail) to validate it.
-        # We then sanitise and validate ourselves.
-        def generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
-            streaming = env_bool("STREAM_EVAL_OUTPUT", False)
-            # Use _call_ollama whenever we need to inject a system prompt or
-            # stream tokens.  Otherwise fall through to super() unchanged so
-            # there is zero behavioural difference from the stock OllamaModel.
-            if streaming or self._get_system_prompt() is not None:
-                raw, cost = self._call_ollama(prompt, stream=streaming)
-            else:
-                raw, cost = super().generate(prompt, schema=None)
-            if schema is not None and isinstance(raw, str):
-                return schema.model_validate_json(self._clean(raw)), cost
-            return raw, cost
-
-        async def a_generate(self, prompt: Any, schema: Any = None) -> Any:  # type: ignore[override]
-            raw, cost = await super().a_generate(prompt, schema=None)
-            if schema is not None and isinstance(raw, str):
-                return schema.model_validate_json(self._clean(raw)), cost
-            return raw, cost
-
-    return _SanitizingOllamaModel(**kwargs)
+    cls = _build_sanitizing_model_class()
+    return cls(**kwargs)
 
 
 @lru_cache(maxsize=1)
@@ -344,6 +390,7 @@ def eval_function(user_input: str, context: str, output: str) -> dict[str, Any]:
     )
 
     return {
+        "eval_version": os.getenv("EVAL_VERSION", "unknown"),
         "test_case": {
             "input": user_input,
             "actual_output": output,
