@@ -12,7 +12,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -81,11 +81,11 @@ class FileResultStore:
             path.unlink()
 
     def mark_done(self, event_id: str, event: AIEvent, evaluation: dict[str, Any]) -> None:
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         eval_version = os.getenv("EVAL_VERSION", "unknown")
         lines: list[str] = [
             f"event_id     : {event_id}",
-            f"status       : done",
+            "status       : done",
             f"eval_version : {eval_version}",
             f"stored_at    : {now}",
             "",
@@ -127,13 +127,13 @@ class FileResultStore:
         event: AIEvent | None = None,
         traceback_text: str | None = None,
     ) -> None:
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         max_chars = int(os.getenv("ERROR_TRACEBACK_MAX_CHARS", "2000"))
         tb = (traceback_text or "")[:max_chars]
 
         lines: list[str] = [
             f"event_id      : {event_id}",
-            f"status        : error",
+            "status        : error",
             f"stored_at     : {now}",
             "",
             f"error_type    : {error_type}",

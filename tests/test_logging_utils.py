@@ -3,9 +3,8 @@ from __future__ import annotations
 
 import logging
 
-from deepeval_mvp.logging_utils import KeyValueFormatter, event_log_context, _format_value
+from deepeval_mvp.logging_utils import KeyValueFormatter, _format_value, event_log_context
 from deepeval_mvp.models import AIEvent
-
 
 # ── _format_value ─────────────────────────────────────────────────────────────
 

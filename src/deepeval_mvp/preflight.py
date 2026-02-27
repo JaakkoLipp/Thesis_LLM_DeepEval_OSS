@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util
 import logging
 import os
-from typing import Any, Callable
+from collections.abc import Callable
 
 
 def _get_env(name: str, fallback: str | None = None) -> str | None:

@@ -3,15 +3,12 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Iterator
 
 import pytest
+from conftest import FakeMongoResultStore
 
 # Adjust these imports if your package/module path differs
 from deepeval_mvp import get_message, service
-from deepeval_mvp.message_protocol import IncomingMessage
-from conftest import FakeMongoResultStore
-
 
 # ---------- Helpers ----------
 
@@ -27,26 +24,8 @@ def _fixture_dir() -> Path:
     return Path(__file__).parent
 
 
-class _FakeMessageSource:
-    """Satisfies the ``MessageSource`` protocol using fixture files."""
-
-    def iter_messages(
-        self,
-        poll_seconds: float = 5.0,
-        max_cycles: int | None = None,
-    ) -> Iterator[IncomingMessage]:
-        yield from get_message.iter_incoming_messages(
-            poll_seconds=poll_seconds, max_cycles=max_cycles
-        )
-
-    def parse_event(self, message: IncomingMessage) -> Any:
-        return get_message.parse_incoming_event(message)
-
-
 def _patch_service_store(monkeypatch):
     holder: dict[str, FakeMongoResultStore] = {}
-
-    orig_default_store = service._default_store
 
     def _factory() -> FakeMongoResultStore:
         inst = FakeMongoResultStore()
