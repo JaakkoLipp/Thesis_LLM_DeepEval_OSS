@@ -27,24 +27,35 @@ Core processing contract:
 
 ### 1) Prerequisites
 
-- Python **3.12**
+- Python **3.13+**
 - `uv` (recommended): https://github.com/astral-sh/uv
-- A MongoDB instance (local Docker MongoDB is fine)
+- A MongoDB instance (local Docker MongoDB is fine — or use file output mode)
 - An Ollama endpoint reachable from where you run this service (local or remote)
 
-### 2) Install dependencies
+### 2) Interactive setup (not tested!)
+
+The setup script installs dependencies, walks you through every config flag,
+generates a `.env` file, and runs preflight validation:
+
+```bash
+chmod +x setup.sh && ./setup.sh
+```
+
+It supports both **MongoDB** and **file-output** storage modes, so you can
+start testing without any database infrastructure.
+
+### 3) Manual setup (alternative)
 
 ```bash
 uv sync
+cp sample_.env_file .env   # then edit .env to taste
 ```
 
-### 3) Configure environment
+Minimum required variables:
 
-Create a `.env` (recommended). Minimum required variables:
-
-- `MONGO_URI` (or `MONGODB_URI`)
-- `MONGO_DB` (or `MONGODB_DB`)
 - `JUDGE_MODEL`
+- `MONGO_URI` (or `MONGODB_URI`) — not needed if `OUTPUT_TO_FILE=1`
+- `MONGO_DB` (or `MONGODB_DB`) — not needed if `OUTPUT_TO_FILE=1`
 
 ### 4) Run (fixture mode)
 
