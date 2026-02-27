@@ -40,9 +40,14 @@ class KeyValueFormatter(logging.Formatter):
                 if value is None:
                     continue
                 extras.append(f"{key}={_format_value(value)}")
-        if extras:
-            return f"{base} {' '.join(extras)}"
-        return base
+        result = f"{base} {' '.join(extras)}" if extras else base
+        # Append traceback when exc_info=True was passed to the log call.
+        if record.exc_info:
+            if not record.exc_text:
+                record.exc_text = self.formatException(record.exc_info)
+        if record.exc_text:
+            result = result + "\n" + record.exc_text
+        return result
 
 
 def _format_value(value: Any) -> str:

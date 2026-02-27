@@ -81,18 +81,22 @@ def test_iter_fixture_messages_does_not_reread_same_path_in_same_process(tmp_pat
         next(gen)
 
 
-def test_process_message_parse_error_marks_error(monkeypatch):
+def test_process_message_parse_error_logs_not_stored(monkeypatch, caplog):
     store = FakeMongoResultStore()
 
     # invalid raw payload
     message = {"raw": b"not-json-and-not-kafka-wrapper", "source_id": "/tmp/bad.txt"}
 
-    outcome = service.process_message(message, store=store, owner_id="test-owner", run_mode="test")
+    with caplog.at_level("ERROR"):
+        outcome = service.process_message(message, store=store, owner_id="test-owner", run_mode="test")
     assert outcome == "error"
 
-    # At least one error doc should exist
+    # Error must NOT be stored in the DB
     statuses = [doc.get("status") for doc in store.docs.values()]
-    assert "error" in statuses
+    assert "error" not in statuses
+
+    # Error must appear in the log output
+    assert any("message processing error" in r.message for r in caplog.records)
 
 
 def test_process_incoming_event_duplicate_claim_skips(monkeypatch):

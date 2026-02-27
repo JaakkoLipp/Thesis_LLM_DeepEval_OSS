@@ -240,7 +240,7 @@ def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dic
             last_exc = exc
             if attempt < max_retries:
                 time.sleep((backoff_ms * (2 ** attempt)) / 1000)
-    # All attempts exhausted — raise so the caller stores an error record.
+    # All attempts exhausted — raise so the caller logs the error.
     raise last_exc  # type: ignore[misc]
 
 

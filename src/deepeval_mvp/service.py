@@ -137,15 +137,12 @@ def process_incoming_event(
         return "stored"
 
     except Exception as exc:
-        if event_id is None:
+        # Release the DB claim so no dangling record remains; errors are
+        # only written to logs/errors.log and printed to the terminal.
+        if event_id is not None:
+            store.release_claim(event_id)
+        else:
             event_id = f"event:{hashlib.sha256(repr(event).encode('utf-8')).hexdigest()}"
-        store.mark_error(
-            event_id,
-            type(exc).__name__,
-            str(exc),
-            event=event,
-            traceback_text=traceback.format_exc(),
-        )
         duration_ms = int((time.monotonic() - started) * 1000)
         logger.error(
             "event processing error",
@@ -190,8 +187,6 @@ def process_message(
         )
     except Exception as exc:
         event_id = _fallback_error_id(message)
-        store.mark_error(event_id, type(exc).__name__, str(exc))
-
         duration_ms = int((time.monotonic() - started) * 1000)
         logger.error(
             "message processing error",
