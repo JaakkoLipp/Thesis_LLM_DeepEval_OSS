@@ -5,6 +5,8 @@ import logging
 import os
 from collections.abc import Callable
 
+from deepeval_mvp.env_utils import env_bool
+
 
 def _get_env(name: str, fallback: str | None = None) -> str | None:
     val = os.getenv(name)
@@ -50,21 +52,19 @@ def run_preflight(
     ok = True
 
     # ── Required env vars ─────────────────────────────────────────────────────
+    using_file_output = env_bool("OUTPUT_TO_FILE", False)
     mongo_uri = _get_env("MONGO_URI", "MONGODB_URI")
     mongo_db = _get_env("MONGO_DB", "MONGODB_DB")
     judge_model = os.getenv("JUDGE_MODEL")
     judge_backend = os.getenv("JUDGE_BACKEND", "ollama").strip().lower()
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
 
-    missing = [
-        name
-        for name, value in {
-            "MONGO_URI": mongo_uri,
-            "MONGO_DB": mongo_db,
-            "JUDGE_MODEL": judge_model,
-        }.items()
-        if not value
-    ]
+    required: dict[str, str | None] = {"JUDGE_MODEL": judge_model}
+    if not using_file_output:
+        required["MONGO_URI"] = mongo_uri
+        required["MONGO_DB"] = mongo_db
+
+    missing = [name for name, value in required.items() if not value]
 
     if judge_backend == "openrouter" and not openrouter_key:
         missing.append("OPENROUTER_API_KEY")
@@ -119,7 +119,7 @@ def run_preflight(
         ok = False
 
     # ── Database connectivity (authoritative ping — store skips its own) ─────
-    if mongo_uri and mongo_db:
+    if not using_file_output and mongo_uri and mongo_db:
         try:
             db_ping(mongo_uri)
         except Exception as exc:  # pragma: no cover - depends on env

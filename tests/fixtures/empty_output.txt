@@ -1,0 +1,16 @@
+# META: {"difficulty": "1-easy", "brevity": "minimal"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the GDP of Finland?",
+    "response": {
+      "output": ""
+    }
+  },
+  "retrieval_context": {
+    "output": "Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023, making it one of the smaller economies in the European Union by total output. Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros."
+  }
+}'''
+)

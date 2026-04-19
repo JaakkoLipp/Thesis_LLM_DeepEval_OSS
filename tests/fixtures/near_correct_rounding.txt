@@ -1,0 +1,16 @@
+# META: {"difficulty": "3-hard", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the population of Tokyo?",
+    "response": {
+      "output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world."
+    }
+  },
+  "retrieval_context": {
+    "output": "Tokyo is the capital of Japan. The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023. The Greater Tokyo Area, which includes surrounding prefectures such as Kanagawa, Saitama, and Chiba, has a population of about 37.4 million, making it the largest metropolitan area globally by population."
+  }
+}'''
+)

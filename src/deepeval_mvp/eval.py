@@ -187,6 +187,7 @@ class _OpenRouterModel:
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=self._api_key,
+            max_retries=env_int("OPENROUTER_MAX_RETRIES", 6),
         )
 
     def generate(self, prompt: Any, schema: Any = None) -> Any:
@@ -237,6 +238,7 @@ class _OpenRouterModel:
         client = AsyncOpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=self._api_key,
+            max_retries=env_int("OPENROUTER_MAX_RETRIES", 6),
         )
 
         messages: list[dict[str, str]] = []

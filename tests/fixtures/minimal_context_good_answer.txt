@@ -1,0 +1,16 @@
+# META: {"difficulty": "3-hard", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "Explain the relationship between voltage, current, and resistance.",
+    "response": {
+      "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant."
+    }
+  },
+  "retrieval_context": {
+    "output": "voltage = current × resistance"
+  }
+}'''
+)

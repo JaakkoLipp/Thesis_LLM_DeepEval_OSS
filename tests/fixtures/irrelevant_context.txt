@@ -1,0 +1,16 @@
+# META: {"difficulty": "2-medium", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the capital of France?",
+    "response": {
+      "output": "The capital of France is Paris, which has been the capital since the 10th century."
+    }
+  },
+  "retrieval_context": {
+    "output": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  }
+}'''
+)

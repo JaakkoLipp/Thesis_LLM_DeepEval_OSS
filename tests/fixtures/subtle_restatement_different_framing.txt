@@ -1,0 +1,16 @@
+# META: {"difficulty": "4-stress", "brevity": "medium"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is a closure in programming?",
+    "response": {
+      "output": "A closure is a function that captures the lexical scope in which it was defined. This means the function retains access to variables from its enclosing scope even after that scope has finished executing. Closures are not the same as anonymous functions — a named function can also be a closure if it references free variables from an outer scope."
+    }
+  },
+  "retrieval_context": {
+    "output": "In programming, a closure is a technique for implementing lexically scoped name binding in a language with first-class functions. A closure is a record storing a function together with an environment: a mapping of each free variable of the function with the value or reference to which the name was bound when the closure was created. A closure, unlike a plain function, allows the function to access those captured variables through the closure's copies of their values or references, even when the function is invoked outside their scope."
+  }
+}'''
+)

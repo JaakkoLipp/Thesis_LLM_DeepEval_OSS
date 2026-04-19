@@ -1,3 +1,4 @@
+# META: {"difficulty": "1-easy", "brevity": "short"}
 KafkaMessage(
     value=b'''{
   "system": "enterprise-rag-chatbot",

@@ -11,6 +11,7 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
+from deepeval_mvp.env_utils import env_csv
 from deepeval_mvp.message_protocol import IncomingMessage  # canonical definition
 from deepeval_mvp.models import AIEvent
 
@@ -103,8 +104,29 @@ def parse_incoming_event(message: IncomingMessage) -> AIEvent:
     return _event_to_aievent(event, kafka_meta=kafka_meta)
 
 
+def _parse_fixture_meta(raw: bytes) -> dict[str, str]:
+    """Extract the ``# META: {...}`` header from a fixture file, if present."""
+    first_line = raw.split(b"\n", 1)[0].decode("utf-8", errors="replace").strip()
+    if first_line.startswith("# META:"):
+        try:
+            return json.loads(first_line[len("# META:"):])
+        except json.JSONDecodeError:
+            pass
+    return {}
+
+
+def _strip_meta_line(raw: bytes) -> bytes:
+    """Remove the ``# META:`` header so the parser sees only the KafkaMessage."""
+    if raw.lstrip().startswith(b"# META:"):
+        _, _, rest = raw.partition(b"\n")
+        return rest
+    return raw
+
+
 def _iter_fixture_messages(poll_seconds: float, max_cycles: int | None) -> Iterator[IncomingMessage]:
     fixture_dir = Path(os.getenv("MESSAGE_FIXTURE_DIR", "tests/fixtures"))
+    allowed_difficulty = set(env_csv("FIXTURE_DIFFICULTY", "")) or None
+    allowed_brevity = set(env_csv("FIXTURE_BREVITY", "")) or None
     seen: set[str] = set()
     cycles = 0
 
@@ -118,7 +140,15 @@ def _iter_fixture_messages(poll_seconds: float, max_cycles: int | None) -> Itera
                 continue
 
             seen.add(source_id)
-            yield {"raw": fixture_file.read_bytes(), "source_id": source_id}
+            raw = fixture_file.read_bytes()
+            meta = _parse_fixture_meta(raw)
+
+            if allowed_difficulty and meta.get("difficulty", "") not in allowed_difficulty:
+                continue
+            if allowed_brevity and meta.get("brevity", "") not in allowed_brevity:
+                continue
+
+            yield {"raw": _strip_meta_line(raw), "source_id": source_id}
 
         cycles += 1
         if max_cycles is not None and cycles >= max_cycles:

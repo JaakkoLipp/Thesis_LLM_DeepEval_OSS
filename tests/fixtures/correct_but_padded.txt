@@ -1,0 +1,16 @@
+# META: {"difficulty": "3-hard", "brevity": "long"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "Explain how a CPU executes instructions.",
+    "response": {
+      "output": "Sure! I'd be happy to help explain this topic. So, you know, CPUs are really important in computing. They are basically the brain of the computer. When we think about how they work, there are many aspects to consider. It's quite fascinating actually. To get into the details, a CPU uses something called the fetch-decode-execute cycle. First it fetches the instruction from memory. Then it decodes what the instruction means. Then it executes it. The ALU does math operations. There are also registers which store data temporarily. Anyway, hope that helps! Let me know if you have any other questions about computers or technology in general."
+    }
+  },
+  "retrieval_context": {
+    "output": "A CPU executes instructions through the fetch-decode-execute cycle. In the fetch phase, the program counter identifies the memory address of the next instruction, which is loaded into the instruction register. During decoding, the control unit interprets the opcode and operands. In the execute phase, the arithmetic logic unit (ALU) performs computations or the data is moved between registers and memory. Modern CPUs use pipelining to overlap these stages, and branch prediction to speculatively execute likely code paths, improving throughput."
+  }
+}'''
+)

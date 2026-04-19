@@ -32,6 +32,10 @@ def _install_signal_handlers() -> tuple[Any, Any]:
     """
     def _handler(signum: int, frame: Any) -> None:
         _stop_requested.set()
+        # Re-raise as KeyboardInterrupt so long-running API calls (e.g.
+        # OpenAI client retry loops) are interrupted immediately instead
+        # of blocking until all retries are exhausted.
+        raise KeyboardInterrupt
 
     prev_sigterm = signal.signal(signal.SIGTERM, _handler)
     prev_sigint = signal.signal(signal.SIGINT, _handler)
@@ -303,6 +307,12 @@ def run_service(
                 store_only_fails=store_only_fails,
                 message_source=message_source,
             )
+        return 0
+    except KeyboardInterrupt:
+        logger.info(
+            "shutdown requested",
+            extra={"stage": "service", "outcome": "stopped"},
+        )
         return 0
     except Exception as exc:
         logger.error(

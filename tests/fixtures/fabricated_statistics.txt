@@ -1,0 +1,16 @@
+# META: {"difficulty": "2-medium", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "How many employees does the company have?",
+    "response": {
+      "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800."
+    }
+  },
+  "retrieval_context": {
+    "output": "The company has operations in multiple countries and continues to grow its workforce."
+  }
+}'''
+)

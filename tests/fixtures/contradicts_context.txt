@@ -1,0 +1,16 @@
+# META: {"difficulty": "1-easy", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "Is the Earth round or flat?",
+    "response": {
+      "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface."
+    }
+  },
+  "retrieval_context": {
+    "output": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  }
+}'''
+)

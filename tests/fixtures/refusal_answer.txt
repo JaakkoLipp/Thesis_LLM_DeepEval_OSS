@@ -1,0 +1,16 @@
+# META: {"difficulty": "2-medium", "brevity": "short"}
+KafkaMessage(
+    value=b'''{
+  "system": "enterprise-rag-chatbot",
+  "event_type": "ai-event",
+  "event_data": {
+    "request": "What is the chemical formula for sulfuric acid?",
+    "response": {
+      "output": "I'm sorry, I don't have enough information to answer that question."
+    }
+  },
+  "retrieval_context": {
+    "output": "Sulfuric acid has the chemical formula H2SO4. It is a strong mineral acid with a wide range of industrial applications including fertiliser production, oil refining, and wastewater processing. It is a colourless, odourless, viscous liquid that is highly corrosive."
+  }
+}'''
+)
