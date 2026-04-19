@@ -158,6 +158,105 @@ class _SanitizingOllamaModel:
         return raw, cost
 
 
+class _OpenRouterModel:
+    """DeepEvalBaseLLM wrapper that calls OpenRouter's OpenAI-compatible API.
+
+    Reuses ``_SanitizingOllamaModel._clean`` for response sanitisation and
+    ``_SanitizingOllamaModel._get_system_prompt`` for optional system-prompt
+    injection so that both backends behave consistently.
+
+    The actual base class (``deepeval.models.DeepEvalBaseLLM``) is mixed in
+    dynamically by ``_build_openrouter_model_class()`` to avoid importing
+    ``deepeval`` at module load time.
+    """
+
+    def __init__(self, *, model_name: str, api_key: str, temperature: float = 0.0) -> None:
+        self._model_name = model_name
+        self._api_key = api_key
+        self._temperature = temperature
+
+    def load_model(self) -> Any:
+        return self._model_name
+
+    def get_model_name(self) -> str:
+        return self._model_name
+
+    def _build_client(self) -> Any:
+        from openai import OpenAI  # pylint: disable=import-outside-toplevel
+
+        return OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=self._api_key,
+        )
+
+    def generate(self, prompt: Any, schema: Any = None) -> Any:
+        import sys as _sys
+
+        client = self._build_client()
+        messages: list[dict[str, str]] = []
+        system_prompt = _SanitizingOllamaModel._get_system_prompt()
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": str(prompt)})
+
+        streaming = env_bool("STREAM_EVAL_OUTPUT", False)
+
+        if streaming:
+            _sys.stderr.write("\n[judge] ")
+            _sys.stderr.flush()
+            chunks: list[str] = []
+            response = client.chat.completions.create(
+                model=self._model_name,
+                messages=messages,
+                temperature=self._temperature,
+                stream=True,
+            )
+            for chunk in response:
+                token = chunk.choices[0].delta.content or ""
+                _sys.stderr.write(token)
+                _sys.stderr.flush()
+                chunks.append(token)
+            _sys.stderr.write("\n")
+            _sys.stderr.flush()
+            raw = "".join(chunks)
+        else:
+            response = client.chat.completions.create(
+                model=self._model_name,
+                messages=messages,
+                temperature=self._temperature,
+            )
+            raw = response.choices[0].message.content or ""
+
+        if schema is not None and isinstance(raw, str):
+            return schema.model_validate_json(_SanitizingOllamaModel._clean(raw))
+        return raw
+
+    async def a_generate(self, prompt: Any, schema: Any = None) -> Any:
+        from openai import AsyncOpenAI  # pylint: disable=import-outside-toplevel
+
+        client = AsyncOpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=self._api_key,
+        )
+
+        messages: list[dict[str, str]] = []
+        system_prompt = _SanitizingOllamaModel._get_system_prompt()
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": str(prompt)})
+
+        response = await client.chat.completions.create(
+            model=self._model_name,
+            messages=messages,
+            temperature=self._temperature,
+        )
+        raw = response.choices[0].message.content or ""
+
+        if schema is not None and isinstance(raw, str):
+            return schema.model_validate_json(_SanitizingOllamaModel._clean(raw))
+        return raw
+
+
 def _build_sanitizing_model_class() -> type:
     """Dynamically build the concrete class with OllamaModel as a base.
 
@@ -178,10 +277,43 @@ def _build_sanitizing_model_class() -> type:
     return cls
 
 
+def _build_openrouter_model_class() -> type:
+    """Dynamically build the OpenRouter model class with DeepEvalBaseLLM as a base."""
+    _require_deepeval()
+    from deepeval.models import DeepEvalBaseLLM  # pylint: disable=import-outside-toplevel
+
+    cls = type(
+        "OpenRouterJudge",
+        (_OpenRouterModel, DeepEvalBaseLLM),  # type: ignore[misc]
+        {},
+    )
+    return cls
+
+
 def _build_judge() -> Any:
     model = os.getenv("JUDGE_MODEL")
     if not model:
         raise RuntimeError("JUDGE_MODEL is not set in environment (.env).")
+
+    backend = os.getenv("JUDGE_BACKEND", "ollama").strip().lower()
+
+    if backend == "openrouter":
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "JUDGE_BACKEND=openrouter but OPENROUTER_API_KEY is not set."
+            )
+        cls = _build_openrouter_model_class()
+        return cls(
+            model_name=model,
+            api_key=api_key,
+            temperature=env_float("JUDGE_TEMPERATURE", 0.0),
+        )
+
+    if backend != "ollama":
+        raise RuntimeError(
+            f"Unknown JUDGE_BACKEND={backend!r}. Supported: 'ollama', 'openrouter'."
+        )
 
     kwargs: dict[str, Any] = {
         "model": model,

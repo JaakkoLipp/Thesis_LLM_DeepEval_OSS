@@ -53,6 +53,8 @@ def run_preflight(
     mongo_uri = _get_env("MONGO_URI", "MONGODB_URI")
     mongo_db = _get_env("MONGO_DB", "MONGODB_DB")
     judge_model = os.getenv("JUDGE_MODEL")
+    judge_backend = os.getenv("JUDGE_BACKEND", "ollama").strip().lower()
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
 
     missing = [
         name
@@ -63,6 +65,21 @@ def run_preflight(
         }.items()
         if not value
     ]
+
+    if judge_backend == "openrouter" and not openrouter_key:
+        missing.append("OPENROUTER_API_KEY")
+
+    if judge_backend not in {"ollama", "openrouter"}:
+        logger.error(
+            "preflight failed: unknown JUDGE_BACKEND",
+            extra={
+                "stage": "preflight",
+                "outcome": "error",
+                "error_message": f"JUDGE_BACKEND={judge_backend!r} is not supported. "
+                                 "Use 'ollama' or 'openrouter'.",
+            },
+        )
+        ok = False
 
     if missing:
         logger.error(
