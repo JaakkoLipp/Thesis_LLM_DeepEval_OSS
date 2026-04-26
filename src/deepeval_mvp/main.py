@@ -22,6 +22,7 @@ def build_parser() -> argparse.ArgumentParser:
 def cmd_run(poll_seconds: float, max_cycles: int | None) -> int:
     return run_service(poll_seconds=poll_seconds, max_cycles=max_cycles)
 
+
 def main() -> int:
     load_dotenv(dotenv_path=ENV_PATH)
     configure_logging()
@@ -38,6 +39,7 @@ def main() -> int:
         # The service loop itself handles SIGINT via the graceful-shutdown flag;
         # this is a safety net for any path not yet inside run_service.
         return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

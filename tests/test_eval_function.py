@@ -110,6 +110,7 @@ def test_eval_function_truncates_context_and_aggregates_success(monkeypatch: pyt
     assert ar["success"] is False
     assert ar["reason"] == "not relevant"
 
+
 def test_eval_function_all_success(monkeypatch, eval_module):
     monkeypatch.setattr(eval_module, "_require_deepeval", lambda: None)
     monkeypatch.setattr(eval_module, "_build_judge", lambda: object())
@@ -117,3 +118,13 @@ def test_eval_function_all_success(monkeypatch, eval_module):
 
     res = eval_module.eval_function("q", "ctx", "out")
     assert res["success"] is True
+
+
+def test_eval_function_no_metrics_is_not_success(monkeypatch, eval_module):
+    monkeypatch.setattr(eval_module, "_require_deepeval", lambda: None)
+    monkeypatch.setattr(eval_module, "_build_judge", lambda: object())
+    monkeypatch.setattr(eval_module, "_build_metrics", lambda judge: [])
+
+    res = eval_module.eval_function("q", "ctx", "out")
+    assert res["metrics"] == []
+    assert res["success"] is False

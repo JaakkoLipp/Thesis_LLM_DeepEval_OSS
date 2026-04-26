@@ -355,6 +355,11 @@ def _metric_result(m: Any, name_override: str | None = None) -> dict[str, Any]:
     }
 
 
+def _non_negative_env_int(name: str, default: int) -> int:
+    """Return a non-negative integer from env, clamping invalid negatives."""
+    return max(0, env_int(name, default))
+
+
 def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dict[str, Any]:
     """Run a single metric with optional retry on exception.
 
@@ -362,8 +367,8 @@ def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dic
     ``EVAL_RETRY_BACKOFF_MS`` (default 200) is the initial back-off in ms;
     each subsequent attempt doubles the delay (exponential back-off).
     """
-    max_retries = env_int("EVAL_RETRIES", 0)
-    backoff_ms = env_int("EVAL_RETRY_BACKOFF_MS", 200)
+    max_retries = _non_negative_env_int("EVAL_RETRIES", 0)
+    backoff_ms = _non_negative_env_int("EVAL_RETRY_BACKOFF_MS", 200)
 
     last_exc: Exception | None = None
     for attempt in range(max_retries + 1):
@@ -374,8 +379,12 @@ def _run_metric(m: Any, test_case: Any, name_override: str | None = None) -> dic
             last_exc = exc
             if attempt < max_retries:
                 time.sleep((backoff_ms * (2 ** attempt)) / 1000)
-    # All attempts exhausted — raise so the caller logs the error.
-    raise last_exc  # type: ignore[misc]
+
+    if last_exc is not None:
+        raise last_exc
+
+    # Defensive fallback: should be unreachable because at least one attempt runs.
+    raise RuntimeError("Metric execution failed without raising an exception.")
 
 
 def _build_metrics(judge: Any) -> list[Any]:
@@ -514,9 +523,8 @@ def eval_function(user_input: str, context: str, output: str) -> dict[str, Any]:
         name_override = getattr(m, "name", None)
         results.append(_run_metric(m, test_case, name_override=name_override))
 
-    overall_success = all(
-        bool(r.get("success")) for r in results if r.get("success") is not None
-    )
+    metric_outcomes = [bool(r.get("success")) for r in results if r.get("success") is not None]
+    overall_success = bool(metric_outcomes) and all(metric_outcomes)
 
     return {
         "eval_version": os.getenv("EVAL_VERSION", "unknown"),

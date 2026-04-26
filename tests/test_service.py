@@ -81,7 +81,7 @@ def test_iter_fixture_messages_does_not_reread_same_path_in_same_process(tmp_pat
         next(gen)
 
 
-def test_process_message_parse_error_logs_not_stored(monkeypatch, caplog):
+def test_process_message_parse_error_is_persisted(monkeypatch, caplog):
     store = FakeMongoResultStore()
 
     # invalid raw payload
@@ -91,11 +91,11 @@ def test_process_message_parse_error_logs_not_stored(monkeypatch, caplog):
         outcome = service.process_message(message, store=store, owner_id="test-owner", run_mode="test")
     assert outcome == "error"
 
-    # Error must NOT be stored in the DB
+    # Parse errors should be visible operationally as persisted error records.
     statuses = [doc.get("status") for doc in store.docs.values()]
-    assert "error" not in statuses
+    assert "error" in statuses
 
-    # Error must appear in the log output
+    # Error must appear in the log output.
     assert any("message processing error" in r.message for r in caplog.records)
 
 
@@ -125,6 +125,34 @@ def test_process_incoming_event_duplicate_claim_skips(monkeypatch):
 
     assert first == "stored"
     assert second == "skipped"
+
+
+
+def test_process_incoming_event_eval_error_is_persisted(monkeypatch):
+    store = FakeMongoResultStore()
+
+    fixture_dir = _fixture_dir()
+    valid_candidates = [p for p in fixture_dir.glob("*.txt") if "valid" in p.name or "sample" in p.name]
+    if not valid_candidates:
+        pytest.skip("No suitable fixture file found for error-persistence test.")
+
+    raw = valid_candidates[0].read_bytes()
+    msg = {"raw": raw, "source_id": str(valid_candidates[0].resolve())}
+    event = get_message.parse_incoming_event(msg)
+
+    monkeypatch.setenv("ALLOWED_SYSTEMS", event.system)
+    monkeypatch.setenv("ALLOWED_EVENT_TYPES", event.event_type)
+
+    def _boom(_event):
+        raise RuntimeError("metric failed")
+
+    monkeypatch.setattr(service, "process_event", _boom)
+
+    outcome = service.process_incoming_event(event, store=store, owner_id="ownerA", run_mode="test")
+    assert outcome == "error"
+
+    statuses = [doc.get("status") for doc in store.docs.values()]
+    assert "error" in statuses
 
 
 # ---------- System-ish demo tests (real fixtures, new architecture) ----------

@@ -130,6 +130,30 @@ class TestRunMetricRetry:
             eval_mod._run_metric(metric, tc)
 
 
+
+    def test_negative_retries_are_clamped_to_zero(self, monkeypatch, eval_mod):
+        monkeypatch.setenv("EVAL_RETRIES", "-3")
+        metric = _FailOnceMetric()
+        tc = _FakeLLMTestCase(input="q", actual_output="a")
+
+        with pytest.raises(RuntimeError, match="transient failure"):
+            eval_mod._run_metric(metric, tc)
+        assert metric._attempts == 1
+
+    def test_negative_backoff_is_clamped_to_zero(self, monkeypatch, eval_mod):
+        monkeypatch.setenv("EVAL_RETRIES", "1")
+        monkeypatch.setenv("EVAL_RETRY_BACKOFF_MS", "-10")
+        metric = _FailOnceMetric()
+        tc = _FakeLLMTestCase(input="q", actual_output="a")
+
+        sleeps: list[float] = []
+        monkeypatch.setattr(eval_mod.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+        result = eval_mod._run_metric(metric, tc, name_override=getattr(metric, "name", None))
+        assert result["success"] is True
+        assert sleeps == [0.0]
+
+
 class TestEvalVersion:
     def test_eval_version_stamped_in_result(self, monkeypatch, eval_mod):
         monkeypatch.setenv("EVAL_VERSION", "v0.2-test")

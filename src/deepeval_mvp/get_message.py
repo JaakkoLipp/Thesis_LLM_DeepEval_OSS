@@ -1,4 +1,3 @@
-# get_message.py
 from __future__ import annotations
 
 import ast
@@ -17,33 +16,33 @@ from deepeval_mvp.models import AIEvent
 
 
 def _extract_kafka_envelope(raw: bytes) -> dict[str, Any]:
+    """Parse metadata from the KafkaMessage(...) fixture wrapper string.
+
+    Best effort only: missing fields are omitted.
     """
-    Parse fields from the KafkaMessage(...) string wrapper in fixture files.
-    Best-effort: if a field is missing, it is omitted.
-    """
-    s = raw.decode("utf-8", errors="replace")
+    wrapper = raw.decode("utf-8", errors="replace")
     meta: dict[str, Any] = {}
 
-    m = re.search(r"topic='([^']*)'", s)
-    if m:
-        meta["topic"] = m.group(1)
+    topic_match = re.search(r"topic='([^']*)'", wrapper)
+    if topic_match:
+        meta["topic"] = topic_match.group(1)
 
-    m = re.search(r"partition=(\d+)", s)
-    if m:
-        meta["partition"] = int(m.group(1))
+    partition_match = re.search(r"partition=(\d+)", wrapper)
+    if partition_match:
+        meta["partition"] = int(partition_match.group(1))
 
-    m = re.search(r"offset=(\d+)", s)
-    if m:
-        meta["offset"] = int(m.group(1))
+    offset_match = re.search(r"offset=(\d+)", wrapper)
+    if offset_match:
+        meta["offset"] = int(offset_match.group(1))
 
-    # key=b'....'  -> store as base64 to keep it JSON-safe
-    m = re.search(r"key=(b'[^']*'|b\"[^\"]*\")", s)
-    if m:
+    # key=b'....' -> store as base64 to keep it JSON-safe.
+    key_match = re.search(r"key=(b'[^']*'|b\"[^\"]*\")", wrapper)
+    if key_match:
         try:
-            key_bytes = ast.literal_eval(m.group(1))  # yields bytes
+            key_bytes = ast.literal_eval(key_match.group(1))
             if isinstance(key_bytes, (bytes, bytearray)):
                 meta["key_b64"] = base64.b64encode(bytes(key_bytes)).decode("ascii")
-        except (ValueError, SyntaxError):
+        except (SyntaxError, ValueError):
             pass
 
     return meta
@@ -73,7 +72,6 @@ def _event_to_aievent(event: dict[str, Any], kafka_meta: dict[str, Any] | None =
         output=output,
         raw_meta=meta,
     )
-
 
 
 def _extract_json_payload(raw: bytes) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -172,10 +170,12 @@ def iter_incoming_messages(
     )
 
 
-def get_message(filepath: str) -> tuple[dict[str, Any], tuple[str, str, str]]:
-    with open(filepath, "rb") as f:
-        content = f.read()
+def _read_message_bytes(filepath: str | Path) -> bytes:
+    return Path(filepath).read_bytes()
 
+
+def get_message(filepath: str) -> tuple[dict[str, Any], tuple[str, str, str]]:
+    content = _read_message_bytes(filepath)
     aievent = parse_incoming_event({"raw": content, "source_id": filepath})
 
     meta = dict(aievent.raw_meta)
@@ -184,20 +184,16 @@ def get_message(filepath: str) -> tuple[dict[str, Any], tuple[str, str, str]]:
 
 
 def get_event(filepath: str) -> AIEvent:
-    with open(filepath, "rb") as f:
-        content = f.read()
-
+    content = _read_message_bytes(filepath)
     return parse_incoming_event({"raw": content, "source_id": filepath})
 
 
-# ── Protocol-conforming adapter ───────────────────────────────────────────────
-
 class FixtureMessageSource:
-    """``MessageSource`` protocol implementation backed by fixture files.
+    """MessageSource protocol implementation backed by fixture files.
 
-    This is the MVP's default message source.  The production fork should
+    This is the MVP's default message source. The production fork should
     replace this with a Kafka-backed implementation that satisfies the same
-    ``MessageSource`` protocol.
+    MessageSource protocol.
     """
 
     def iter_messages(
