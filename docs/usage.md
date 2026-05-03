@@ -116,6 +116,9 @@ During service execution, per message:
 - MONGO_URI / MONGODB_URI: MongoDB connection string (required)
 - MONGO_DB / MONGODB_DB: database name (required)
 - MONGO_COLLECTION / MONGODB_COLLECTION: collection name (default: evaluation_results)
+- OUTPUT_TO_FILE: when true, use FileResultStore instead of MongoDB (default: false)
+- OUTPUT_DIR: target folder for file output (default: <repo_root>/output)
+- OUTPUT_FILE_FORMAT: file format when OUTPUT_TO_FILE=true; text (default) or json
 - STORE_FULL_CONTEXT: store full context string in payload (default: false)
 - CONTEXT_STORE_MAX_CHARS: max context chars stored when STORE_FULL_CONTEXT=false (default: 4000)
 - STORE_ONLY_FAILS: when true, delete the document for events that pass evaluation

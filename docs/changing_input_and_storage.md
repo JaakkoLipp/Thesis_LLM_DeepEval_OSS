@@ -233,11 +233,13 @@ and write evaluation results to individual text files:
 ```bash
 OUTPUT_TO_FILE=1        # enable file-based output
 OUTPUT_DIR=output       # optional, defaults to <repo_root>/output
+OUTPUT_FILE_FORMAT=text # optional: text (default) or json
 ```
 
 When `OUTPUT_TO_FILE=1`, the service creates a `FileResultStore` (defined in
-`store_file.py`) instead of `MongoResultStore`.  Each processed event produces
-a human-readable `.txt` file in the output directory named after its event ID.
+`store_file.py`) instead of `MongoResultStore`. Each processed event produces
+one output file named after its event ID in the output directory (`.txt` for
+`text`, `.json` for `json`).
 
 - The `output/` folder is git-ignored by default.
 - All `ResultStore` protocol methods (`claim_event`, `release_claim`,

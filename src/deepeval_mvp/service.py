@@ -239,8 +239,9 @@ def _default_store() -> ResultStore:
     """Lazy import of the MVP's concrete store.
 
     When ``OUTPUT_TO_FILE`` is truthy the :class:`FileResultStore` is used
-    instead of MongoDB, writing evaluation results to individual text files
-    in the directory specified by ``OUTPUT_DIR`` (default ``output/``).
+    instead of MongoDB, writing evaluation results to files in the directory
+    specified by ``OUTPUT_DIR`` (default ``output/``).
+    ``OUTPUT_FILE_FORMAT`` controls text (default) vs JSON output.
 
     The production fork should replace this with its CosmosDB store factory
     and pass a ``ResultStore``-conforming instance to ``run_service(store=...)``.

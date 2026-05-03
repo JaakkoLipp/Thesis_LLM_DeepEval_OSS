@@ -106,8 +106,13 @@ See: `src/deepeval_mvp/get_message.py`
 The service writes evaluation results to MongoDB via `MongoResultStore` (`src/deepeval_mvp/store_mongo.py`).
 
 Alternatively, set `OUTPUT_TO_FILE=1` to use `FileResultStore` (`src/deepeval_mvp/store_file.py`),
-which writes human-readable `.txt` files to `OUTPUT_DIR` (default `output/`) — useful for local
-development, demos, or CI runs where a database is unnecessary.
+which writes files to `OUTPUT_DIR` (default `output/`) — useful for local development,
+demos, or CI runs where a database is unnecessary.
+
+Output format is controlled by `OUTPUT_FILE_FORMAT`:
+
+- `text` (default): human-readable `.txt` files
+- `json`: structured `.json` files
 
 ### Idempotency and event IDs
 
@@ -212,6 +217,7 @@ See: `docs/testing.md`
 - `METRIC_ASYNC_MODE` — toggles DeepEval internal async mode
 - `STORE_ONLY_FAILS` — if enabled, only failed evals are persisted (successful ones release the claim)
 - `OUTPUT_TO_FILE` — use file-based output instead of MongoDB
+- `OUTPUT_FILE_FORMAT` — when `OUTPUT_TO_FILE=1`, choose `text` (default) or `json`
 - `STREAM_EVAL_OUTPUT` — stream judge tokens to stderr in real time
 - `JUDGE_TEMPERATURE` — LLM sampling temperature (default 0.0)
 - `EVAL_VERSION` — version label stamped in every result

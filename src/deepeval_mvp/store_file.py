@@ -1,8 +1,13 @@
-"""FileResultStore — writes evaluation results to individual text files.
+"""FileResultStore — writes evaluation results to individual files.
 
 Activated by setting the environment variable ``OUTPUT_TO_FILE=1``.
 The output directory defaults to ``output/`` at the repository root but can
 be overridden with ``OUTPUT_DIR``.
+
+Output format is selected by ``OUTPUT_FILE_FORMAT``:
+
+- ``text`` (default): human-readable ``.txt`` files
+- ``json``: structured ``.json`` files
 
 Implements the same :class:`ResultStore` protocol as :class:`MongoResultStore`,
 so it is a drop-in replacement everywhere the protocol is expected.
@@ -10,11 +15,12 @@ so it is a drop-in replacement everywhere the protocol is expected.
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from deepeval_mvp.models import AIEvent
 from deepeval_mvp.store_mongo import _event_id_from_payload, _kafka_id, _kafka_id_is_usable
@@ -40,17 +46,27 @@ def _default_output_dir() -> Path:
     return Path(__file__).resolve().parents[2] / "output"
 
 
-class FileResultStore:
-    """Persist evaluation results as human-readable text files.
+def _output_file_format() -> Literal["text", "json"]:
+    """Resolve the file output format from ``OUTPUT_FILE_FORMAT``."""
+    raw = (os.getenv("OUTPUT_FILE_FORMAT") or "text").strip().lower()
+    if raw == "json":
+        return "json"
+    return "text"
 
-    Each event produces one ``.txt`` file named after its event ID inside
-    the configured output directory.  Duplicate detection is based on
-    whether the file already exists on disk.
+
+class FileResultStore:
+    """Persist evaluation results as text or JSON files.
+
+    Each event produces one file named after its event ID inside the configured
+    output directory. Duplicate detection is based on whether the file already
+    exists on disk.
     """
 
     def __init__(self, output_dir: Path | str | None = None) -> None:
         self._dir = Path(output_dir) if output_dir else _default_output_dir()
         self._dir.mkdir(parents=True, exist_ok=True)
+        self._format: Literal["text", "json"] = _output_file_format()
+        self._suffix = ".json" if self._format == "json" else ".txt"
 
     # ── helpers shared with MongoResultStore ──────────────────────────────
 
@@ -61,7 +77,10 @@ class FileResultStore:
         return _event_id_from_payload(event.raw_meta, event.user_input, event.output)
 
     def _path_for(self, event_id: str) -> Path:
-        return self._dir / f"{_sanitize_filename(event_id)}.txt"
+        return self._dir / f"{_sanitize_filename(event_id)}{self._suffix}"
+
+    def _write_json(self, path: Path, payload: dict[str, Any]) -> None:
+        path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     # ── ResultStore protocol ─────────────────────────────────────────────
 
@@ -72,7 +91,18 @@ class FileResultStore:
             return event_id, False  # already processed
         # "Claim" by writing a placeholder to prevent races in the
         # (unlikely) multi-process scenario.
-        path.write_text(f"# claimed by {owner_id}\n", encoding="utf-8")
+        if self._format == "json":
+            self._write_json(
+                path,
+                {
+                    "event_id": event_id,
+                    "status": "processing",
+                    "owner_id": owner_id,
+                    "claimed_at": datetime.now(UTC).isoformat(),
+                },
+            )
+        else:
+            path.write_text(f"# claimed by {owner_id}\n", encoding="utf-8")
         return event_id, True
 
     def release_claim(self, event_id: str) -> None:
@@ -83,6 +113,30 @@ class FileResultStore:
     def mark_done(self, event_id: str, event: AIEvent, evaluation: dict[str, Any]) -> None:
         now = datetime.now(UTC).isoformat()
         eval_version = os.getenv("EVAL_VERSION", "unknown")
+        if self._format == "json":
+            self._write_json(
+                self._path_for(event_id),
+                {
+                    "event_id": event_id,
+                    "status": "done",
+                    "eval_version": eval_version,
+                    "stored_at": now,
+                    "meta": {
+                        "system": event.system,
+                        "event_type": event.event_type,
+                        "session_id": event.raw_meta.get("session_id", ""),
+                        "time_stamp": event.raw_meta.get("time_stamp", ""),
+                    },
+                    "payload": {
+                        "user_input": event.user_input,
+                        "output": event.output,
+                        "context": event.context,
+                    },
+                    "evaluation": evaluation,
+                },
+            )
+            return
+
         lines: list[str] = [
             f"event_id     : {event_id}",
             "status       : done",
@@ -130,6 +184,36 @@ class FileResultStore:
         now = datetime.now(UTC).isoformat()
         max_chars = int(os.getenv("ERROR_TRACEBACK_MAX_CHARS", "2000"))
         tb = (traceback_text or "")[:max_chars]
+
+        if self._format == "json":
+            payload: dict[str, Any] = {
+                "event_id": event_id,
+                "status": "error",
+                "stored_at": now,
+                "error": {
+                    "type": error_type,
+                    "message": error_message,
+                },
+            }
+
+            if event is not None:
+                payload["meta"] = {
+                    "system": event.system,
+                    "event_type": event.event_type,
+                    "session_id": event.raw_meta.get("session_id", ""),
+                    "time_stamp": event.raw_meta.get("time_stamp", ""),
+                }
+                payload["payload"] = {
+                    "user_input": event.user_input,
+                    "output": event.output,
+                    "context": event.context,
+                }
+
+            if tb:
+                payload["traceback"] = tb
+
+            self._write_json(self._path_for(event_id), payload)
+            return
 
         lines: list[str] = [
             f"event_id      : {event_id}",
