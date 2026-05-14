@@ -144,7 +144,12 @@ def process_incoming_event(
         # Release the DB claim so no dangling record remains; errors are
         # only written to logs/errors.log and printed to the terminal.
         if event_id is not None:
-            store.release_claim(event_id)
+            # Instead of just releasing, mark it as an error so it is persisted
+            try:
+                from deepeval_mvp.models import AIEvent
+                store.mark_error(event_id, type(exc).__name__, str(exc), event=event)
+            except Exception:
+                store.release_claim(event_id)
         else:
             event_id = f"event:{hashlib.sha256(repr(event).encode('utf-8')).hexdigest()}"
         duration_ms = int((time.monotonic() - started) * 1000)
@@ -204,6 +209,13 @@ def process_message(
             },
             exc_info=True,
         )
+        # Persist the error to the store so it's visible operationally
+        try:
+            from deepeval_mvp.models import AIEvent
+            dummy_event = AIEvent(system="unknown", event_type="unknown", user_input="", context="", output="", raw_meta={})
+            store.mark_error(event_id, type(exc).__name__, str(exc), event=dummy_event)
+        except Exception:
+            pass
         return "error"
 
 

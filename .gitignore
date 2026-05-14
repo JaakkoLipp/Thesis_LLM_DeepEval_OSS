@@ -25,6 +25,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.claude/*
+.deepeval/*
+.uv-cache/*
 
 
 # Custom files added by dev
