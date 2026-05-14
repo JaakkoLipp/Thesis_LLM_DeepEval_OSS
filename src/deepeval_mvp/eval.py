@@ -106,11 +106,15 @@ class _SanitizingOllamaModel:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": str(prompt)})
 
+        chat_kwargs: dict[str, Any] = {"model": self._model_name, "messages": messages}
+        if not env_bool("OLLAMA_ENABLE_THINKING", True):
+            chat_kwargs["think"] = False
+
         if stream:
             _sys.stderr.write("\n[judge] ")
             _sys.stderr.flush()
             chunks: list[str] = []
-            for chunk in client.chat(model=self._model_name, messages=messages, stream=True):
+            for chunk in client.chat(**chat_kwargs, stream=True):
                 token: str = chunk.message.content or ""
                 _sys.stderr.write(token)
                 _sys.stderr.flush()
@@ -119,7 +123,7 @@ class _SanitizingOllamaModel:
             _sys.stderr.flush()
             return "".join(chunks), 0
         else:
-            response = client.chat(model=self._model_name, messages=messages)
+            response = client.chat(**chat_kwargs)
             return response.message.content or "", 0
 
     # ``schema=None`` on the super() call means we get back the raw string
