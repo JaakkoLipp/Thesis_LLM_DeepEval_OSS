@@ -36,7 +36,7 @@ MINISTRAL_OPENROUTER_MODEL="${MINISTRAL_OPENROUTER_MODEL:-mistralai/ministral-14
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR" || exit 1
 
-NUM_RUNS="${NUM_RUNS:-3}"
+NUM_RUNS="${NUM_RUNS:-1}"
 POLL_SECONDS="${POLL_SECONDS:-0.0}"
 MAX_CYCLES="${MAX_CYCLES:-1}"
 FIXTURE_DIR="${FIXTURE_DIR:-tests/fixtures}"
@@ -101,7 +101,7 @@ build_run_env() {
   )
   if [[ "$backend" == "ollama" ]]; then
     RUN_ENV+=("LOCAL_MODEL_BASE_URL=$OLLAMA_BASE_URL")
-    RUN_ENV+=("OLLAMA_ENABLE_THINKING=true")
+    RUN_ENV+=("OLLAMA_ENABLE_THINKING=false")
   fi
 }
 

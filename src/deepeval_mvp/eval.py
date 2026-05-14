@@ -110,6 +110,10 @@ class _SanitizingOllamaModel:
         if not env_bool("OLLAMA_ENABLE_THINKING", True):
             chat_kwargs["think"] = False
 
+        max_tokens = env_int("OLLAMA_MAX_TOKENS", 0)
+        if max_tokens > 0:
+            chat_kwargs["options"] = {"num_predict": max_tokens}
+
         if stream:
             _sys.stderr.write("\n[judge] ")
             _sys.stderr.flush()
