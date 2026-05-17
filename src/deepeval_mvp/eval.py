@@ -182,6 +182,15 @@ class _OpenRouterModel:
         self._model_name = model_name
         self._api_key = api_key
         self._temperature = temperature
+        self._max_tokens: int | None = env_int("OPENROUTER_MAX_TOKENS", 0) or None
+        _providers = [p for p in os.environ.get("OPENROUTER_PROVIDER", "").split(",") if p.strip()]
+        _quantization = os.environ.get("OPENROUTER_QUANTIZATION", "").strip()
+        _routing: dict[str, Any] = {}
+        if _providers:
+            _routing["order"] = _providers
+        if _quantization:
+            _routing["quantizations"] = [_quantization]
+        self._extra_body: dict[str, Any] | None = {"provider": _routing} if _routing else None
 
     def load_model(self) -> Any:
         return self._model_name
@@ -218,7 +227,9 @@ class _OpenRouterModel:
                 model=self._model_name,
                 messages=messages,
                 temperature=self._temperature,
+                max_tokens=self._max_tokens,
                 stream=True,
+                extra_body=self._extra_body,
             )
             for chunk in response:
                 token = chunk.choices[0].delta.content or ""
@@ -233,6 +244,8 @@ class _OpenRouterModel:
                 model=self._model_name,
                 messages=messages,
                 temperature=self._temperature,
+                max_tokens=self._max_tokens,
+                extra_body=self._extra_body,
             )
             raw = response.choices[0].message.content or ""
 
@@ -259,6 +272,8 @@ class _OpenRouterModel:
             model=self._model_name,
             messages=messages,
             temperature=self._temperature,
+            max_tokens=self._max_tokens,
+            extra_body=self._extra_body,
         )
         raw = response.choices[0].message.content or ""
 
