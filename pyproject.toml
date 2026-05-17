@@ -23,16 +23,13 @@ package = true
 filterwarnings = [
   "ignore:There is no current event loop:DeprecationWarning",
 ]
-env_files = [".env"]
+env_file = ".env"
 testpaths = ["tests"]
 pythonpath = ["src"]
 markers = [
   "integration: dry-run integration flow with mocks",
   "system: live run against real model backend",
 ]
-
-[project.optional-dependencies]
-analysis = ["pandas", "scikit-learn", "openpyxl", "matplotlib"]
 
 [tool.poe.tasks]
 # Basic usage task for running as a service
