@@ -347,15 +347,39 @@ def emit_figures(summary: pd.DataFrame, per_tier: dict[str, pd.DataFrame],
         return
 
     fig, ax = plt.subplots(figsize=(7, 5))
-    for _, r in summary.iterrows():
-        ax.scatter(r["reliability"], r["pooled_kappa"], s=80, alpha=0.85)
+
+    # Landis & Koch band shading (only the visible range)
+    bands = [
+        (0.20, 0.40, "#fee8c8", "Fair"),
+        (0.40, 0.60, "#fdbb84", "Moderate"),
+        (0.60, 0.80, "#e34a33", "Substantial"),
+    ]
+    for lo, hi, colour, label in bands:
+        ax.axhspan(lo, hi, color=colour, alpha=0.18)
+        # Place band label at the right edge, vertically centred in band
+        ax.text(0.99, (lo + hi) / 2, label, fontsize=8, color="grey",
+                ha="right", va="center", style="italic",
+                transform=ax.get_yaxis_transform())
+
+    colours = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]
+    for idx, (_, r) in enumerate(summary.iterrows()):
+        ax.scatter(r["reliability"], r["pooled_kappa"], s=120,
+                   alpha=0.9, zorder=5, color=colours[idx % len(colours)])
         ax.annotate(r["judge"], (r["reliability"], r["pooled_kappa"]),
-                    xytext=(6, 4), textcoords="offset points", fontsize=9)
+                    xytext=(8, 6), textcoords="offset points", fontsize=9,
+                    fontweight="bold",
+                    arrowprops=dict(arrowstyle="-", color="grey", lw=0.5))
+
+    # Zoom axes to the data range so differences are visible
+    rel_vals = summary["reliability"].values
+    kap_vals = summary["pooled_kappa"].values
+    x_pad = 0.01
+    y_pad = 0.04
+    ax.set_xlim(min(rel_vals) - x_pad, max(rel_vals) + x_pad)
+    ax.set_ylim(min(kap_vals) - y_pad, max(kap_vals) + y_pad)
+
     ax.set_xlabel("Reliability (proportion of attempts producing a verdict)")
     ax.set_ylabel("Cohen's $\\kappa$ vs single-rater reference")
-    ax.set_xlim(0, 1.02)
-    ax.axhline(0.0, color="grey", linewidth=0.5)
-    ax.axhline(0.4, color="grey", linewidth=0.4, linestyle="--", alpha=0.5)
     ax.set_title("Figure 6.1. Reliability versus agreement, per judge")
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
