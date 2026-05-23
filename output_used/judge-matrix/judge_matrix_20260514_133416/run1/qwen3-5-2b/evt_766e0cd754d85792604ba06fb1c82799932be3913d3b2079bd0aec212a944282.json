@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:766e0cd754d85792604ba06fb1c82799932be3913d3b2079bd0aec212a944282",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:36:24.305750+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the capital of France?",
+    "output": "The capital of France is Paris, which has been the capital since the 10th century.",
+    "context": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the capital of France?",
+      "actual_output": "The capital of France is Paris, which has been the capital since the 10th century.",
+      "retrieval_context_len": 215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The faithfulness score is 0.00 because the retrieved context contains no information to align with the actual output, resulting in a total absence of any matching details or information.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The answer is correct and directly addresses the question without any irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The statement 'What is the capital of France?' is identical to the input query 'What is the capital of France?', indicating a perfect match in content but zero contextual relevance since there are no external documents to evaluate.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to extract the explicit requirement to identify 'the capital of France'. It answers this by stating the capital is Paris, but it does not isolate the target entity for retrieval, which is the core function of an extraction task.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully provides the requested factual information (Paris is the capital), satisfying the requirement for specific and useful details. However, it includes a minor inaccuracy by claiming the capital dates back to the 10th century, whereas Paris became the capital in 1564; despite this factual error, the core task was completed correctly. Given that the primary goal of retrieving the capital was met with concrete information, a score of 9 reflects strong alignment with the positive aspects of the steps.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

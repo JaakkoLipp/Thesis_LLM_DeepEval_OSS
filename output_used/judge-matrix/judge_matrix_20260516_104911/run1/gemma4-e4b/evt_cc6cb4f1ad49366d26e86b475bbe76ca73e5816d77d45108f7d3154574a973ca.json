@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:cc6cb4f1ad49366d26e86b475bbe76ca73e5816d77d45108f7d3154574a973ca",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:51:14.134307+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the GDP of Finland?",
+    "output": "",
+    "context": "Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023, making it one of the smaller economies in the European Union by total output. Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the GDP of Finland?",
+      "actual_output": "",
+      "retrieval_context_len": 252
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because although there are no explicit contradictions listed in the 'contradiction' field, the problem setup indicates that contradictions only occur in the 'actual output', which is not provided, making it impossible to justify the low score based on the given information.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and accurately answers the question about Finland's GDP, and there are no irrelevant statements detracting from the relevancy.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly answer the query, mentioning \"Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023\".",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require several actions: extracting requirements, checking for fulfillment, penalizing missing parts, and formatting the output. The provided steps are descriptive instructions for an evaluation process itself. The test case parameters only provide an Input (\"What is the GDP of Finland?\") and an empty Actual Output. The response correctly simulates the final required output format (SCORE: <float> REASON: <text>) but fails to actually perform the assessment based on the inputs, resulting in a very low score because the core task (evaluating the relationship between the input and the empty output) was not executed.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response perfectly follows the required output format, presenting the score and reason exactly as specified in the evaluation steps (SCORE: <float> REASON: <text>). Although the content is based on an empty actual output for the input 'What is the GDP of Finland?', the adherence to the strict formatting instruction is the most notable strength here.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:86776c9c656a7c6407864b0c11f83a9b5f50b56f09b83048c331f5720825ae70",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:02:24.743745+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was the Treaty of Versailles signed and what were its main provisions?",
+    "output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+    "context": "The Treaty of Versailles was signed on 28 June 1919 and formally ended World War I between the Allied Powers and Germany. Its main provisions included: the War Guilt Clause (Article 231) assigning blame to Germany, substantial financial reparations later set at 132 billion gold marks, military restrictions limiting the German army to 100,000 troops and prohibiting an air force, and territorial losses including the return of Alsace-Lorraine to France and cession of territory to the new state of Poland."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "When was the Treaty of Versailles signed and what were its main provisions?",
+      "actual_output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+      "retrieval_context_len": 506
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was fully faithful and accurate. Great job!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly aligned** with the input—providing the exact date (June 28, 1919) and a **clear, concise summary** of the Treaty of Versailles' main provisions (war guilt clause, reparations, territorial losses, military restrictions, and the League of Nations). No irrelevant details were included, and the answer was **directly relevant, accurate, and well-structured**. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context **perfectly** answers the input with **direct, precise details**—exact date (*'28 June 1919'*) and **comprehensive provisions** (War Guilt Clause, reparations, military restrictions, territorial losses). No irrelevant data was present, and the response is **flawlessly aligned** with the query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses both explicit requirements: it correctly identifies the signing date (**28 June 1919**) and lists key provisions (**war guilt clause, financial reparations, military restrictions, territorial losses**) as requested. All details are accurate, comprehensive, and directly tied to the input. No missing parts or style penalties apply.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides **specific, accurate, and relevant details** directly addressing the input: the **exact date (28 juin 1919)** and **key provisions** (war guilt clause, financial reparations, military restrictions, territorial losses like Alsace-Lorraine). It avoids vagueness and aligns closely with the evaluation steps by offering **concrete historical facts** without filler. The only minor shortcoming is the lack of a direct English translation for non-French speakers, but this does not detract significantly from the informativeness.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

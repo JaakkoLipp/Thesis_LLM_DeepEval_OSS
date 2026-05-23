@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5aec3a43a076be1445589641f723849bcfe577c5d96633cc6193ecb163e6e2d0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:44:12.928780+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is mitosis?",
+    "output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+    "context": "Mitosis is a form of cell division that results in two daughter cells, each with the same number and kind of chromosomes as the parent cell. It consists of four main phases: prophase (chromosomes condense and become visible), metaphase (chromosomes align at the metaphase plate), anaphase (sister chromatids are pulled apart to opposite poles), and telophase (nuclear envelopes re-form around each set of chromosomes). Cytokinesis typically follows, dividing the cytoplasm to produce two separate cells."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is mitosis?",
+      "actual_output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+      "retrieval_context_len": 503
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, meaning the actual output is perfectly faithful to the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is fully relevant to the input, and there were no irrelevant statements found to lower the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieved statements directly and completely define mitosis, stating that \"Mitosis is a form of cell division that results in two daughter cells...\" and detailing its \"four main phases: prophase..., metaphase..., anaphase..., and telophase...\". Excellent retrieval!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation process required extracting explicit requirements from the input (\"What is mitosis?\"), checking if the actual output addresses these requirements, and scoring based on fulfillment. The actual output provides a comprehensive and accurate definition of mitosis, fully addressing the core informational requirement from the test case input.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly and comprehensively answers the question \"What is mitosis?\" by providing a clear definition and detailing the specific stages (prophase, metaphase, anaphase, telophase, and cytokinesis). This fulfills Step 1 by providing specific, useful information, and Step 2 is satisfied because the details are concrete and relevant, leading to a near-perfect score as per Step 3.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

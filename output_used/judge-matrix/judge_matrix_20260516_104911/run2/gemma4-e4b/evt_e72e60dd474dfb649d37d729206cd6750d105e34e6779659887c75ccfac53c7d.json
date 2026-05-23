@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:e72e60dd474dfb649d37d729206cd6750d105e34e6779659887c75ccfac53c7d",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T08:00:33.693324+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What are the three states of matter and how do they differ?",
+    "output": "The three states of matter are solid, liquid, and gas.",
+    "context": "Matter exists in three classical states: solid, liquid, and gas. In solids, particles are tightly packed in a fixed arrangement, giving them a definite shape and volume. Liquids have particles that are close together but can move freely, so they have a definite volume but take the shape of their container. Gases have widely spaced particles that move rapidly, so they have neither a definite shape nor a definite volume."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What are the three states of matter and how do they differ?",
+      "actual_output": "The three states of matter are solid, liquid, and gas.",
+      "retrieval_context_len": 422
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there were no contradictions found, meaning the actual output fully aligns with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output perfectly answers the question about the three states of matter and their differences, with no irrelevant statements found.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context directly answers the prompt; for example, it states, \"Matter exists in three classical states: solid, liquid, and gas,\" and goes on to explain how each state \"differ[s]\".",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation correctly identifies that the first requirement, 'Extract the explicit requirements from the user input,' is partially met as the output addresses the topic. However, the actual output only states the three states (solid, liquid, and gas) and fails to address the second explicit requirement: 'how do they differ?'. Consequently, it receives partial credit for addressing the core concept but is penalized for missing the required comparative explanation.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output correctly identifies the three states of matter (solid, liquid, and gas), satisfying step 1. However, it fails to address the second part of the input question, which asks *how* they differ, providing only a list rather than detailed differentiation, leading to a penalty for lacking the comprehensive information requested.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

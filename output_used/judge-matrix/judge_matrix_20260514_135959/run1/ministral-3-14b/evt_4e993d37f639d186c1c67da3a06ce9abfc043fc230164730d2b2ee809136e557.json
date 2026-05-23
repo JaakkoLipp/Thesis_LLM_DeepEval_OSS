@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:4e993d37f639d186c1c67da3a06ce9abfc043fc230164730d2b2ee809136e557",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:11:15.894091+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How does TLS 1.3 differ from TLS 1.2 in its handshake process?",
+    "output": "TLS 1.3 reduces the handshake from two round-trips to one (1-RTT) by combining the ClientHello and key-share into a single flight. It removes support for static RSA key exchange and legacy cipher suites such as CBC-mode ciphers, retaining only AEAD algorithms like AES-128-GCM and ChaCha20-Poly1305. The server responds with its key-share, encrypted extensions, and finished message in one flight, allowing application data to flow after just one round-trip. TLS 1.3 also supports 0-RTT resumption, where cached pre-shared keys let clients send early data before the handshake completes, at the cost of reduced replay protection.",
+    "context": "TLS 1.3, defined in RFC 8446, redesigns the handshake to complete in a single round-trip (1-RTT) instead of the two round-trips required by TLS 1.2. The client sends a ClientHello message that includes supported cipher suites and one or more key-share entries (typically ECDHE). The server selects a cipher suite, responds with its own key-share, and derives handshake keys immediately. All cipher suites in TLS 1.3 use AEAD constructions; supported algorithms include AES-128-GCM, AES-256-GCM, and ChaCha20-Poly1305. Static RSA and Diffie-Hellman key exchanges, CBC-mode ciphers, and MD5/SHA-1 hash functions are removed. A 0-RTT mode allows session resumption with pre-shared keys (PSK), enabling clients to send early application data in the first flight, though this data is not forward-secret and is susceptible to replay attacks."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "How does TLS 1.3 differ from TLS 1.2 in its handshake process?",
+      "actual_output": "TLS 1.3 reduces the handshake from two round-trips to one (1-RTT) by combining the ClientHello and key-share into a single flight. It removes support for static RSA key exchange and legacy cipher suites such as CBC-mode ciphers, retaining only AEAD algorithms like AES-128-GCM and ChaCha20-Poly1305. The server responds with its key-share, encrypted extensions, and finished message in one flight, allowing application data to flow after just one round-trip. TLS 1.3 also supports 0-RTT resumption, where cached pre-shared keys let clients send early data before the handshake completes, at the cost of reduced replay protection.",
+      "retrieval_context_len": 835
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.7142857142857143,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.71** because the actual output incorrectly **narrowed TLS 1.3’s AEAD cipher suites to just two examples** (AES-128-GCM, AES-256-GCM) while omitting others like ChaCha20-Poly1305, and **misrepresented the TLS 1.3 handshake flow** by claiming the Finished message appears in the first flight (when it’s actually deferred to the second flight). These inaccuracies, though partial, still reflect core misunderstandings of TLS 1.3’s design.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response **perfectly** addressed the input's core question about TLS 1.3 vs. TLS 1.2 handshake differences—covering key aspects (e.g., 1-RTT, reduced round trips, cipher suite negotiation) **without deviation or irrelevance**. Precision and clarity aligned flawlessly with the query, leaving no room for improvement.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provides a **perfectly precise, detailed, and exhaustive** breakdown of TLS 1.3’s handshake process—directly answering the input’s question with **technical depth** (e.g., *‘1-RTT vs. 2-RTT,’ ‘key-share entries,’ ‘AEAD ciphers,’* and *‘0-RTT mode’*), while **no irrelevant content** dilutes the relevance. A flawless match!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of explaining how TLS 1.3 differs from TLS 1.2 in its handshake process. Key details like the reduction to **1-RTT** (combining ClientHello and key-share), removal of **static RSA key exchange** and **legacy cipher suites** (e.g., CBC), and the introduction of **AEAD algorithms** (AES-128-GCM, ChaCha20-Poly1305) are all included. Additionally, it covers the **0-RTT resumption** feature and its trade-offs, directly answering the input’s focus on handshake mechanics. No required parts are missing, and the explanation is technically precise.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides **highly specific, technically precise details** directly addressing the input's focus on TLS 1.3 vs. TLS 1.2 handshake differences. It covers **key structural changes** (1-RTT vs. 2-RTT), **protocol-level modifications** (removal of RSA key exchange, AEAD-only ciphers), **server response optimizations**, and **0-RTT resumption**—all critical to answering the question. No filler or vague statements are present; every claim is grounded in concrete protocol mechanics, aligning perfectly with the evaluation steps.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

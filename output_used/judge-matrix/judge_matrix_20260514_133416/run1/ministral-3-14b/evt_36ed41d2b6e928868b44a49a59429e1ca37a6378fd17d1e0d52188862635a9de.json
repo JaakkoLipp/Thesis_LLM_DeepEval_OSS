@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:36ed41d2b6e928868b44a49a59429e1ca37a6378fd17d1e0d52188862635a9de",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:41:02.496675+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the population of Tokyo?",
+    "output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+    "context": "Tokyo is the capital of Japan. The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023. The Greater Tokyo Area, which includes surrounding prefectures such as Kanagawa, Saitama, and Chiba, has a population of about 37.4 million, making it the largest metropolitan area globally by population."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the population of Tokyo?",
+      "actual_output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+      "retrieval_context_len": 329
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the actual output incorrectly merged the **Tokyo Metropolis (Tokyo-to) population (~13.96 million)** with the **Greater Tokyo Area (~37.4 million)**, conflating two distinct geographic and administrative definitions. This misalignment with the retrieval context—where the two are clearly differentiated—reduces faithfulness by overstating the population by ~23 million.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the answer was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details were included, and the response was concise yet complete. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the retrieval context includes **directly relevant population data** for Tokyo (e.g., *'The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023'* and *'Greater Tokyo Area... about 37.4 million'*), but **irrelevant statements** (e.g., *'unrelated to population data'*) dilute the precision. The partial match justifies a moderate score.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of providing the population of Tokyo. It includes both the city proper (14 million) and the Greater Tokyo Area (37 million), directly answering the query without omissions. The output is precise, relevant, and avoids unnecessary stylistic deviations, adhering strictly to the evaluation steps.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly addresses the input with precise, actionable details—specifying the population of Tokyo (14 million in the city proper and 37 million in the Greater Tokyo Area) and providing context (most populous metropolitan area). It avoids vagueness, fulfills the request entirely, and includes relevant, verifiable data. The output aligns perfectly with the evaluation steps by delivering specificity, utility, and no filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

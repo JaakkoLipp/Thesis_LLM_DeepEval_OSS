@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:38:31.310701+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.80** because the response directly addressed the core question about employee count but included an irrelevant detail (office location) that didn’t contribute to the answer. The core information was accurate and relevant, but the unnecessary detail slightly lowered the precision.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context directly answers the input with a **precise, actionable statement** ('*The company has operations in multiple countries and continues to grow its workforce.*'), leaving **no irrelevant noise**—a perfect match!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response partially addresses the explicit requirement ('How many employees does the company have?') by providing a **total employee count (14,200)** and additional context (growth rate, office locations). However, it **fails to directly answer the core question**—the number of employees—without extraneous details, which violates the requirement of addressing the input's explicit focus. The output also **lacks precision** by not isolating the primary metric (14,200) as the sole answer, instead embedding it in a verbose response. Style or formatting is irrelevant, but the **core requirement (direct answer to the question) is not fully met**.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly answers the input question with **specific, quantifiable details** (14,200 employees, 12% growth, regional breakdowns like Singapore/Berlin office sizes). It avoids vagueness, provides **actionable context** (geographic distribution, growth trend), and aligns perfectly with the evaluation steps by delivering **highly relevant, concrete information** without filler. The response exceeds expectations by offering granularity beyond the core question.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

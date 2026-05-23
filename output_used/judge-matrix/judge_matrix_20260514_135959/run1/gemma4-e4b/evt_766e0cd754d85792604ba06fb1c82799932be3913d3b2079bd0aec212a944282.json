@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:766e0cd754d85792604ba06fb1c82799932be3913d3b2079bd0aec212a944282",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T11:07:37.772694+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the capital of France?",
+    "output": "The capital of France is Paris, which has been the capital since the 10th century.",
+    "context": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the capital of France?",
+      "actual_output": "The capital of France is Paris, which has been the capital since the 10th century.",
+      "retrieval_context_len": 215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output mentions information not present in the context, specifically 'the capital of France' and 'when Paris has been the capital of France', whereas the context discusses the mitochondria, ATP, and eukaryotic organisms.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and completely answers the question asked in the input without including any irrelevant information.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided reasons confirm the context is irrelevant, stating that statements like 'The statement 'The mitochondria is the powerhouse of the cell.' is about biology and does not answer the question 'What is the capital of France?'' and 'The statement 'It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy.' is about the function of mitochondria and is irrelevant to the capital of France.' are completely unrelated to the input question, and no relevant statements were found.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps required extracting explicit requirements from the input ('What is the capital of France?'), checking if the output addresses each requirement (the capital of France is provided as Paris), and scoring accordingly. The output directly and accurately answers the question posed, fully satisfying the single core requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly and specifically answers the input question ('What is the capital of France?'). It provides the core answer ('Paris') and then adds extra, concrete relevant detail ('which has been the capital since the 10th century'), perfectly aligning with the goal of rewarding concrete, useful information while avoiding vagueness.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

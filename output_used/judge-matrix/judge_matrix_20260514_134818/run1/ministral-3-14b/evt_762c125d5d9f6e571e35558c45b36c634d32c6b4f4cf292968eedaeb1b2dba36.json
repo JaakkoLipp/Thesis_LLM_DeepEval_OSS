@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:56:51.516340+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.50** because the actual output incorrectly stated the Nobel Prize was awarded in **1942** (contradicting the retrieval context’s correct year, **1945**), introducing a clear factual error that undermines trustworthiness.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the response correctly identified the discovery date (1928) and discoverer (Alexander Fleming) of penicillin, but **dedicated significant space to Nobel Prize details (1945, Florey/Chain)**, which—while related—**distracted from the core question** about discovery origins. The irrelevant Nobel Prize context (including co-recipient names) **reduced precision** by adding tangential information, though the core answer remained accurate.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.33** because the retrieval context included **only one directly relevant statement** ('*Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary’s Hospital in London*'), while the rest of the context—such as Fleming’s *observation of bacterial inhibition* and the *1945 Nobel Prize*—were **irrelevant to the core question** of *when* and *by whom* penicillin was discovered.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the **explicit requirements** of the input by providing the **discovery year (1928)** and the **discoverer (Alexander Fleming)**. It also includes **additional relevant details** (location, Nobel Prize context), which, while not strictly required, enhance accuracy without detracting from the core answer. The only minor shortcoming is the **unnecessary inclusion of the Nobel Prize details**, which slightly deviates from the direct question but does not invalidate the core response. The output is **concise, accurate, and well-structured**, adhering closely to the evaluation steps.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the input with **specific, factual details** (year, discoverer, location, and Nobel Prize context), avoiding vagueness. It provides **concrete relevance** to the question by naming *Alexander Fleming* and *1928*, while also offering **additional useful context** (collaborators and award) without overcomplicating. The output aligns perfectly with the evaluation steps by delivering **highly informative, precise content** with no filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

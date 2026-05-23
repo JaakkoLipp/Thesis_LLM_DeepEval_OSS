@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:58:31.423249+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicted the retrieval context by claiming Fleming discovered penicillin *by* Alexander Fleming and by incorrectly stating the Nobel Prize year as 1942 instead of 1945.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the answer is completely relevant to the input, and there are no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because while the context contains a relevant statement, \"Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London,\" the provided reasons for irrelevancy suggest that the context also discusses secondary details, like the Nobel Prize, which are not directly answering the core question of \"When was penicillin discovered and by whom?\". The irrelevance reasons point out that the context's focus extends beyond the direct query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully extracts the required information (when and by whom penicillin was discovered) from the input (\"When was penicillin discovered and by whom?\"). It directly addresses both parts of the query (discovery details and discoverer names) in the actual output, fully meeting all stated requirements.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly answers the question ('When was penicillin discovered and by whom?') with specific details (1928 by Alexander Fleming). It also provides extra, highly relevant information by mentioning the location (St Mary's Hospital) and the subsequent Nobel Prize recipients and year, satisfying all criteria for being specific and informative.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

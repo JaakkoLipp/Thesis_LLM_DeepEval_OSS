@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T07:56:30.982952+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output seems to contradict the retrieval context by ignoring the information that the context states the Earth is an oblate spheroid, and also overlooks the implication of curvature from the description of the Earth as an oblate spheroid with specific equatorial and polar radii.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because while the output attempts to address the topic, it includes statements that promote demonstrably false and irrelevant viewpoints (like asserting the Earth has no curvature or stating the flat-Earth view) without providing a substantive comparison or supporting the scientifically accepted model, thus limiting the score from being higher.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly and fully answer the user's question, as seen in the facts that 'The Earth is an oblate spheroid, meaning it is roughly spherical...' and 'This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations.' ✨",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements from the input, checking if the output addresses each, penalizing missing parts, and formatting the final output. The provided response perfectly follows the specified output format: SCORE: <float> REASON: <text>, using a score and reason text.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require assessing if the output provides specific, useful information to answer the input ('Is the Earth round or flat?'). The actual output states, 'The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface,' which is a direct and highly specific, albeit factually incorrect, response. According to the steps, the score should reflect helpfulness, and while it is specific, it presents misinformation contrary to established facts, but more critically, it fails to address the common knowledge answer expected by the query. Because it provides *a* detailed answer (Step 1) but is wholly uninformative in a factual sense, and the goal is to evaluate helpfulness/relevance, I score it low as it promotes misinformation instead of providing useful information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

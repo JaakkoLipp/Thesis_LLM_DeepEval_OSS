@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:09:53.789929+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful, accurate, and consistent with the provided information. Well done!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details, deviations, or unnecessary information were included. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided a **direct, precise answer** ('The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure')—perfectly aligned with the input and **no irrelevant data** was present. Spot on!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of providing the boiling point of water (100°C/212°F) at standard pressure, which is the core of the input. It also includes **unprompted but relevant** supplementary information (altitude effects, e.g., Mount Everest), which aligns with a thorough answer but was not explicitly required. The output lacks a direct acknowledgment of the *standard atmospheric pressure* as a qualifier (though it is implied), and the additional details, while useful, slightly dilute focus on the core requirement. No style issues or omissions of required parts exist.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output provides a highly specific and informative answer to the input, including the standard boiling point of water (100°C/212°F) and additional relevant context about altitude effects (e.g., boiling point on Mount Everest). It avoids vagueness, directly addresses the query, and includes concrete details (e.g., atmospheric pressure, specific temperature values). This aligns perfectly with the evaluation steps, particularly rewarding specificity and relevance.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

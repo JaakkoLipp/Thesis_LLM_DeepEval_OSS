@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:07:11.106927+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output completely misrepresented core biological processes: it falsely attributed photosynthesis to animals (instead of plants/algae), confused chloroplasts with mitochondria, and reversed the gas exchange (claiming CO₂ was produced instead of O₂). Every key detail contradicted the retrieval context, demonstrating total factual failure.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely failed** to address the input question—providing **factually incorrect, irrelevant, and contradictory** statements about photosynthesis (e.g., misattributing it to animals, mitochondria, and CO₂ production). The response **ignored the core definition** and instead filled the output with **false or misleading claims**, making it **utterly unusable** for answering 'What is photosynthesis?'",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **four precise, authoritative statements** about photosynthesis, covering its definition, process, inputs/outputs, and byproducts (*'Photosynthesis is a biological process...'*, *'During photosynthesis, light energy...'*, etc.). No irrelevant content was present, making this retrieval **flawlessly relevant**!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of defining **photosynthesis** (a biological process involving plants/algae, not animals) and contains **factually incorrect details** (e.g., mitochondria in muscle cells, carbon dioxide as output). Key shortcomings include: (1) **wrong subject** (animals instead of plants/algae), (2) **incorrect mechanism** (food-to-energy conversion is respiration, not photosynthesis), and (3) **misstated outputs** (photosynthesis produces oxygen, not carbon dioxide). No alignment with the input’s core requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output provides **no alignment** with the input question about *photosynthesis*, instead describing a **fundamentally incorrect process** (misattributing it to animals and mitochondria) and introducing **false details** (e.g., carbon dioxide as a primary output). It fails all evaluation steps: (1) no useful information is provided to answer the input; (2) the response is entirely non-answer with **vague, biologically inaccurate filler**; (3) the score must reflect **zero informativeness** due to the complete misdirection and lack of relevance to the input.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

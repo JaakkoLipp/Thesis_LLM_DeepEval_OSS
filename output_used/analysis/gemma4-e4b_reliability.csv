@@ -1,0 +1,7 @@
+metric,n_attempts,n_errors,reliability
+AnswerRelevancy,81,2,0.9753086419753086
+Completeness,81,2,0.9753086419753086
+ContextualRelevancy,81,2,0.9753086419753086
+Faithfulness,81,2,0.9753086419753086
+Informativeness,81,2,0.9753086419753086
+(overall),405,10,0.9753086419753086

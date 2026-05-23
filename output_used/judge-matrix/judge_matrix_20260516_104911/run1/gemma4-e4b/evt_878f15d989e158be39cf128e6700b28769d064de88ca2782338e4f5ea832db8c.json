@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:878f15d989e158be39cf128e6700b28769d064de88ca2782338e4f5ea832db8c",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:54:21.885197+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the chemical formula for sulfuric acid?",
+    "output": "I'm sorry, I don't have enough information to answer that question.",
+    "context": "Sulfuric acid has the chemical formula H2SO4. It is a strong mineral acid with a wide range of industrial applications including fertiliser production, oil refining, and wastewater processing. It is a colourless, odourless, viscous liquid that is highly corrosive."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the chemical formula for sulfuric acid?",
+      "actual_output": "I'm sorry, I don't have enough information to answer that question.",
+      "retrieval_context_len": 264
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, meaning the actual output is perfectly consistent with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is perfectly relevant, and there were no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because while a statement directly answers the query, the score is lowered because the system also noted that other parts of the context discuss 'industrial applications' and 'physical properties', which are not what the input specifically asks for, even though 'Sulfuric acid has the chemical formula H2SO4' is present.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation process requires extracting explicit requirements from the user input ('What is the chemical formula for sulfuric acid?'), checking if the actual output addresses these requirements, and scoring based on completeness. The actual output ('I'm sorry, I don't have enough information to answer that question.') fails to address the core requirement (providing the chemical formula), leading to a significant penalty. The score reflects partial compliance with the structured evaluation steps but fails the primary task execution.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails step 1 because it does not provide the specific, useful information requested by the input (\"What is the chemical formula for sulfuric acid?\"). It instead offers a non-answer, violating the principle of rewarding concrete relevant details described in step 2. Therefore, the score must be low.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

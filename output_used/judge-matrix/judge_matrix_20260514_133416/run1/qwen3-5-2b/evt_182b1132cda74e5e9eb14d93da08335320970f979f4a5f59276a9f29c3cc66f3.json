@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:34:50.757677+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output contradicts the context by asserting the Earth is flat and flat, which directly conflicts with the context stating the Earth is an oblate spheroid, an inherently curved shape described by bulging at the equator.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is low because the output contained no relevant statements, leading to a score of 0.25 instead of 1.0.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the input questions whether the Earth is round or flat, while the retrieval context explicitly states this as a 'well-known scientific fact' rather than providing a direct opinion or reasoning relevant to the user's query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly identified the Earth as round in its response, directly contradicting the 'flat' claim in the input. It accurately explained the curvature and the orbital mechanics of satellites around a round planet, addressing both the explicit question and the implied scientific fact required by the test case.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly contradicts the input by asserting the Earth is flat, which is a specific and relevant correction to the query. It also provides concrete scientific reasoning (no curvature, straight satellite orbits) to support the claim. The explanation is concise, directly addresses the input and output, and avoids vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

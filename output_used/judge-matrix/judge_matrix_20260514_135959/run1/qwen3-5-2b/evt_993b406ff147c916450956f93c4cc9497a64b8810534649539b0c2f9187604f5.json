@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:04:25.354526+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because there are no contradictions in the provided input, indicating a perfect alignment where the actual output fully matches the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output is missing the actual response content entirely, and the empty irrelevant statements list implies no errors or missing sections, which typically results in a low score due to the absence of a helpful answer.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The provided context contains accurate, specific data (100°C or 212°F) that directly supports the input query, making it highly relevant with a score of 1.00.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output fully satisfies the explicit requirement to identify the boiling point of water (100°C) and provide alternative units (Fahrenheit). However, the explanation for higher altitudes contradicts the factual premise of the original question by stating the boiling point decreases to 70°C when atmospheric pressure is lower; physically, pressure reduction causes boiling points to increase. This minor factual inconsistency in the reasoning prevents a perfect score. Additionally, the output includes extra context not requested by the user.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the input question with specific, concrete details including exact temperature values, units, and context (standard pressure and altitude). It meets all evaluation criteria by providing no vagueness and offering highly informative, precise data relevant to the physics question.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

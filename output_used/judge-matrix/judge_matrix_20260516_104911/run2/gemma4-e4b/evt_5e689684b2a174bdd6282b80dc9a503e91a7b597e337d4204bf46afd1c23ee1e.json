@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T08:02:12.113481+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the contradictions show that the actual output wrongly asserts that the photosynthesis process involves a single listing of sunlight, water, and carbon dioxide converting into glucose *and* oxygen, which the context contradicts, and it also incorrectly specifies that the process takes place *primarily in the chloroplasts of leaf cells* when the context only states light energy is captured by chlorophyll in chloroplasts.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output was entirely relevant to the input. Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context is perfectly relevant, containing key definitions and processes such as 'Photosynthesis is a biological process used by green plants and certain other organisms.' and explaining that 'During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts.' Great job finding all the right information!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements, checking if the output addresses them, penalizing missing parts, and formatting the final output. Since the provided test case ('What is photosynthesis?' as input and a definition as output) does not inherently contain multiple distinct requirements to check against, the model successfully fulfilled the implicit primary requirement: providing a direct and accurate answer to the question posed in the input. It adhered to the implied structure of answering the query directly, thus fully meeting the functional requirement presented.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response excels by directly answering the 'What is photosynthesis?' question. It provides specific, useful information by detailing the reactants (sunlight, water, carbon dioxide), products (glucose, oxygen), and the location of the process (chloroplasts of leaf cells), adhering well to the steps requiring concrete relevant details and being highly informative.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

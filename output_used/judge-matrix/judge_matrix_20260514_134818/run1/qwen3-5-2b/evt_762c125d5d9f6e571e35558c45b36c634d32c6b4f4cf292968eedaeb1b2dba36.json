@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:52:27.149531+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output is 0.67 faithful because the claim incorrectly attributes the 1942 Nobel Prize to Fleming and ignores the actual award of the 1945 Prize, despite the retrieval context confirming both 1945 winners and their respective years.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The answer is factually correct regarding the year and discoverer, so the low score indicates the model failed to directly address the specific question of 'when it was discovered' without providing unrelated historical context or filler.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The retrieval context contains a duplicate query identical to the input question, indicating a potential failure in the retrieval process where the source query does not actually differ from the input query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the user's question by providing the year (1928), the discoverer (Alexander Fleming), and the location (St Mary's Hospital in London). It also accurately includes the historical context regarding Howard Florey and Ernst Boris Chain's involvement in the Nobel Prize sharing, making all explicit requirements met.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides specific and relevant details directly addressing the query: the year (1928), the discoverer (Alexander Fleming), the institution (St Mary's Hospital in London), and the collaborator who shared the Nobel Prize. It avoids vague filler and effectively answers the input using concrete facts.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

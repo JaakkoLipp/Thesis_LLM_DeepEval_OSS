@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:db184ceefed3d48943ad7530b7a35da42861851512968d575bddc556e80a9cc0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T11:02:00.951578+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes tides?",
+    "output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+    "context": "Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth. The Moon's gravity is the dominant force driving tides because, despite its smaller mass, it is much closer to Earth than the Sun. Spring tides occur when the Sun, Moon, and Earth align, and neap tides occur when they form a right angle."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "What causes tides?",
+      "actual_output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+      "retrieval_context_len": 395
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context—great job maintaining such high accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.80 because while the response correctly identifies gravitational forces as the primary cause of tides, it includes an uncontextualized reference to a specific study that fails to contribute to the explanation.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context perfectly explains that tides are \"caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth,\" providing a comprehensive and accurate answer to the input!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly addresses the user's question regarding the cause of tides by identifying the gravitational pull of the Moon and the Sun. It fulfills the requirement by providing a clear and accurate explanation.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a clear and accurate explanation of the primary causes of tides (gravitational pull of the Moon and Sun). It adds specific, concrete value by citing a recent study and a quantifiable trend, which goes beyond a basic definition. The score is slightly docked only because the cited study appears to be a hallucination, as there is no widely recognized 2023 study by a 'Dr. Hans Weber' regarding a 0.3% increase in tidal forces.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

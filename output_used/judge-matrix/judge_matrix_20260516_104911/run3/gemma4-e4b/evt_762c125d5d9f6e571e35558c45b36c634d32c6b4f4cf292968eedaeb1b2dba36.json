@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:08:17.774614+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.5 because the actual output incorrectly states the Nobel Prize year as 1942 when the retrieval context specifies the 1945 Nobel Prize, and it also fails to include the specific year information for the contradiction.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and accurately answers the question about the discovery of penicillin and its discoverer, with no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.67 because while the context provides the core answer in the relevant statement, such as 'Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London,' the 'reasons for why the retrieval context is irrelevant' section notes that the context focuses on the Nobel Prize ('...discusses the Nobel Prize award date (1945) and the development...') rather than solely the initial discovery date asked for.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements, checking if the output addresses all of them, and penalizing missing parts. The user input asks two distinct pieces of information: 'When was penicillin discovered' and 'by whom?'. The actual output successfully provides both the year (1928) and the discoverer (Alexander Fleming), fully addressing all specified requirements.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response perfectly aligns with the evaluation steps. It directly answers the input question ('When was penicillin discovered and by whom?') by providing specific information (1928 by Alexander Fleming). It also adds highly relevant context (St Mary's Hospital, Nobel Prize details), earning a high score as per step 2, and follows the required output format structure for the final score justification.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

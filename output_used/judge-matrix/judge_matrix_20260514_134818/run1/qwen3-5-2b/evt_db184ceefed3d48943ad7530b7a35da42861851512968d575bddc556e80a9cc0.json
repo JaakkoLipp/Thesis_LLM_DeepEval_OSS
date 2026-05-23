@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:db184ceefed3d48943ad7530b7a35da42861851512968d575bddc556e80a9cc0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:50:17.515240+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes tides?",
+    "output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+    "context": "Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth. The Moon's gravity is the dominant force driving tides because, despite its smaller mass, it is much closer to Earth than the Sun. Spring tides occur when the Sun, Moon, and Earth align, and neap tides occur when they form a right angle."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What causes tides?",
+      "actual_output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+      "retrieval_context_len": 395
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because the retrieval context contains no contradictions; the information aligns perfectly and there are no issues to note.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The provided output list is empty, resulting in a current score of 1.00 as there are no irrelevant statements to deduct points.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context explains the gravitational mechanisms of tides and provides specific examples, supporting the 'causes of tides' query, but this is less directly relevant than a direct definition which would yield a higher score.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses all explicit requirements by accurately identifying the gravitational pull of the Moon and the Sun as the cause of tides. It also incorporates specific details from the input text, including the exact percentage (0.3%) and decadely rate mentioned in the test case.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output strongly aligns with the evaluation steps by providing specific, factual information. It explicitly identifies the gravitational pull of the Moon as the primary cause and the Sun as a secondary factor, directly answering the input question. Additionally, it includes a concrete, data-driven detail (0.3% increase per decade) from a credible source (Nature 2023), fulfilling the requirement for specific and useful information. The tone is appropriate and the content is concise yet informative.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

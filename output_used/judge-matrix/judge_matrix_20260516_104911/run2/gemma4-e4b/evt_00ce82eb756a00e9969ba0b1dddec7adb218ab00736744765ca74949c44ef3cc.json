@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:00ce82eb756a00e9969ba0b1dddec7adb218ab00736744765ca74949c44ef3cc",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T08:00:22.855807+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes earthquakes?",
+    "output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+    "context": "Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves. They most commonly occur along tectonic plate boundaries where plates converge, diverge, or slide past each other. The point within the Earth where the earthquake originates is called the focus, and the point directly above it on the surface is the epicentre."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What causes earthquakes?",
+      "actual_output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+      "retrieval_context_len": 363
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, meaning the actual output is fully faithful to the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output repeatedly discusses volcanoes, including those on Mars, rather than directly addressing the general causes of earthquakes as requested by the input.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and completely answer the input question, starting with \"Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves.\" Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation required extracting the explicit requirement from the input, \"What causes earthquakes?\". The actual output discusses volcanoes, Olympus Mons, and general volcano information, failing entirely to address the core requirement of explaining the causes of earthquakes. Therefore, the output misses the required information.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.1,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output completely misses the topic of the input, \"What causes earthquakes?\". It discusses volcanoes, listing general information about them and citing Olympus Mons on Mars. This fails step 1 (providing specific, useful info) and is heavily penalized for being irrelevant filler, earning a low score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

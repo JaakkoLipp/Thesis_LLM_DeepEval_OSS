@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5625ec488bc173f63ab63d55a1f28c5d2260e166da1ee1e2fefaba63d3bef3cf",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:40:38.636562+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the difference between symmetric and asymmetric encryption?",
+    "output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+    "context": "Symmetric encryption uses a single shared key for both encryption and decryption. Common algorithms include AES (Advanced Encryption Standard) and DES (Data Encryption Standard). It is computationally fast and suitable for encrypting large volumes of data. Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption. RSA and ECC (Elliptic Curve Cryptography) are widely used asymmetric algorithms. Asymmetric encryption is slower due to more complex mathematical operations but solves the key distribution problem. In practice, hybrid systems use asymmetric encryption to exchange a symmetric session key, then symmetric encryption for the bulk data transfer."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the difference between symmetric and asymmetric encryption?",
+      "actual_output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+      "retrieval_context_len": 700
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.4,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.40** because the actual output **incorrectly classified AES-256 as asymmetric encryption** (it’s symmetric) and **misrepresented RSA as symmetric** (it’s asymmetric), while also **reversing the performance claim**—asserting symmetric encryption is slower (contradicting the retrieval context’s stated speed advantage). These errors undermine the output’s factual alignment with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.33** because the response partially addressed the core distinction (symmetric vs. asymmetric encryption) but was undermined by **multiple factual inaccuracies** (e.g., mislabeling AES as asymmetric, conflating RSA with AES, and incorrect speed/security tradeoff claims). These errors distracted from the actual answer and lowered relevance. The response *did* correctly identify the **key difference** (key usage: shared vs. public/private), but the irrelevant/false statements dragged the score down significantly. A higher score would require **precision**—no mixed-up definitions or contradictory claims.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly addresses the input by defining *both* symmetric and asymmetric encryption, comparing their key structures ('single shared key' vs. 'key pair'), listing algorithms (AES/DES vs. RSA/ECC), and even explaining their trade-offs (speed vs. key distribution). The hybrid system example further clarifies real-world use, making it **flawlessly relevant**!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response partially addresses the core requirement of explaining the difference between symmetric and asymmetric encryption but contains **critical inaccuracies and contradictions**. Strengths include defining symmetric encryption correctly (single key) and listing examples (AES, DES). However, it **fails to distinguish asymmetric encryption properly**: it incorrectly states AES-256 uses a public/private key pair (AES is symmetric) and conflates RSA (asymmetric) with AES (symmetric). The claim that symmetric encryption is *slower but more secure* is factually reversed (symmetric is faster; asymmetric is slower but more secure for key exchange). The output also **omits key structural differences** (e.g., public/private key pairs in asymmetric) and **misrepresents algorithm classifications**. These errors undermine the response’s utility despite partial correct examples.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.4,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response provides **some** correct technical distinctions (e.g., single key in symmetric vs. key pairs in asymmetric) and lists **partially accurate** examples (AES/DES for symmetric, RSA for asymmetric). However, it contains **critical inaccuracies**: AES-256 is incorrectly labeled as asymmetric (it is symmetric), and the claim that symmetric encryption is 'slower but more secure' while asymmetric is 'faster but less secure' is **factually reversed** (asymmetric is slower due to key operations, symmetric is faster but less secure for key distribution). The output also **omits key context**, such as the role of public/private keys in asymmetric encryption or the trade-offs (e.g., key management). While the structure is clear, the **misinformation and oversimplifications** undermine its usefulness.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

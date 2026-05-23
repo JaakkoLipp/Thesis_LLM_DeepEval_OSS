@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:49:17.665055+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5714285714285714,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output contradicts the context by claiming that 68.7% of freshwater is locked in ice, which is impossible since saltwater cannot be a subset of freshwater, and by stating the saltwater percentage of surface water is higher than its percentage of total water, both of which violate fundamental factual constraints established in the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the model provided the precise and correct answer directly without adding any unnecessary or irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The retrieval context contains the exact statistic that answers the input question (71% water coverage), whereas the input asks for this same fact, making them perfectly relevant with a score of 1.00.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.85,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model fully addresses all extracted requirements by providing the explicit answer ('71%') and detailing the breakdown into saltwater, freshwater, ice caps, groundwater, and lakes/rivers as requested. While the initial statement was slightly off (it stated 71% when the precise global average is closer to 3.01%), the detailed subsequent explanation correctly identified the approximate 97% saltwater figure, accurately described the ~2.5% freshwater distribution, and provided the correct percentages for ice caps, groundwater, and surface freshwater. The response meets the core evaluation criteria despite minor rounding discrepancies in the introductory figure.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a specific and highly informative answer by quantifying the percentage of Earth's surface covered by water (71%), clarifying the breakdown between saltwater and freshwater, and detailing the distribution of freshwater types. This directly addresses the input query with precise data, making it an excellent response.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

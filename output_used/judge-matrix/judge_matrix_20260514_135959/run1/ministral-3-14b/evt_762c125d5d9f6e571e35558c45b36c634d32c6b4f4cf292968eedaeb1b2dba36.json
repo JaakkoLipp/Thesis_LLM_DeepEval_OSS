@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:09:19.723679+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.50** because the actual output incorrectly stated the Nobel Prize was awarded in **1942** instead of the correct year, **1945**, as referenced in the retrieval context. This factual error directly undermines the output's accuracy and reliability.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the response likely provided the core discovery details (date and discoverer) but included **unnecessary Nobel Prize context** (e.g., prize details, recipient names), which diluted focus on the direct question. The core answer was correct, but the irrelevant additions dragged the score down.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.33** because the retrieval context included **only one directly relevant statement** ('Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming...'), while the rest provided **detailed mechanisms or irrelevant details** (e.g., Nobel Prize mention, mold observation). The partial match (1/3) justifies the low score.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirements of the input by providing the correct year (1928) and discoverer (Alexander Fleming) of penicillin. It also includes an additional relevant detail (location and Nobel Prize context), which is not required but does not detract from the core accuracy. The only minor shortcoming is the inclusion of extraneous information (Nobel Prize details), though this does not affect the core requirements. The output is precise and factually correct for the primary query.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly answers the input with **specific, factual details**—naming the year (1928), the discoverer (Alexander Fleming), and the location (St Mary's Hospital, London). It also provides **additional relevant context** (Nobel Prize and collaborators) without introducing vague or irrelevant filler. The response is **highly informative, concise, and aligned with the evaluation steps**, particularly excelling in Step 2 (rewarding concrete details) and Step 3 (maximizing specificity).",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

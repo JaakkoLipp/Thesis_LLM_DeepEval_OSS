@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:53:13.536033+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicts the context by stating that photosynthesis is for animals converting food into energy and incorrectly mentioning the mitochondria and carbon dioxide as the primary output, when the context specifies green plants, the reactants (CO2 and water), the product (glucose), and the release of oxygen.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contains several fundamentally inaccurate statements regarding photosynthesis, confusing it with cellular respiration (e.g., stating it involves converting food into energy, mentioning mitochondria instead of chloroplasts). These severe factual errors prevent the score from being higher.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the entire context is highly relevant, as statements like 'Photosynthesis is a biological process used by green plants and certain other organisms,' and 'During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts' directly and completely answer the question, \"What is photosynthesis?\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require extracting explicit requirements from the input (\"What is photosynthesis?\"), checking if the actual output addresses them, and penalizing missing parts. The actual output completely fails to define photosynthesis, instead describing a process associated with mitochondria and CO2 production, which misses the core concept of photosynthesis. It only vaguely addresses the topic, resulting in a very low score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to provide specific information regarding the input 'What is photosynthesis?'. Instead, it gives incorrect biological information, stating it is a process by which animals convert food into energy, occurring in mitochondria and producing carbon dioxide. This severely lacks the concrete details expected for this topic.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

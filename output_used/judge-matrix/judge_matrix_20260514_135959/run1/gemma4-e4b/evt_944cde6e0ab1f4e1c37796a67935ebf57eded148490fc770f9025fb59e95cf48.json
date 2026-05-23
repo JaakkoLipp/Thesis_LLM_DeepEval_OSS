@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T11:08:58.127987+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the actual output makes unverified claims, such as stating 'Whether water is wet depends on definition' and asserting that 'water itself is not wet' based on the context, which only defines wetness generally and associates it with water without providing a specific definition to confirm the claim that water is wet under that definition.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the answer directly and perfectly addresses the question 'Is water wet?' with no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly address the concept of 'wetness' in relation to water, such as 'Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water' and 'Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus.' This directly pertains to the input question, making it highly relevant.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements (Step 1), checking if the output addresses each one (Step 2), and penalizing missing parts (Step 3). The input \"Is water wet?\" presents a direct factual question, which serves as the sole requirement. The actual output directly addresses this question by exploring definitional ambiguity, fulfilling the core requirement completely. The response structure inherently meets the implicit goal of answering the prompt factually, thus achieving full coverage against the single requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly addresses the philosophical nature of the question \"Is water wet?\" by providing detailed distinctions ('If wet means having water on a surface...') and acknowledging ambiguity ('There is no single scientifically agreed-upon answer'), thus providing specific, useful information and avoiding vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

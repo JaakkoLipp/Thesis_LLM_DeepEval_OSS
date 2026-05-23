@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:86776c9c656a7c6407864b0c11f83a9b5f50b56f09b83048c331f5720825ae70",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:01:19.257141+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was the Treaty of Versailles signed and what were its main provisions?",
+    "output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+    "context": "The Treaty of Versailles was signed on 28 June 1919 and formally ended World War I between the Allied Powers and Germany. Its main provisions included: the War Guilt Clause (Article 231) assigning blame to Germany, substantial financial reparations later set at 132 billion gold marks, military restrictions limiting the German army to 100,000 troops and prohibiting an air force, and territorial losses including the return of Alsace-Lorraine to France and cession of territory to the new state of Poland."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "When was the Treaty of Versailles signed and what were its main provisions?",
+      "actual_output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+      "retrieval_context_len": 506
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score of 1.00 indicates perfect alignment; there are no contradictions to justify.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output correctly addressed the historical context and main provisions of the Treaty of Versailles, providing a concise and accurate response relevant to the user's question. Since all provided information is directly relevant and the answer is complete, it received a high score as it perfectly matches the intent without any distractions or irrelevant details.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The context discusses the specific historical details and provisions of the Treaty of Versailles, directly addressing the input's query about its signature date and key clauses, resulting in a perfect score of 1.00.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model perfectly addresses all explicit requirements from the input query. It accurately identifies the date of signing (June 28, 1919) and comprehensively lists the main provisions including the war guilt clause, reparations, military restrictions, and territorial loss. No requirements were missed.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output provides a direct and specific answer to both parts of the input query: the exact signing date (28 June 1919) and a detailed list of main provisions including military restrictions, reparations, and territorial changes. It avoids vague filler and offers concrete factual details, achieving high alignment with the evaluation criteria.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:cc6cb4f1ad49366d26e86b475bbe76ca73e5816d77d45108f7d3154574a973ca",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:35:58.502629+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the GDP of Finland?",
+    "output": "",
+    "context": "Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023, making it one of the smaller economies in the European Union by total output. Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the GDP of Finland?",
+      "actual_output": "",
+      "retrieval_context_len": 252
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because there are no contradictions; the actual output aligns perfectly with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output is not lower because the current score of 0.00 reflects a lack of meaningful content addressing the question, but it is at its current score due to the complete absence of relevant information.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The context contains direct, exact answers to the user's specific question about the GDP of Finland, making it highly relevant.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response contains no content, meaning it fails to extract the economic data from the user input ('What is the GDP of Finland?'). Consequently, it misses the requirement to provide an answer to the question and yields a score of 0.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides specific and relevant information, correctly identifying the GDP of Finland as 349.1 billion USD in current PPP terms, which directly answers the input question. It avoids vague filler and delivers a concrete, factual metric.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

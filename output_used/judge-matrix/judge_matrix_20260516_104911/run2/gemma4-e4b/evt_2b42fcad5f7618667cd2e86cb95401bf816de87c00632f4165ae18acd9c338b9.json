@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T07:59:59.490124+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicts the context by stating that animals use photosynthesis to convert food into energy and that carbon dioxide is the primary output, when the context specifies that photosynthesis is used by green plants and converts CO2 and water into glucose, and that it releases oxygen.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided output includes multiple statements detailing what photosynthesis is not, rather than directly and comprehensively answering 'What is photosynthesis?' The irrelevant statements correct misconceptions about where or what photosynthesis applies to, overshadowing a direct explanation.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieved statements directly and comprehensively explain what photosynthesis is, covering its definition, process, reactants, and products, as seen in statements like 'Photosynthesis is a biological process used by green plants and certain other organisms.' and 'The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy.'",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require extracting explicit requirements from the input (\"What is photosynthesis?\") and checking if the output addresses them. The actual output provides a definition but contains factual inaccuracies (stating animals convert food into energy via photosynthesis, and listing mitochondria as the location/product). The core requirement—explaining photosynthesis—is attempted, but the poor content quality warrants a low score, while the structural steps are followed for assessment.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails significantly to answer the input \"What is photosynthesis?\" The actual output incorrectly defines photosynthesis as a process for animals to convert food into energy, mentioning mitochondria and carbon dioxide, which are unrelated to the actual biological definition of photosynthesis. This leads to a penalty for providing non-relevant and incorrect information, resulting in a very low score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:100199393e6f3fdf39c2a9e413c07c414cd549bb3072de9ecd34804e17143341",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:50:45.849204+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the relationship between voltage, current, and resistance.",
+    "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+    "context": "voltage = current × resistance"
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Explain the relationship between voltage, current, and resistance.",
+      "actual_output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+      "retrieval_context_len": 30
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.75 because the actual output's claim that resistance is an exception to the formula is directly contradicted by the retrieval context, which states that V=IR governs all scenarios without such exceptions.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The provided reasons list is empty while the score remains high at 1.00, indicating no specific irrelevant statements were detected in the actual output.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The provided score of 1.00 is high because the retrieval context directly contains the fundamental formula for the input question (voltage = current × resistance), making it perfectly relevant to the explanation task.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output fully addresses all three explicit requirements: it extracts and defines the relationship between V, I, and R; explicitly states the formula (V=IR); and explains the implications of these variables using specific details from the prompt (higher resistance, doubling voltage/doubling current). No missing parts or style issues are present.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully addresses the input question by providing specific, actionable details about the relationship between voltage, current, and resistance. It explicitly names Ohm's Law, explains the inverse relationship between resistance and current, and includes a concrete example of doubling voltage affecting current, making it highly informative.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

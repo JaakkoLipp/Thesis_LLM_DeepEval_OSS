@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:766e0cd754d85792604ba06fb1c82799932be3913d3b2079bd0aec212a944282",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:05:22.922476+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the capital of France?",
+    "output": "The capital of France is Paris, which has been the capital since the 10th century.",
+    "context": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "What is the capital of France?",
+      "actual_output": "The capital of France is Paris, which has been the capital since the 10th century.",
+      "retrieval_context_len": 215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output incorrectly asserts facts about the capital of France or Paris, even though the retrieval context does not contain any information about the capital of France or Paris, nor when Paris has been the capital.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and accurately answers the question, and there are no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided 'Reasons for why the retrieval context is irrelevant' clearly show that the context discusses unrelated topics, stating that the input asks for 'What is the capital of France?' while the context discusses 'The mitochondria is the powerhouse of the cell' and related cell biology facts, and there are no relevant statements provided.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation successfully followed all steps. Step 1 correctly identified the requirement: state the capital of France. Step 2 confirmed the actual output, \"The capital of France is Paris, which has been the capital since the 10th century,\" directly addresses this requirement by naming Paris. Step 3 shows no penalties are needed as the requirement is met. Finally, the output format precisely matches the required structure: SCORE: <float> REASON: <text>.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly answers the input \"What is the capital of France?\" by stating \"The capital of France is Paris,\" which aligns with step 1 and 2. It provides a concrete, relevant detail (Paris). It receives a high score because it is highly specific, only deducting one point because the added detail about the 10th century, while extra, is still contextually relevant rather than purely vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

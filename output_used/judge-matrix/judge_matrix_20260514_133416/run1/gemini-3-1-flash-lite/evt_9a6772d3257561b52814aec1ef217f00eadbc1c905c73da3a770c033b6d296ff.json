@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:9a6772d3257561b52814aec1ef217f00eadbc1c905c73da3a770c033b6d296ff",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:39:43.187273+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the speed of light in a vacuum?",
+    "output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+    "context": "The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second). This value is denoted by the symbol c and is a fundamental physical constant."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "What is the speed of light in a vacuum?",
+      "actual_output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+      "retrieval_context_len": 207
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context. Great job maintaining complete accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because the output failed to provide the requested numerical value, instead offering irrelevant qualitative descriptions and philosophical commentary on the significance of the speed of light.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context perfectly provides the exact value of '299,792,458 metres per second,' directly answering the user's question with precision!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.1,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The user explicitly asked for the speed of light in a vacuum, which requires a specific numerical value. The actual output provides a vague qualitative description without mentioning the required constant or the specific value, failing to address the core requirement of the prompt.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to provide the specific numerical value for the speed of light in a vacuum. While it correctly identifies the concept as a fundamental constant, it relies on vague descriptors like 'very fast' rather than providing the requested scientific data.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

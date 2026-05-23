@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:59:16.981595+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the contradictions show that the actual output incorrectly states that the conversion results in glucose AND oxygen in a single compound output, when the context only mentions oxygen as a separate byproduct, and it also incorrectly limits the location of the process to *primarily* the chloroplasts of leaf cells when the context only describes where it happens.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is entirely relevant to the input question about photosynthesis, and there were no irrelevant statements to penalize the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and comprehensively answer the input, covering the definition, process, inputs, outputs, and byproducts of photosynthesis.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements, checking if the output addresses them, penalizing missing parts, and returning a score in the specified format. The user input, \"What is photosynthesis?\", contains one implicit requirement: a definition of photosynthesis. The actual output provides a clear, comprehensive definition, fully meeting the requirement. Furthermore, the provided example JSON structure for the final output format is implicitly followed by the evaluator's logic.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly and comprehensively answers the input question, 'What is photosynthesis?'. It provides specific, useful details by defining the process, listing the required inputs (sunlight, water, carbon dioxide), and stating the outputs (glucose and oxygen). It also adds concrete context by mentioning where it takes place ('chloroplasts of leaf cells'), satisfying all criteria for being highly specific and informative.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

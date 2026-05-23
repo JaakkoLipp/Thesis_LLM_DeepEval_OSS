@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:39:31.783464+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context—great job maintaining such high accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the response is perfectly accurate and directly addresses the input without any extraneous information. Great job!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieval context perfectly addresses the input by stating, 'The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit,' providing a precise and accurate answer!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input requested the boiling point of water, which the output provided accurately in both Celsius and Fahrenheit. It also included relevant context regarding atmospheric pressure and altitude, fully addressing the core requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides the exact boiling point of water in both Celsius and Fahrenheit, correctly identifies the dependency on atmospheric pressure, and includes a concrete, illustrative example regarding high altitude to enhance clarity.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

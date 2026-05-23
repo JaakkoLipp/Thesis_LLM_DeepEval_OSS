@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5625ec488bc173f63ab63d55a1f28c5d2260e166da1ee1e2fefaba63d3bef3cf",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:02:39.166485+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the difference between symmetric and asymmetric encryption?",
+    "output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+    "context": "Symmetric encryption uses a single shared key for both encryption and decryption. Common algorithms include AES (Advanced Encryption Standard) and DES (Data Encryption Standard). It is computationally fast and suitable for encrypting large volumes of data. Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption. RSA and ECC (Elliptic Curve Cryptography) are widely used asymmetric algorithms. Asymmetric encryption is slower due to more complex mathematical operations but solves the key distribution problem. In practice, hybrid systems use asymmetric encryption to exchange a symmetric session key, then symmetric encryption for the bulk data transfer."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the difference between symmetric and asymmetric encryption?",
+      "actual_output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+      "retrieval_context_len": 700
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output incorrectly states that AES is asymmetric while the retrieval context correctly identifies it as a symmetric algorithm, and claims symmetric encryption is faster, contradicting the retrieval context's assertion that symmetric encryption is slower.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the input is a direct question about a well-defined technical topic, and the provided output (as implied by the empty irrelevant list) addresses this topic comprehensively without any noise or off-topic content.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieval context provides specific definitions and examples of asymmetric algorithms like RSA and ElGamal, which directly support answering the user's question about the differences between the two encryption types.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.7,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly identifies the core difference between symmetric and asymmetric encryption by stating the use of a single key versus key pairs in the output. However, it introduces a factual error by listing AES-256 under asymmetric encryption; AES is a symmetric algorithm. The output also provides an inaccurate security comparison (claiming symmetric is less secure), leading to a penalty, but the fundamental structural distinction remains addressable.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The model correctly identifies the core definitions and distinguishes the two types (single key vs. key pair). However, it contains factual inaccuracies in the example and final claim (AES is symmetric, yet claims it uses key pairs like RSA in asymmetric, which is wrong), and the final sentence contradicts itself regarding security speed. These errors significantly reduce the quality and reliability of the information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

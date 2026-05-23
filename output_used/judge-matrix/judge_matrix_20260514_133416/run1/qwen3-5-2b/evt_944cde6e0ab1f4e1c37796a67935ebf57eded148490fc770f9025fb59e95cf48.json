@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:37:29.179430+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.50 because the actual output claims that wetness is a condition where water makes other things wet, whereas the retrieval context explicitly states that wetness describes water being covered or saturated, defining 'wet' as the state of water itself rather than an action performed by it.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.50 because while the user asks a simple factual question, the output contains irrelevant content regarding 'wetness' which is not just a simple fact but includes unnecessary, complex definitions of water molecules, human skin, and wetness that diverge from the core question and introduce irrelevant concepts.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The input question seeks a factual yes/no answer about water's state, while the context explicitly addresses the lack of definitive scientific consensus on such definitions, making the context irrelevant and contradictory to the question's requirements.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response directly addresses the user's question by clarifying that the definition of 'wet' leads to different outcomes for water itself versus other objects. However, it fails to explicitly confirm the expected answer to the binary question 'Is water wet?' by stating that there is no single scientifically agreed-upon answer without definitively saying 'No' to the main question or affirming the 'Yes' based on the condition implied.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails the first step by providing only general philosophical speculation (e.g., 'depends on definition') rather than specific, useful factual information. The parameters require a binary yes/no determination with specific conditions, but the output gives an ambiguous explanation instead of a concrete scientific answer.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:03:06.092094+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output provides accurate information consistent with the retrieval context, resulting in a faithful score of 0.50.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input asks a simple yes/no question about water, but the actual output contains an empty list of irrelevant statements. The reasoning is incomplete or placeholder, failing to explicitly state why the score is exactly 1.00 based on the provided input-output alignment, rather than a valid reason string explaining the 1.00 relevance.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the input asks a specific fact 'Is water wet?' while the retrieval context provides a generic definition of wetness without directly answering the question about water, resulting in a mismatch. The input is a simple factual query, whereas the relevant statement offers a general definition rather than addressing the specific subject (water) in that context.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model successfully extracted the prompt's ambiguity regarding 'wet' (surface vs. liquid property). It accurately addressed the core requirement to distinguish between the physical state of water (liquid) and the relationship of water to surfaces (wet). However, it included a concluding statement ('There is no single scientifically agreed-upon answer') which is not a requirement and slightly irrelevant to the logic of the query, though it doesn't constitute a strict failure to cover the main constraints. The response comprehensively covers the necessary logical steps.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response scores very low because the input and output are semantically identical; both provide no specific, unique information to answer the question. The output does not add any concrete details or reasoning beyond stating the definition is subjective, making it functionally redundant and failing to meet the criteria for providing useful information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

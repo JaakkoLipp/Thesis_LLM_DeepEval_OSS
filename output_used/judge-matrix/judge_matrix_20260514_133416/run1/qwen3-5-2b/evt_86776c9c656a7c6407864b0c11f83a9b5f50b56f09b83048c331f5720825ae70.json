@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:86776c9c656a7c6407864b0c11f83a9b5f50b56f09b83048c331f5720825ae70",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:35:23.717011+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was the Treaty of Versailles signed and what were its main provisions?",
+    "output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+    "context": "The Treaty of Versailles was signed on 28 June 1919 and formally ended World War I between the Allied Powers and Germany. Its main provisions included: the War Guilt Clause (Article 231) assigning blame to Germany, substantial financial reparations later set at 132 billion gold marks, military restrictions limiting the German army to 100,000 troops and prohibiting an air force, and territorial losses including the return of Alsace-Lorraine to France and cession of territory to the new state of Poland."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "When was the Treaty of Versailles signed and what were its main provisions?",
+      "actual_output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+      "retrieval_context_len": 506
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because there are no contradictions in the provided list, meaning the actual output fully aligns with the retrieval context without any discrepancies requiring a score adjustment.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the model provided a relevant and concise answer directly addressing both parts of the input query (date and main provisions) without any irrelevant statements, despite the empty list of reasons listed above indicating no further improvements are needed.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context lists all key facts like the treaty's name, specific articles, and provisions directly answering the query, yet the input request itself provides the necessary information to fulfill this, making the context redundant rather than helpful for retrieval.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model successfully extracted all explicit requirements from the user input: the specific date the treaty was signed (28 juin 1919), the date of signing (Le Traité de Versailles a été signé le 28 juin 1919), and a comprehensive list of main provisions including the clause of war guilt, reparations, military restrictions, and the loss of Alsace-Lorraine.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully identifies the date (June 28, 1919) and provides concrete examples of provisions including specific articles (culpability), financial aspects (reparations), military restrictions (100,000 men), and territorial changes (Alsace-Lorraine). This level of specificity directly answers the user's query with relevant details.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:37:52.976425+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context. Great job maintaining complete accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the response was perfectly accurate and directly addressed the question without any unnecessary information. Great job!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context perfectly addresses the input by providing both the definition of wetness and the scientific nuance regarding whether water itself is wet, making it an excellent match!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input asks a direct question about whether water is wet. The output addresses this requirement by providing a balanced explanation of the different definitions and perspectives surrounding the topic, effectively answering the prompt.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a clear, nuanced explanation of the philosophical and linguistic debate surrounding the definition of 'wet.' It avoids vague filler by presenting the two primary perspectives—water as a wetting agent versus water as a liquid—and correctly identifies that the answer depends on the chosen definition.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

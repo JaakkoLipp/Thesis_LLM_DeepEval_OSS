@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:36ed41d2b6e928868b44a49a59429e1ca37a6378fd17d1e0d52188862635a9de",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:51:15.941022+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the population of Tokyo?",
+    "output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+    "context": "Tokyo is the capital of Japan. The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023. The Greater Tokyo Area, which includes surrounding prefectures such as Kanagawa, Saitama, and Chiba, has a population of about 37.4 million, making it the largest metropolitan area globally by population."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the population of Tokyo?",
+      "actual_output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+      "retrieval_context_len": 329
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output incorrectly claims Tokyo's population is 14 million, directly contradicting the retrieval context which specifies the Tokyo Metropolis population is approximately 13.96 million (which the output approximates as 14 million). The contradiction arises because the output treats the 13.96 million figure as a base value that is rounded to 14 million, whereas the actual output's phrasing implies a direct assertion of the rounded value (14 million) rather than acknowledging the precise figure (13.96 million).",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "There are no irrelevant statements in the actual output to explain the score. The output successfully answered the question with the population of Tokyo as requested, so the score is at its maximum relevance.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The provided context states only that Tokyo is the capital of Japan, which does not contain any data about its population.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output fully addresses the explicit requirement to state the population of Tokyo. It correctly provides the population for both the city proper (14 million) and the Greater Tokyo Area (37 million), aligning completely with the input query. The explanation of Tokyo's status as the most populous metropolitan area adds relevant context without overstepping the requirement to state the population.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.95,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model provides concrete, specific information including precise figures (14 million for city proper and 37 million for Greater Tokyo Area), which directly answers the input question. It also adds significant contextual relevance by identifying the city's status as the most populous metropolitan area in the world. This aligns well with the evaluation criteria for rewarding specific and informative details.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

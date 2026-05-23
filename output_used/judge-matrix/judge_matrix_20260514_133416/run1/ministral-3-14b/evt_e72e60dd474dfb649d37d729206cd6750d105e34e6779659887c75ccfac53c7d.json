@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:e72e60dd474dfb649d37d729206cd6750d105e34e6779659887c75ccfac53c7d",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:42:26.371818+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What are the three states of matter and how do they differ?",
+    "output": "The three states of matter are solid, liquid, and gas.",
+    "context": "Matter exists in three classical states: solid, liquid, and gas. In solids, particles are tightly packed in a fixed arrangement, giving them a definite shape and volume. Liquids have particles that are close together but can move freely, so they have a definite volume but take the shape of their container. Gases have widely spaced particles that move rapidly, so they have neither a definite shape nor a definite volume."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What are the three states of matter and how do they differ?",
+      "actual_output": "The three states of matter are solid, liquid, and gas.",
+      "retrieval_context_len": 422
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the output perfectly addressed the input by clearly defining the **three states of matter (solid, liquid, gas)** and concisely explaining their key differences (particle arrangement, energy, and shape/volume). No irrelevant details were included, and the response was both accurate and directly aligned with the question. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context **perfectly matches** the input—directly answering the question with **all three states of matter (solid, liquid, gas)** and their **distinct characteristics** ('*particles are tightly packed*', '*close together but move freely*', '*widely spaced and move rapidly*'). No irrelevant content was present, and the explanation was **concise, accurate, and exhaustive**. 🎉",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response correctly identifies the **three states of matter** (solid, liquid, gas), fulfilling the first explicit requirement from the input. However, it **fails to address the second requirement**—explaining *how they differ*—which was a critical part of the user's question. The omission of differentiation (e.g., particle arrangement, energy levels, or phase transitions) directly violates the evaluation step of addressing all requirements. Style is irrelevant, but the partial fulfillment (only 1/2 requirements met) justifies a mid-range score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response correctly identifies the three states of matter (solid, liquid, gas) as requested, fulfilling the core requirement for specificity. However, it fails to address the second part of the input—*how they differ*—which is a critical detail for a complete answer. The omission of distinguishing characteristics (e.g., particle arrangement, energy levels, or physical properties) leaves the response incomplete, despite avoiding vague filler. The lack of differentiation between states penalizes the score, as the evaluation prioritizes addressing all aspects of the input.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

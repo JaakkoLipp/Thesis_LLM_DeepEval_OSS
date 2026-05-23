@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:58:07.837029+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was fully faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly aligned** with the input—clearly defining photosynthesis (the process by which plants convert light energy into chemical energy) without any irrelevant details. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **four precise, authoritative statements** about photosynthesis, covering its definition, process, inputs/outputs, and key biological mechanisms (*'Photosynthesis is a biological process...'*, *'During photosynthesis, light energy...'*, etc.). No irrelevant content was present, and the response is **flawlessly aligned** with the query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of defining photosynthesis by covering all key components: the process of converting sunlight, water, and carbon dioxide into glucose and oxygen, the location (chloroplasts in leaf cells), and the biological context. No required parts are missing, and the output is concise yet comprehensive. The alignment with the evaluation steps is strong, as the output directly answers the input query without omissions or irrelevant details.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly addresses the input with **highly specific, scientifically accurate details**—namely, the process of converting sunlight, water, and carbon dioxide into glucose and oxygen, the location (chloroplasts in leaf cells), and the biological context. It avoids vagueness, provides **mechanistic clarity**, and fulfills all evaluation criteria by delivering **concrete, relevant information** without filler. The output aligns perfectly with the expected depth and precision for a definition of photosynthesis.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

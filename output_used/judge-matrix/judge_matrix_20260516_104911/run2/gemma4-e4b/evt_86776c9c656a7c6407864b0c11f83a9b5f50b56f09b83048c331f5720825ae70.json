@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:86776c9c656a7c6407864b0c11f83a9b5f50b56f09b83048c331f5720825ae70",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T07:57:15.694819+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was the Treaty of Versailles signed and what were its main provisions?",
+    "output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+    "context": "The Treaty of Versailles was signed on 28 June 1919 and formally ended World War I between the Allied Powers and Germany. Its main provisions included: the War Guilt Clause (Article 231) assigning blame to Germany, substantial financial reparations later set at 132 billion gold marks, military restrictions limiting the German army to 100,000 troops and prohibiting an air force, and territorial losses including the return of Alsace-Lorraine to France and cession of territory to the new state of Poland."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "When was the Treaty of Versailles signed and what were its main provisions?",
+      "actual_output": "Le Traité de Versailles a été signé le 28 juin 1919. Ses principales dispositions comprenaient la clause de culpabilité de guerre imposée à l'Allemagne, des réparations financières importantes, des restrictions militaires (armée limitée à 100 000 hommes), et la perte de territoires dont l'Alsace-Lorraine rendue à la France.",
+      "retrieval_context_len": 506
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, indicating that the actual output is perfectly faithful to the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output directly and comprehensively answered both parts of the input query regarding the signing date and main provisions of the Treaty of Versailles, with no irrelevant statements detracting from the relevance.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly answer both parts of the input question, stating that 'The Treaty of Versailles was signed on 28 June 1919' and detailing its provisions, such as 'the War Guilt Clause (Article 231) assigning blame to Germany, substantial financial reparations... military restrictions limiting the German army to 100,000 troops and prohibiting an air force, and territorial losses including the return of Alsace-Lorraine to France and cession of territory to the new state of Poland.' Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation required extracting two explicit requirements: 1) When was the Treaty of Versailles signed, and 2) What were its main provisions. The actual output successfully addresses both requirements. It provides the date (\"28 juin 1919\") and lists several main provisions (war guilt clause, reparations, military restrictions, loss of territories). Therefore, all requirements are fully met.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly and completely addresses both parts of the input: it states the signing date ('le 28 juin 1919') and provides specific, useful details regarding the main provisions, such as the 'clause de culpabilité de guerre imposée à l'Allemagne', financial reparations, military restrictions, and territorial losses.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

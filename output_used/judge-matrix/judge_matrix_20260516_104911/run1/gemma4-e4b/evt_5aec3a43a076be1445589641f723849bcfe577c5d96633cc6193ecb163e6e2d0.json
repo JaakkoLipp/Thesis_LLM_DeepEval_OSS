@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5aec3a43a076be1445589641f723849bcfe577c5d96633cc6193ecb163e6e2d0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:53:59.203035+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is mitosis?",
+    "output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+    "context": "Mitosis is a form of cell division that results in two daughter cells, each with the same number and kind of chromosomes as the parent cell. It consists of four main phases: prophase (chromosomes condense and become visible), metaphase (chromosomes align at the metaphase plate), anaphase (sister chromatids are pulled apart to opposite poles), and telophase (nuclear envelopes re-form around each set of chromosomes). Cytokinesis typically follows, dividing the cytoplasm to produce two separate cells."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is mitosis?",
+      "actual_output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+      "retrieval_context_len": 503
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.67 because the actual output contradicts the context by stating that mitosis is genetically identical, when the context only assures that the chromosome content is the same, but does not specify genetic identity.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score of 1.00 is appropriate because the output was entirely relevant to the question 'What is mitosis?' and contained no irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly define mitosis, stating, \"Mitosis is a form of cell division that results in two daughter cells, each with the same number and kind of chromosomes as the parent cell,\" and detailing its phases like \"prophase,\" \"metaphase,\" \"anaphase,\" and \"telophase.\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully followed all evaluation steps. It accurately extracted the requirement (defining mitosis) from the user input and provided a comprehensive, detailed explanation that fully addresses this single requirement. No parts were missed, achieving full alignment.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response perfectly adheres to the evaluation steps. It provides specific, useful information defining mitosis and detailing its phases (prophase, metaphase, anaphase, telophase, and cytokinesis), which directly answers the 'What is mitosis?' input. There is no vague filler; the content is highly concrete and relevant, warranting the highest possible score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

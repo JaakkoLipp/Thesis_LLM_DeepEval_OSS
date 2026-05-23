@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:50:00.647028+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context. Great job maintaining complete accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.60 because the output includes extraneous information about the company's operational reach and financial growth metrics instead of focusing solely on the requested employee count.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the context only vaguely notes the company 'continues to grow its workforce' without providing the specific employee count requested by the input.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The user input requested the total number of employees, and the actual output explicitly provides this figure (14,200) while also offering relevant contextual details about geographic distribution and growth.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the question with a specific figure (14,200 employees) and provides relevant context regarding geographic distribution and growth, avoiding vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

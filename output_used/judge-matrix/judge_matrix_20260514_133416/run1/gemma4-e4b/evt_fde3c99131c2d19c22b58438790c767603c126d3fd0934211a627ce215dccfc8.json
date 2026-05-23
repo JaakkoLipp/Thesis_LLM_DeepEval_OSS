@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:41:48.412043+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output makes specific, unverified claims about the employee count, number of countries, and the location of the largest office in Singapore or Berlin, which the context does not provide, only generally stating the company is growing and operates in multiple countries.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.75 because while the output provided some relevant information, one of the included statements incorrectly focused on the growth rate instead of directly answering the question about the total number of employees.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because both provided reasons for irrelevancy accurately state that the context does not answer the question, noting that 'The statement 'The company has operations in multiple countries' does not answer the question 'How many employees does the company have?'' and 'The statement 'The company continues to grow its workforce.' indicates growth but does not specify the current number of employees to answer the question 'How many employees does the company have?''.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The first step, extracting explicit requirements, identifies the need to state 'How many employees does the company have?'. The actual output directly addresses this core requirement by providing the figure 'approximately 14,200 people'. The second step confirms the coverage of this requirement. Since only one explicit requirement was present, and it was fully addressed, the output meets the necessary criteria. The resulting score is high because the primary data point requested was clearly provided.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output strongly aligns with the evaluation steps. It directly answers the input question ('How many employees does the company have?') with a specific figure ('approximately 14,200 people'). It provides multiple concrete and useful details, such as the number of countries (37), growth rate (12%), and breakdowns for major offices (Singapore: 3,100, Berlin: 2,800), thereby earning a high score for specificity and relevance.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

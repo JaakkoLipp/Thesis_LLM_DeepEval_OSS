@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:57:31.869714+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the actual output incorrectly claimed water boils at **70°C on Mount Everest**, ignoring the retrieval context’s altitude-based reality (boiling point drops to ~85°C at 5,500m, not 70°C). This factual inaccuracy—despite acknowledging altitude’s effect—demonstrates partial but flawed alignment with the context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details were included, and the answer (100°C at standard pressure) fully satisfied the question. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided an **exact, authoritative answer** to the input—*'The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure'*—with no irrelevant noise. Perfect precision!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the **explicit requirement** of providing the boiling point of water (100°C/212°F) at standard pressure, which is the core of the input. It also **exceeds expectations** by offering additional context (altitude effects, Mount Everest example), demonstrating depth. However, it **lacks precision** in the test case parameters: the input only asked for the boiling point (no mention of altitude or examples), so the extra details, while informative, are **unnecessary** and slightly misaligned with the minimal requirement. Style/clarity is irrelevant per evaluation steps, but the output’s **scope overreach** deducts points.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the input with **specific, useful information** (boiling point at standard pressure: 100°C/212°F) and **expands relevance** by addressing altitude effects (e.g., Mount Everest’s 70°C example). It avoids vagueness, provides **concrete details** (units, conditions), and aligns perfectly with the evaluation steps—no filler or non-answers. The output is **highly informative** and tailored to the query.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

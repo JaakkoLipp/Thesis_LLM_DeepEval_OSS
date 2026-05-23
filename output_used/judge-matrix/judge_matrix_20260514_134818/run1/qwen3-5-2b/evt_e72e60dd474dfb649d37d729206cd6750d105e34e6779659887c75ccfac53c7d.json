@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:e72e60dd474dfb649d37d729206cd6750d105e34e6779659887c75ccfac53c7d",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:51:49.161220+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What are the three states of matter and how do they differ?",
+    "output": "The three states of matter are solid, liquid, and gas.",
+    "context": "Matter exists in three classical states: solid, liquid, and gas. In solids, particles are tightly packed in a fixed arrangement, giving them a definite shape and volume. Liquids have particles that are close together but can move freely, so they have a definite volume but take the shape of their container. Gases have widely spaced particles that move rapidly, so they have neither a definite shape nor a definite volume."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What are the three states of matter and how do they differ?",
+      "actual_output": "The three states of matter are solid, liquid, and gas.",
+      "retrieval_context_len": 422
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output aligns perfectly with the retrieval context; since there are no contradictions, the high faithfulness score of 1.00 is justified by the complete and accurate correspondence between the two sources.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the input has no relevant statements, making it impossible for the output to contain irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The retrieval context is relevant to the input as it explicitly lists the three states of matter (solid, liquid, and gas) and provides specific details about their particle arrangements, distinguishing them by properties like shape, volume, and movement.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.65,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output addresses the explicit requirement by naming all three states of matter and explicitly stating how they differ. However, the answer is too brief and lacks detail, failing to explain 'how' the differences manifest (e.g., particle behavior or physical properties), which is implied but not provided. The structure is missing the list format for clarity.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly identifies the three states of matter (solid, liquid, gas) and directly answers the specific question asked. It provides concise, relevant details rather than vague filler, aligning well with the requirement for concrete information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

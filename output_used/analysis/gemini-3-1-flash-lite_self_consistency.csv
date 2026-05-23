@@ -1,0 +1,6 @@
+metric,sum,count,self_consistency
+AnswerRelevancy,24,26,0.9230769230769231
+Completeness,26,26,1.0
+ContextualRelevancy,26,26,1.0
+Faithfulness,26,26,1.0
+Informativeness,25,26,0.9615384615384616

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:41:27.316967+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely misrepresented core biological processes**: it falsely attributed photosynthesis to animals (instead of plants/algae), confused chloroplasts (photosynthesis site) with mitochondria (respiration site), and reversed the gas exchange (claiming oxygen was produced *and* consumed, while carbon dioxide was incorrectly labeled as a byproduct). Every factual claim in the contradictions was inverted or fabricated, demonstrating **zero alignment** with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely failed** to address the input question—instead, it provided **incorrect, irrelevant, and contradictory** statements about photosynthesis (e.g., falsely claiming animals perform it, mislocating it to mitochondria/muscle cells, and reversing the gas exchange). The response **offered no correct definition or key details** (e.g., light-dependent reactions, glucose production) and **undermined core scientific facts**, making it **utterly unusable** for the query.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **four precise, authoritative statements** on photosynthesis, covering its definition, mechanism, energy conversion, and byproduct, all aligned with the user’s query. *Spot-on retrieval!*",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of defining **photosynthesis**, instead incorrectly describing **cellular respiration** (energy conversion from food in mitochondria, producing CO₂). Key details like the role of **chloroplasts**, **light energy**, or **oxygen production** (core to photosynthesis) are entirely missing. The output misrepresents the biological process entirely, violating requirement 2 (addressing the input) and incurring a full penalty under requirement 3.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output provides **incorrect and irrelevant details** (e.g., photosynthesis occurring in *animals* and *muscle cells*, producing *carbon dioxide*), directly contradicting the biological process (which occurs in *plants/algae* via chloroplasts and produces *oxygen*). It fails to address the input's core question about photosynthesis entirely, instead offering a vague, nonsensical analogy to cellular respiration. No useful information is provided, violating all evaluation steps, particularly the requirement for **specific, accurate, and relevant** details.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

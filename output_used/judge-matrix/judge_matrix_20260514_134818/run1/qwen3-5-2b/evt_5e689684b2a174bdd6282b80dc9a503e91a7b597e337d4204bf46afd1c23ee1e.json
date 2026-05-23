@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:52:58.083163+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The faithfulness score is 0.50 because the actual output incorrectly claims the process produces oxygen, while the retrieval context explicitly states that oxygen is not a product of the conversion.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "No irrelevant statements were found in the actual output, but no additional positive reinforcement was included as specified in the instructions to only mention irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements explicitly define photosynthesis as a biological process and explain its mechanism, directly addressing the question.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output correctly identifies photosynthesis, defines it as the process by which plants convert sunlight, water, and carbon dioxide into glucose and oxygen, and specifies the location (chloroplasts) as required by the input. It fully addresses the explicit requirements without missing any necessary components.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output directly answers the question 'What is photosynthesis?' by providing the definition and specifying key components (sunlight, water, carbon dioxide, glucose, oxygen) and the location (chloroplasts). It fulfills the requirement for specific, useful information with high detail.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

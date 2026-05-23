@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:00ce82eb756a00e9969ba0b1dddec7adb218ab00736744765ca74949c44ef3cc",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:55:12.023501+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes earthquakes?",
+    "output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+    "context": "Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves. They most commonly occur along tectonic plate boundaries where plates converge, diverge, or slide past each other. The point within the Earth where the earthquake originates is called the focus, and the point directly above it on the surface is the epicentre."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What causes earthquakes?",
+      "actual_output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+      "retrieval_context_len": 363
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful, accurate, and well-supported by the provided information. Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.20** because the output included **only tangential or unrelated facts** (e.g., general volcano definitions, Olympus Mons details) without addressing the **core question**—the *causes of earthquakes* (e.g., tectonic plate movements, fault lines, seismic activity). While some facts were accurate, they lacked relevance to the input, leaving the response **largely off-topic**. A higher score would require direct, focused answers to the question.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **three precise, authoritative statements** (e.g., *'Earthquakes are caused by the sudden release of energy in the Earth's crust...'* and *'They most commonly occur along tectonic plate boundaries...'*), covering **causes, mechanisms, and key terminology** (focus/epicenter) without any irrelevant noise. **Spot-on!**",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of explaining the causes of earthquakes. Instead, it provides unrelated information about volcanoes and Olympus Mons, which is irrelevant to the user's query. No part of the output aligns with the core topic of seismic activity or its causes, violating step 2 of the evaluation. The output demonstrates a complete disregard for the input's intent, resulting in zero alignment with the requirements.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output fails to address the input question ('What causes earthquakes?') entirely, instead providing unrelated information about volcanoes and Olympus Mons. This demonstrates a complete lack of relevance to the query, with no specific or useful details about earthquake causes. The response is a non-answer, violating evaluation steps 1 and 2 by offering no concrete or informative content.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:00:45.083966+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output contains multiple contradictory claims that directly refute the context: first, it states the Earth is flat while the context specifies it is oblate, and second, it claims the Earth has no curvature, directly contradicting the context's definition of its shape and curvature.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.50 because the statement 'This statement directly contradicts the correct answer to the input question, making it highly relevant to address the input.' is logically inconsistent with the context of identifying irrelevant statements; such a claim cannot exist within the explanation of why a score cannot be higher.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context is irrelevant because it does not address the user's question about whether the Earth is round or flat; instead, it explains the precise shape of the Earth (oblate spheroid) to support the provided scientific fact, which is contradictory to the flat Earth hypothesis.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The model fails to answer the question accurately and instead states the Earth is flat, which contradicts established scientific facts. Additionally, it provides incorrect information regarding satellite orbits, claiming they happen in a straight line above the surface, whereas they follow curved paths due to gravity. This indicates a complete lack of factual correctness and an incorrect understanding of basic planetary science, resulting in a score of 0.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output correctly identifies Earth as flat (incorrect premise), explicitly states there is no curvature (contradicted by the fact that Earth is round), and provides a plausible but false explanation about satellite orbits. While the explanation covers the main points of the question and includes a relevant detail (satellites), the factual inaccuracy regarding Earth's shape makes the answer not highly specific or informative in a correct context.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:766e0cd754d85792604ba06fb1c82799932be3913d3b2079bd0aec212a944282",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:52:38.232764+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the capital of France?",
+    "output": "The capital of France is Paris, which has been the capital since the 10th century.",
+    "context": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the capital of France?",
+      "actual_output": "The capital of France is Paris, which has been the capital since the 10th century.",
+      "retrieval_context_len": 215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate. Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details, no ambiguity, and no unnecessary information. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the retrieval context provided **no relevant information** (empty relevant statements) and instead included **completely unrelated data** (e.g., *'The mitochondria is the powerhouse of the cell...'*—a biological fact with **zero connection** to the capital of France).",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response correctly identifies the capital of France ('Paris') as the primary requirement, fully addressing the explicit query. However, it includes an **unnecessary** detail (the historical context of Paris being the capital since the 10th century), which, while accurate, was not part of the direct requirement. This minor deviation from strict adherence to the input's simplicity slightly reduces the score, as the evaluation penalizes extraneous information when the task is purely factual. The core requirement was met, but the output exceeded the minimal scope.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the input with the exact capital ('Paris') and provides a relevant, specific detail ('since the 10th century'), avoiding vagueness. It fulfills all evaluation steps by delivering concrete, useful information without filler or non-answers.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

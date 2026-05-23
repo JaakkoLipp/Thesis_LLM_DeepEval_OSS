@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5aec3a43a076be1445589641f723849bcfe577c5d96633cc6193ecb163e6e2d0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:03:40.343087+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is mitosis?",
+    "output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+    "context": "Mitosis is a form of cell division that results in two daughter cells, each with the same number and kind of chromosomes as the parent cell. It consists of four main phases: prophase (chromosomes condense and become visible), metaphase (chromosomes align at the metaphase plate), anaphase (sister chromatids are pulled apart to opposite poles), and telophase (nuclear envelopes re-form around each set of chromosomes). Cytokinesis typically follows, dividing the cytoplasm to produce two separate cells."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is mitosis?",
+      "actual_output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+      "retrieval_context_len": 503
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because the actual output perfectly aligns with the retrieval context, as there are no contradictions to address.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output contained no irrelevant statements and the input question was successfully answered with a concise definition of mitosis.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context is completely irrelevant because it contains a separate step (cytokinesis) unrelated to the definition of mitosis, and it only states that mitosis produces two daughter cells without mentioning the critical biological mechanism of chromosome separation and spindle alignment that mitosis fundamentally relies on.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output explicitly addresses the single requirement to define mitosis as cell division producing two genetically identical daughter cells. It correctly identifies and describes all phases of mitosis (prophase, metaphase, anaphase, telophase) and cytokinesis, matching the factual content of the input. The response is well-structured and accurate.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response accurately defines mitosis, provides clear examples of its phases (prophase, metaphase, anaphase, telophase), and includes a relevant detail about cytokinesis. This aligns perfectly with the requirement to provide specific, useful information and avoids vague filler, resulting in a high score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:36ed41d2b6e928868b44a49a59429e1ca37a6378fd17d1e0d52188862635a9de",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:53:00.326719+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the population of Tokyo?",
+    "output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+    "context": "Tokyo is the capital of Japan. The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023. The Greater Tokyo Area, which includes surrounding prefectures such as Kanagawa, Saitama, and Chiba, has a population of about 37.4 million, making it the largest metropolitan area globally by population."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the population of Tokyo?",
+      "actual_output": "The population of Tokyo is approximately 14 million in the city proper, and around 37 million in the Greater Tokyo Area, making it the most populous metropolitan area in the world.",
+      "retrieval_context_len": 329
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.67 because although the actual output mentions the population of the Tokyo Metropolis was approximately 14 million, the contradiction points out that the context specifies 'Tokyo Metropolis' not 'the city proper', implying a slight overgeneralization in the actual output.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is perfectly relevant and directly answers the question about the population of Tokyo, with no irrelevant statements noted.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided context directly answers the query with the statement, 'The population of the Tokyo Metropolis (Tokyo-to) was approximately 13.96 million as of 2023.' Great job on retrieving the perfect information!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation required extracting explicit requirements (the population of Tokyo) and checking if the actual output addressed them. The actual output directly answers the question posed in the input ('What is the population of Tokyo?') by providing specific figures for both the city proper and the Greater Tokyo Area, thereby fully meeting all implied requirements.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly addresses the input query, 'What is the population of Tokyo?'. It provides specific and useful information by giving two distinct population figures: 'approximately 14 million in the city proper' and 'around 37 million in the Greater Tokyo Area.' This concrete detail is highly informative, meeting all evaluation criteria.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

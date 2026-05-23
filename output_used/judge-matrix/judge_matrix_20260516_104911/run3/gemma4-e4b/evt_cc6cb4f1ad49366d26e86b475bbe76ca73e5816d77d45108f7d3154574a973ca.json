@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:cc6cb4f1ad49366d26e86b475bbe76ca73e5816d77d45108f7d3154574a973ca",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:04:43.935353+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the GDP of Finland?",
+    "output": "",
+    "context": "Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023, making it one of the smaller economies in the European Union by total output. Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "What is the GDP of Finland?",
+      "actual_output": "",
+      "retrieval_context_len": 252
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions found, meaning the actual output is fully faithful to the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and completely answers the question asked in the input without any irrelevant information being present.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly address the input question, as shown by the relevant statements: \"Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023,\" \"Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros.\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require the model to process an Input and an Actual Output, and then assign a score based on fulfilling implicit requirements (i.e., answering the question). Since the Actual Output provided in the test case is completely empty, the response fails to address the core requirement of answering the question posed in the Input (\"What is the GDP of Finland?\"). Consequently, the output does not meet any discernible requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output is empty. Following the evaluation steps, the model fails to provide any specific, useful information to answer the query 'What is the GDP of Finland?'. Due to the complete absence of content, it cannot be rewarded for concrete relevant details, leading to a low score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

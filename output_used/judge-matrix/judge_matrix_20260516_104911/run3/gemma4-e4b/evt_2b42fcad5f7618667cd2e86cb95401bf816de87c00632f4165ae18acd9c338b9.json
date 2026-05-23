@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:06:41.481409+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contains multiple contradictions; for example, it incorrectly states that animals convert food into energy through photosynthesis, and it incorrectly claims that photosynthesis occurs mainly in the mitochondria of muscle cells or that it produces carbon dioxide as the primary output, when the context explicitly details the inputs and outputs as carbon dioxide and water into glucose, releasing oxygen.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output provided detailed and accurate information about photosynthesis, but the provided 'Reasons why the score can't be higher' list contains statements that actively contradict or misunderstand the fundamental principles of photosynthesis by incorrectly mixing up details about cellular respiration (mitochondria, converting food into energy) with photosynthesis. This suggests the actual output may have conflated different biological processes, leading to a very low relevancy score, even if the core definition was present.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the entire retrieval context is perfectly relevant, containing key information such as \"Photosynthesis is a biological process used by green plants and certain other organisms,\" \"During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts,\" and \"The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy.\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The primary requirement, extracting the definition of photosynthesis, was not met by the Actual Output. Instead of defining photosynthesis, the output incorrectly described a process occurring in mitochondria. While the output is a substantive answer, it fails to address the core definitional request, leading to a low score despite attempting an output.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to answer the input question, \"What is photosynthesis?\" The actual output incorrectly describes a process, stating it's for animals converting food into energy in mitochondria and producing CO2. This is factually wrong regarding photosynthesis, which is a process used by plants/autotrophs. It does not provide specific, useful information about photosynthesis.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

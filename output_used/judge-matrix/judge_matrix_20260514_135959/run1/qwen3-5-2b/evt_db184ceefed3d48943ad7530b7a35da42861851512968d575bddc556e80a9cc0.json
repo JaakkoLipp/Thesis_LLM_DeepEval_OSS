@@ -1,0 +1,20 @@
+{
+  "event_id": "evt:db184ceefed3d48943ad7530b7a35da42861851512968d575bddc556e80a9cc0",
+  "status": "error",
+  "stored_at": "2026-05-14T11:02:00.831432+00:00",
+  "error": {
+    "type": "ValidationError",
+    "message": "1 validation error for Verdicts\n  Input should be an object [type=model_type, input_value=[{'verdict': 'yes'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+  },
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes tides?",
+    "output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+    "context": "Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth. The Moon's gravity is the dominant force driving tides because, despite its smaller mass, it is much closer to Earth than the Sun. Spring tides occur when the Sun, Moon, and Earth align, and neap tides occur when they form a right angle."
+  }
+}

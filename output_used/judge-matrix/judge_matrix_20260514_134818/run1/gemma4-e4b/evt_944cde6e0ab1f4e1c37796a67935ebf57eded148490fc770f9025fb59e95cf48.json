@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:57:24.197731+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the actual output appears to make claims that are not supported by the context; specifically, the context defines wetness generally, mentions water as the most common example, and explains the physical nature of wetness, but it does not establish a definition where simply being a liquid or being in contact with a liquid automatically makes water wet, contrary to the contradictions listed.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output was entirely on point and directly addressed the input question, with no irrelevant statements detracting from the relevance.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly address the concept of 'wetness' and its relation to water, as seen in statements like 'Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water.' and 'Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus.' This context is perfectly aligned with the input 'Is water wet?'",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation required extracting explicit requirements (Step 1) and checking if the actual output addressed all of them (Step 2). Since the user input, \"Is water wet?\", poses a single direct question, the requirement is simply to answer this question thoroughly. The actual output provides a detailed, nuanced answer addressing the ambiguity of the definition, thereby fully meeting the implicit requirement and requiring no penalty for missing parts, resulting in a perfect score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully addresses the philosophical nature of the input question (\"Is water wet?\") by providing specific, nuanced information rather than a simple yes/no. It tackles the core ambiguity by suggesting two different definitions ('having water on a surface' vs. 'being a liquid'), which strongly aligns with the evaluation steps' goal of rewarding concrete relevant details and penalizing vagueness.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

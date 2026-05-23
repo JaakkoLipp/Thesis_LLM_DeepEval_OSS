@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T11:05:46.791006+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicts the retrieval context by claiming \"The Earth is flat,\" despite the context stating \"The Earth is an oblate spheroid\" and mentioning curvature confirmed by multiple methods.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because the output heavily leans into and reinforces the flat-Earth theory, directly contradicting the need for a neutral or scientifically accurate answer regarding the Earth's shape, despite the question being a direct inquiry.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context directly addresses the shape of the Earth, stating 'The Earth is an oblate spheroid' and providing details like 'This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations,' which fully answers the user's query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require extracting explicit requirements from the user input ('Is the Earth round or flat?'). The actual output attempts to answer this but does not follow the specified output format (SCORE: <float> REASON: <text>). However, when checking the requirement fulfillment (Step 2), the actual output provides a direct answer, addressing the core question, which earns partial credit for content, though the format requirement is not addressed at all.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output directly addresses the input by stating the Earth is flat, which fulfills Step 1. However, instead of providing factual information, it asserts a belief, leading to a partial penalty. It avoids vague filler (Step 2), but because the information provided is definitively incorrect according to standard knowledge, the high end of the scoring is not reached, resulting in a moderate score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

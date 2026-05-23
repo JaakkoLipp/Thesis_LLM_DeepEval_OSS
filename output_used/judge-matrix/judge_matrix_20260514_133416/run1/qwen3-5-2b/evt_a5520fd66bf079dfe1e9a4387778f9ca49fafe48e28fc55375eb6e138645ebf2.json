@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:a5520fd66bf079dfe1e9a4387778f9ca49fafe48e28fc55375eb6e138645ebf2",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:38:42.331608+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is a closure in programming?",
+    "output": "A closure is a function that captures the lexical scope in which it was defined. This means the function retains access to variables from its enclosing scope even after that scope has finished executing. Closures are not the same as anonymous functions — a named function can also be a closure if it references free variables from an outer scope.",
+    "context": "In programming, a closure is a technique for implementing lexically scoped name binding in a language with first-class functions. A closure is a record storing a function together with an environment: a mapping of each free variable of the function with the value or reference to which the name was bound when the closure was created. A closure, unlike a plain function, allows the function to access those captured variables through the closure's copies of their values or references, even when the function is invoked outside their scope."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is a closure in programming?",
+      "actual_output": "A closure is a function that captures the lexical scope in which it was defined. This means the function retains access to variables from its enclosing scope even after that scope has finished executing. Closures are not the same as anonymous functions — a named function can also be a closure if it references free variables from an outer scope.",
+      "retrieval_context_len": 540
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the retrieval context explicitly defines a closure as a 'record storing a function together with an environment... with the value or reference to which the name was bound when the closure was created,' whereas the actual output incorrectly claims the closure captures 'the lexical scope in which it was defined,' which is a conflation of scope and the specific environment where the name was bound.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output contains no irrelevant statements; it directly and accurately addresses the user's question about programming closures by providing a clear definition and code example, making the output highly relevant and informative.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input explicitly asks 'What is a closure in programming?', but the retrieval context defines closure as a 'record storing a function together with an environment' that 'allows the function to access those captured variables through the closure's copies of their values or references, even when the function is invoked outside their scope.' Since the input seeks a definition while the context provides an irrelevant detailed description of a specific implementation detail (lexically scoped name binding), there is no data in the context that directly answers the question, resulting in a relevance score of 0.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly identifies and explicitly states that closures capture lexical scope in the input, fulfilling Requirement 1. It also addresses Requirement 3 by clarifying the distinction from anonymous functions. The explanation is comprehensive, directly referencing the key details from the input (lexical scope, variable retention) and covering the comparison provided. All explicit requirements are fully met.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.85,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully addresses the prompt by defining a closure with precise technical details, specifically mentioning 'lexical scope' and 'enclosing scope.' It provides a clear distinction from anonymous functions, which aligns well with the evaluation criteria for providing specific, useful information. However, the score is slightly lower than 10 because it could have briefly listed at least two key features (e.g., memory efficiency and scoping rules) to fully meet the '10 is highly specific' threshold.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

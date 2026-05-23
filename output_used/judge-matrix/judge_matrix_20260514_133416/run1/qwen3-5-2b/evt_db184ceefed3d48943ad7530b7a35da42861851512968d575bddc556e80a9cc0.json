@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:db184ceefed3d48943ad7530b7a35da42861851512968d575bddc556e80a9cc0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:36:15.646758+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes tides?",
+    "output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+    "context": "Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth. The Moon's gravity is the dominant force driving tides because, despite its smaller mass, it is much closer to Earth than the Sun. Spring tides occur when the Sun, Moon, and Earth align, and neap tides occur when they form a right angle."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What causes tides?",
+      "actual_output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+      "retrieval_context_len": 395
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because there are no contradictions in the retrieval context, and the output aligns perfectly with the available information.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the input explicitly asks about the cause of tides, and the actual output contains no irrelevant statements, indicating a complete and direct match.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The input explicitly asks for the cause of tides, and the retrieval context directly states that tides are caused by gravitational forces from the Moon and Sun, confirming the relevance.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly extracts the core requirement about the causes of tides and addresses it by listing the Moon's gravitational pull and the Sun's contribution. It also fully meets the requirement to address the specific detail provided in the second sentence of the prompt, including the data point regarding 0.3% per decade. However, the response fails to explicitly answer the third requirement (according to a 2023 study published in Nature by Dr. Hans Weber), as it cites Dr. Hans Weber without mentioning the year 2023 or the specific journal 'Nature', resulting in a score of 8.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model correctly identifies and states the specific cause of tides (gravitational pull of the Moon), providing the correct order and magnitude ('to a lesser extent'). It additionally offers specific supporting details, including the source of the information (Nature, Dr. Weber, 2023) and the current rate of change (0.3% per decade), which fulfills the requirement for useful, concrete information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

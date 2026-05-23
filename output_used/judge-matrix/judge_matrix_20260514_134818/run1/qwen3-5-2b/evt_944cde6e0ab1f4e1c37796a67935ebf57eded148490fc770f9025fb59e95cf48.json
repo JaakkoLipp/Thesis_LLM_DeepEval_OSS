@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:51:34.422335+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The faithfulness score is 0.25 because the actual output fails to correct the claim that 'water itself is not wet.' Instead, it repeats the contradiction that the claim is factually incorrect based on the retrieval context, claiming there is no single scientific definition. This ignores the context's definition of wetness as a surface property, whereas the output should have identified water's surface wetness instead of rejecting the premise.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.75 because the input is a simple factual question requiring a direct yes/no answer, whereas the output provides a lengthy and irrelevant definition instead of directly addressing the simplicity of the query.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.67 because the retrieval context defines wetness as covering surfaces and describes the physical mechanism of liquid contact, which are the exact concepts needed to answer 'Is water wet?' rather than providing unrelated examples.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output addresses the input's rhetorical question directly by defining the terms (wet) and providing two distinct perspectives based on whether the question asks about water itself or water's properties. It meets the requirement to extract and address all explicit parts of the input. However, it fails to explicitly answer the initial question 'Is water wet?' with a clear 'yes' or 'no' statement, which would make the evaluation of the specific intent less complete.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model directly addresses the ambiguous question by providing a nuanced, definition-dependent explanation that breaks down the criteria for 'wet.' It cites relevant details such as surface contact versus liquid state, offering concrete information. While a 10 might be ideal for a perfect 'definition' test, the response clearly and concisely satisfies the requirement to provide specific, useful information over vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

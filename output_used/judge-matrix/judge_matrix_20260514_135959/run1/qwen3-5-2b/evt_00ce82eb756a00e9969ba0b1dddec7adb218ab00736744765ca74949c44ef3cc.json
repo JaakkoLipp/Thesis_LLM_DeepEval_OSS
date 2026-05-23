@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:00ce82eb756a00e9969ba0b1dddec7adb218ab00736744765ca74949c44ef3cc",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:03:24.492577+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes earthquakes?",
+    "output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+    "context": "Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves. They most commonly occur along tectonic plate boundaries where plates converge, diverge, or slide past each other. The point within the Earth where the earthquake originates is called the focus, and the point directly above it on the surface is the epicentre."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What causes earthquakes?",
+      "actual_output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+      "retrieval_context_len": 363
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the claim describes volcanoes as mountains erupting with lava and ash, which directly contradicts the retrieval context's definition of earthquakes as occurring at plate boundaries.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "No irrelevant statements were found in the output, but the score is low (1.00) because the provided list of irrelevant reasons is empty, indicating the model failed to generate content directly relevant to the question about earthquake causes.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The provided input 'What causes earthquakes?' lacks explicit mention of terms like 'tectonic plate boundaries', 'seismic waves', or the 'focus' and 'epicentre' used in the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.1,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output correctly extracts and answers the user's question about causes of earthquakes by explicitly stating that volcanoes erupt with gases, which is a primary geological cause of earthquakes. While it also incorrectly adds an unrelated statement about Olympus Mons and Mars, the core requirement to explain the cause is satisfied.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully answers the question about earthquake causes by mentioning that 'earthquakes' are not listed as causes, instead identifying volcanoes as one alternative geological phenomenon. The score is slightly lower than ideal (8) because while the content is relevant, it does not list earthquakes themselves as potential causes, which might be expected for a direct factual query, though it does provide useful corrective context. Additionally, the inclusion of specific details like Olympus Mons' height adds concrete value.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

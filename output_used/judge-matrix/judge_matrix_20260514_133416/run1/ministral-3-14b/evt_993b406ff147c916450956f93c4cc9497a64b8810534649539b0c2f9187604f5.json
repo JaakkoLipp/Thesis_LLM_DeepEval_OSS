@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:44:59.045566+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.67** because the actual output incorrectly stated the boiling point of water on Mount Everest as **70°C**, despite the retrieval context only confirming the *general principle* (lower boiling point at high altitudes). The specific claim was **factually inaccurate** (actual ~72°C), introducing a **minor but clear contradiction** that undermined precision.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details were included, and the answer was concise yet complete. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided a **direct, precise answer** ('The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure')—perfectly aligned with the input and **no irrelevant data** was present. Spot on!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the **explicit requirement** (boiling point of water) by providing the standard value (100°C/212°F) and context (atmospheric pressure). It also **goes beyond** by explaining altitude effects, which aligns with the input’s implicit curiosity about variations. However, it **misses** a direct acknowledgment of the user’s phrasing ('what is the boiling point'), which could have improved conciseness. The output is factually accurate and structured, but the slight deviation from minimalism (e.g., extra detail on altitude) is not penalized per the 'ignore style' rule.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a highly specific, accurate, and useful answer to the input by stating the boiling point of water at standard pressure (100°C/212°F) and adding relevant context about altitude-dependent variations (e.g., Mount Everest example). It avoids vagueness, includes concrete details (e.g., exact temperatures and atmospheric conditions), and fulfills all evaluation criteria by being informative, precise, and grounded in scientific facts.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

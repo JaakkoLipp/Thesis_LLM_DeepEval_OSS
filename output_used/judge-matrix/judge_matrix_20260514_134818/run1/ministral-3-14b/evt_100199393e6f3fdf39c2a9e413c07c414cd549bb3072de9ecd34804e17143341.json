@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:100199393e6f3fdf39c2a9e413c07c414cd549bb3072de9ecd34804e17143341",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:53:26.723120+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the relationship between voltage, current, and resistance.",
+    "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+    "context": "voltage = current × resistance"
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "Explain the relationship between voltage, current, and resistance.",
+      "actual_output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+      "retrieval_context_len": 30
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.75** because the actual output presents Ohm’s Law (*V = IR*) as an absolute proportionality between voltage and current **without explicitly stating the critical condition of constant resistance**, despite the retrieval context implicitly requiring it. While the core principle is correct, the omission of this constraint introduces a subtle but meaningful misalignment with the context’s precision, warranting a deduction.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response perfectly addressed the input by clearly explaining Ohm’s Law (V = I × R), directly linking voltage, current, and resistance in a concise, accurate, and relevant manner—with no extraneous or irrelevant details. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context perfectly matches the input with the **exact Ohm’s Law equation** (*'voltage = current × resistance'*), providing a **direct, precise, and complete** answer—no fluff, no gaps!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response correctly identifies **Ohm’s Law (V = IR)** as the foundational relationship between voltage, current, and resistance, directly addressing the explicit requirement to *explain their relationship*. It also provides **qualitative insights** (e.g., how resistance affects current for a fixed voltage) and **quantitative examples** (e.g., doubling voltage doubles current at constant resistance), which strengthen the explanation. However, it **lacks a broader conceptual framework** (e.g., units, real-world analogies, or limitations of Ohm’s Law, such as non-ohmic materials) that could have fully satisfied the *explain* requirement. The output is technically accurate but narrowly focused on the formula and its immediate implications.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly addresses the input by explaining the relationship between voltage, current, and resistance using **Ohm's Law (V = IR)** as a foundational principle, which is highly relevant. It provides **specific, actionable details**—such as how resistance affects current and how voltage scales with current—demonstrating clear understanding. The output avoids vagueness and includes **quantitative insights** (e.g., 'doubling voltage doubles current'), aligning closely with the evaluation steps. Minor improvement could involve briefly mentioning real-world applications or exceptions (e.g., non-ohmic materials), but the core explanation is precise and informative.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:9a6772d3257561b52814aec1ef217f00eadbc1c905c73da3a770c033b6d296ff",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T11:10:42.863858+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the speed of light in a vacuum?",
+    "output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+    "context": "The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second). This value is denoted by the symbol c and is a fundamental physical constant."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the speed of light in a vacuum?",
+      "actual_output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+      "retrieval_context_len": 207
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there were no contradictions found, indicating that the actual output is entirely consistent with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output perfectly answered the question with no irrelevant statements found.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly and fully answer the question, stating, \"The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second).\" You're doing great!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The first evaluation step requires extracting the explicit requirement, which is to state the speed of light in a vacuum. The second step checks if the output addresses this. The actual output only provides a qualitative description (\"very fast\") and general context, failing to provide the quantitative value requested in the input. Therefore, the output fails to meet the core requirement, leading to a low score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails Step 1 because it does not provide the specific, useful information (the numerical value) needed to answer the input 'What is the speed of light in a vacuum?'. It also fails Step 2 by providing vague filler ('The speed of light is very fast...') instead of concrete details, resulting in a low score according to Step 3.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

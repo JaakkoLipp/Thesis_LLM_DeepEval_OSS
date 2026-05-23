@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5625ec488bc173f63ab63d55a1f28c5d2260e166da1ee1e2fefaba63d3bef3cf",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:50:57.580731+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the difference between symmetric and asymmetric encryption?",
+    "output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+    "context": "Symmetric encryption uses a single shared key for both encryption and decryption. Common algorithms include AES (Advanced Encryption Standard) and DES (Data Encryption Standard). It is computationally fast and suitable for encrypting large volumes of data. Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption. RSA and ECC (Elliptic Curve Cryptography) are widely used asymmetric algorithms. Asymmetric encryption is slower due to more complex mathematical operations but solves the key distribution problem. In practice, hybrid systems use asymmetric encryption to exchange a symmetric session key, then symmetric encryption for the bulk data transfer."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "What is the difference between symmetric and asymmetric encryption?",
+      "actual_output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+      "retrieval_context_len": 700
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.4,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.40 because the actual output incorrectly classifies AES-256 as an asymmetric algorithm and inaccurately describes the relative computational speeds of symmetric and asymmetric encryption.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because the output contains multiple fundamental factual errors regarding the classification and performance characteristics of symmetric versus asymmetric encryption, which directly contradicts the core of the user's request.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context perfectly addresses the input by clearly defining that 'Symmetric encryption uses a single shared key' while 'Asymmetric encryption uses a key pair,' providing a comprehensive and accurate comparison!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response correctly identifies that symmetric encryption uses a single key, but it contains significant factual errors. It incorrectly claims AES-256 is an asymmetric algorithm, misidentifies RSA and AES as the most common asymmetric algorithms, and provides inaccurate comparisons regarding the speed and security profiles of the two methods.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response contains significant factual errors that undermine its utility. It incorrectly identifies AES-256 as an asymmetric algorithm and mischaracterizes the performance and security trade-offs, stating that symmetric encryption is slower and more secure than asymmetric, which is the opposite of the standard technical consensus.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

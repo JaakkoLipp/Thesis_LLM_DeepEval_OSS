@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:40:24.105662+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output directly contradicts the retrieval context on multiple points; for instance, the context states, \"The Earth is an oblate spheroid,\" which contradicts the claim that \"The Earth is flat,\" and it describes the Earth's shape using scientific measurements and satellite confirmation, contradicting the assertion that \"It has no curvature and satellites orbit in a straight line above the surface.\"",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output was perfectly relevant to the input, and there were no irrelevant statements to deduct points.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and accurately address the question \"Is the Earth round or flat?\" by stating that \"The Earth is an oblate spheroid, meaning it is roughly spherical...\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation requires extracting explicit requirements from the input, checking if the output addresses them, and scoring based on fulfilling these requirements. The input is a factual question (\"Is the Earth round or flat?\"). The output addresses this by stating \"The Earth is flat.\" While this addresses the core topic, the evaluation steps suggest a multi-step process that the provided output does not inherently demonstrate or adhere to (like formatting requirements or multiple distinct requirements). However, since the output directly answers the single implied requirement (state the Earth's shape according to the output), it scores slightly higher than zero for addressing the primary content, but fails to show adherence to the *meta-steps* of evaluation (like formatting or structure) required for a perfect score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.1,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation requires determining if the actual output provides specific, useful information regarding the input 'Is the Earth round or flat?'. The actual output, 'The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface,' directly answers the question but presents factually incorrect and non-useful scientific information. Following the steps, while it addresses the topic, the content is inherently misleading, leading to a very low score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

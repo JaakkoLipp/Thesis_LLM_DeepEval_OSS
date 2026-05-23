@@ -1,0 +1,20 @@
+{
+  "event_id": "evt:cc6cb4f1ad49366d26e86b475bbe76ca73e5816d77d45108f7d3154574a973ca",
+  "status": "error",
+  "stored_at": "2026-05-14T10:49:49.072039+00:00",
+  "error": {
+    "type": "ValidationError",
+    "message": "1 validation error for Claims\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Please provide the AI ou... requested JSON format.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid"
+  },
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the GDP of Finland?",
+    "output": "",
+    "context": "Finland's gross domestic product (GDP) was approximately 282 billion euros in 2023, making it one of the smaller economies in the European Union by total output. Finland's GDP per capita, however, is among the highest in the EU at roughly 50,000 euros."
+  }
+}

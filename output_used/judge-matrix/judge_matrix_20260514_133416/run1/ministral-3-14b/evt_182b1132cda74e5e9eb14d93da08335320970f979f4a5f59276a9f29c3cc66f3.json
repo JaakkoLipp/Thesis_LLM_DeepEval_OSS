@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:182b1132cda74e5e9eb14d93da08335320970f979f4a5f59276a9f29c3cc66f3",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:35:39.025026+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is the Earth round or flat?",
+    "output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+    "context": "The Earth is an oblate spheroid, meaning it is roughly spherical but slightly flattened at the poles and bulging at the equator. This shape has been confirmed through satellite imagery, gravity measurements, and centuries of geodetic observations. The equatorial radius is approximately 6,378 km and the polar radius is approximately 6,357 km."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "Is the Earth round or flat?",
+      "actual_output": "The Earth is flat. It has no curvature and satellites orbit in a straight line above the surface.",
+      "retrieval_context_len": 343
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely contradicts the retrieval context** by falsely claiming the Earth is flat (e.g., straight-line satellite orbits, no curvature, or denial of geodetic/observational evidence). The contradictions explicitly state the Earth is an **oblate spheroid** (confirmed by satellites, gravity, and measurements), yet the output ignores this entirely, presenting **directly opposing claims** (e.g., 'satellites orbit in straight lines' or 'Earth is flat'). This is a **total failure of faithfulness**—no alignment with the retrieval context whatsoever.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely failed** to address the input question. Instead of providing a scientific or evidence-based answer (e.g., Earth’s roundness due to gravity, satellite orbits, or observable curvature), it **directly contradicted** the question with false claims ('The Earth is flat.') and **irrelevant assertions** ('It has no curvature.' and 'Satellites orbit in a straight line above the surface.'). These statements **misrepresent reality**, **ignore scientific consensus**, and **do not engage with the core inquiry**—making the response **entirely off-topic and unhelpful**.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context **perfectly** answers the input with **direct, authoritative, and multi-faceted evidence**—explicitly stating Earth's shape as an 'oblate spheroid' (quoted: *'The Earth is an oblate spheroid...'*), citing **satellite imagery, gravity measurements, and geodetic observations** (quoted: *'This shape has been confirmed through...'*), and providing **precise measurements** (quoted: *'The equatorial radius is approximately 6,378 km...'*). No irrelevant data, just **flawless relevance**!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of the input, which is a factual question about the shape of the Earth. The output provides a flat-Earth claim without any scientific basis or acknowledgment of the well-established spherical shape of Earth, directly contradicting the input's intent. No factual alignment or reasoning is present, and the response ignores the core requirement of answering the question truthfully.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response provides no useful or accurate information to answer the input. It contradicts well-established scientific consensus (Earth is round) without justification or evidence, and the claims about satellites and curvature are factually incorrect. The output fails to address the question meaningfully, relying on pseudoscientific assertions instead of verifiable details.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

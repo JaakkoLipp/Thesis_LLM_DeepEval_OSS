@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:878f15d989e158be39cf128e6700b28769d064de88ca2782338e4f5ea832db8c",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:09:01.923113+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the chemical formula for sulfuric acid?",
+    "output": "I'm sorry, I don't have enough information to answer that question.",
+    "context": "Sulfuric acid has the chemical formula H2SO4. It is a strong mineral acid with a wide range of industrial applications including fertiliser production, oil refining, and wastewater processing. It is a colourless, odourless, viscous liquid that is highly corrosive."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the chemical formula for sulfuric acid?",
+      "actual_output": "I'm sorry, I don't have enough information to answer that question.",
+      "retrieval_context_len": 264
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful and accurate! Well done!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output failed to address the core question entirely—providing no factual answer, no attempt at the chemical formula (H₂SO₄), and instead offering generic, non-responsive statements ('I'm sorry,' 'I don’t have enough information'). These responses are irrelevant, unhelpful, and directly contradict the input’s intent.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.33** because only **one directly relevant statement** ('Sulfuric acid has the chemical formula **H₂SO₄**') was present, while the rest of the context (e.g., *‘industrial applications’* and *‘physical properties’* like corrosiveness) was **off-topic** and diluted the precision.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of providing the chemical formula for sulfuric acid (H₂SO₄). Instead, it incorrectly claims insufficient information, which is irrelevant to the task. The output does not meet the core requirement of delivering the factual answer, violating step 2 and 3 of the evaluation.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The actual output fails to provide any specific or useful information to answer the input question. The response is a generic non-answer ('I'm sorry, I don't have enough information'), which directly contradicts the requirement for concrete, relevant details. The input asked for a straightforward factual answer (the chemical formula for sulfuric acid), and the output neither addresses this nor offers an alternative useful response. This aligns with the evaluation steps by penalizing vague filler and rewarding specificity, where the score reflects complete misalignment.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

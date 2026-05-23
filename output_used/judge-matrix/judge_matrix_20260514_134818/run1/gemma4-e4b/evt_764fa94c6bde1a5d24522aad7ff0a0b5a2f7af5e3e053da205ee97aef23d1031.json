@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:54:38.772385+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, meaning the actual output is fully aligned with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and accurately answers the question with no irrelevant statements found.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the relevant statements directly answer the query: \"Approximately 71% of the Earth's surface is covered by water\".",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation correctly follows all steps: it extracts the core requirement ('What percentage of the Earth's surface is covered by water?'), verifies the actual output directly addresses this by stating 'About 71% of the Earth's surface is covered by water,' and does not penalize for extra information (saltwater/freshwater breakdown). The output format matches the required structure by producing a final score and reason.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response strongly aligns with the steps by first providing a direct answer to the input question (\"About 71% of the Earth's surface is covered by water\"). It then excels by providing specific, useful, and relevant supplementary details (e.g., 96.5% saltwater, 1.2% surface freshwater), thereby fulfilling the requirement to reward concrete relevant details and resulting in a highly informative output.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

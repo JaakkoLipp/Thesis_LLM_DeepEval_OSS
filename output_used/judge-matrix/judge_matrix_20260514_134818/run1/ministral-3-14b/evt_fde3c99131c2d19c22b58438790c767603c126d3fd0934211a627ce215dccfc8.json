@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:52:06.578581+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.80** because the response directly addressed the core question about total employees but included an irrelevant detail (office location) that detracted slightly from precision. The answer remains strong—just a minor distraction.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the retrieval context lacks **any** concrete data (e.g., 'X employees') to answer the input directly, despite vague mentions like *'continues to grow its workforce'*—which are insufficient for a precise answer.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response partially addresses the explicit requirement ('How many employees does the company have?') by providing a **total employee count (14,200)** and additional context (growth rate, office locations). However, it **fails to directly answer the core question** without extraneous details, which could confuse or mislead. The **missing focus** on the primary metric (total employees) without clear emphasis reduces alignment with the input's simplicity. Style or formatting is irrelevant, but the **lack of precision** in isolating the answer penalizes the response.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output provides a highly specific and actionable answer to the input question, including the exact number of employees (14,200), geographic distribution (37 countries), growth rate (12% YoY), and detailed breakdowns of office sizes (Singapore: 3,100; Berlin: 2,800). This aligns perfectly with the evaluation steps by offering concrete, relevant details without vagueness or filler, directly addressing the query with precision.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

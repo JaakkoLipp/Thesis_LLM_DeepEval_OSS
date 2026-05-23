@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:02:06.302367+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.8333333333333334,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.83** because the actual output incorrectly rounded freshwater to **2.5%** (when the retrieval context implies ~3.5% based on 96.5% saltwater), introducing a minor but avoidable numerical inaccuracy.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details were included, and the answer ('~71%') was both correct and concise. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided the **exact answer** ('Approximately 71% of the Earth's surface is covered by water') in a **direct, precise, and authoritative** manner—no irrelevant data or ambiguity was present. Perfect retrieval!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the **explicit requirement** of answering the percentage of Earth's surface covered by water (71%), which is the core query. However, it **exceeds the scope** by providing additional details (e.g., saltwater/freshwater breakdown, ice caps, groundwater) that were not requested. While these details are accurate and informative, they are **irrelevant to the core requirement** and could distract from the primary answer. The output is **concise for the main question** but **overly detailed for the given input**. No style issues are penalized, as the focus is on content alignment.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a highly specific and informative breakdown of Earth's water coverage, directly addressing the input question with precise percentages (71% total, 96.5% saltwater, 2.5% freshwater, and further subdivisions like ice caps, groundwater, and surface freshwater). It avoids vagueness by offering concrete, relevant details that enhance understanding, fully aligning with the evaluation steps. The output is structured, actionable, and exceeds expectations for specificity.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

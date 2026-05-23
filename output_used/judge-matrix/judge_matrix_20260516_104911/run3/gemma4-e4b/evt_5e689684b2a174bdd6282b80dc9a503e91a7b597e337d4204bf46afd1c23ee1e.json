@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:09:07.868378+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output makes two claims that contradict the retrieval context: first, it incorrectly states the final output as 'glucose and oxygen' in a single phrase, when the context details the process results in glucose with oxygen released as a byproduct; and second, it incorrectly limits the location by stating the process happens 'primarily in the chloroplasts of leaf cells', when the context only mentions chloroplasts and does not specify this limitation.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is perfectly relevant to the input, and there are no irrelevant statements to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and comprehensively answer the question about photosynthesis, as seen by the context stating, \"Photosynthesis is a biological process used by green plants and certain other organisms,\" and detailing the steps like capturing \"light energy from the sun... to convert carbon dioxide from the air and water from the soil into glucose.\" Great job with the context!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation correctly followed all steps. Step 1 successfully extracted the requirement (defining photosynthesis) from the input. Step 2 confirmed that the actual output provided a comprehensive definition addressing this requirement. Step 3 dictated penalizing missing parts, which were not missing. Step 4 assigned a score, and the final output format perfectly matched the requirement in Step 5: SCORE: <float> REASON: <text>.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly answers the input \"What is photosynthesis?\" by providing specific details about the process (converting sunlight, water, and carbon dioxide into glucose and oxygen) and specifying where it occurs (chloroplasts of leaf cells), fully satisfying steps 1 and 2, resulting in a high score as per step 3.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

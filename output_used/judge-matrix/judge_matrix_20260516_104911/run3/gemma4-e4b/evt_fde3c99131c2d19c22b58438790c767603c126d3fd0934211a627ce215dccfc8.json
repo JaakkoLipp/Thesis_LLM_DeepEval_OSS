@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:04:55.736504+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicts the context by stating information that the context does not provide, specifically regarding the current number of employees, the number of countries the company operates in, any year-over-year growth rate, the largest office or number of employees in Singapore, and the number of employees in Berlin.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.75 because while the output provides some relevant context, a key piece of information—the direct answer to the total number of employees—is missed, as the output incorrectly focuses on the growth rate instead.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided reasons state that the context mentions 'operations in multiple countries' which does not answer the question about the number of employees, and it only indicates that the workforce is 'growing' but does not provide a specific number of employees, and there are no relevant statements to support the query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation successfully extracted the explicit requirement: determining the number of employees. The actual output directly addresses this by stating the company employs 'approximately 14,200 people', thus fulfilling the core requirement. The process correctly ignores style (like the inclusion of growth rate or office locations) and assigns a high score for addressing the necessary information.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly addresses the quantitative question posed by the input, \"How many employees does the company have?\". It provides a specific, useful figure (\"approximately 14,200 people\") as required by Step 1 and rewards concrete details (total employees, number of countries, growth rate, and largest offices) as per Step 2, leading to a high score as dictated by Step 3.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

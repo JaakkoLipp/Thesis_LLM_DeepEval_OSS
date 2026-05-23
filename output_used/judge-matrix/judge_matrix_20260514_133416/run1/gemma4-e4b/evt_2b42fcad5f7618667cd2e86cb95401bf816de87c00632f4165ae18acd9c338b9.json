@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:43:24.929669+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the contradictions show that the actual output incorrectly states animals use photosynthesis and incorrectly states that photosynthesis occurs in the mitochondria and produces carbon dioxide, contradicting the context which specifies green plants and certain other organisms use it, and that it occurs in chloroplasts producing glucose and releasing oxygen.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided irrelevant statements focus on correcting misconceptions about photosynthesis (e.g., where it occurs, what it produces), rather than providing a direct, comprehensive definition of photosynthesis as requested by the input.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because all provided statements, such as \"Photosynthesis is a biological process used by green plants and certain other organisms,\" directly and completely answer the question \"What is photosynthesis?\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.2,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation correctly identifies the need to extract requirements and check for their presence. However, the 'Actual Output' provided completely fails to address the core requirement from the 'Input' (\"What is photosynthesis?\"). The output incorrectly describes energy conversion in animals, resulting in a significant penalty for missing the required information.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to answer the input question, 'What is photosynthesis?'. Instead, it provides incorrect information, describing a process involving animals, mitochondria, and carbon dioxide, which contradicts the established biological definition of photosynthesis. While it attempts to give an answer, the content is factually inaccurate and not useful for the given input.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

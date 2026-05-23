@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:10:25.738443+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly aligned** with the input—clearly defining photosynthesis (the process by which plants convert light energy into chemical energy) without any irrelevant details. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match** for the input—it directly defines photosynthesis ('Photosynthesis is a biological process...'), explains its core mechanism ('light energy... captured by chlorophyll'), and details the chemical process ('converts carbon dioxide and water into glucose') and byproduct ('oxygen released'). No irrelevant content was present, making this an **ideal retrieval**!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of defining photosynthesis by covering all key components: the process of converting sunlight, water, and carbon dioxide into glucose and oxygen, the location (chloroplasts in leaf cells), and the biological context. No required parts are missing, and the output is concise yet comprehensive, aligning perfectly with the evaluation steps.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly addresses the input by providing a **specific, scientifically accurate definition** of photosynthesis, including key components (sunlight, water, carbon dioxide, glucose, oxygen) and the **biological context** (chloroplasts, leaf cells). It avoids vagueness, delivers **relevant details** without filler, and fulfills the requirement for a **highly informative** answer. The output aligns perfectly with the evaluation steps, particularly the emphasis on **concrete relevance** and **useful information**.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "event_id": "evt:ae030d85431617fdab5e49837bee1beaf1bdec3714c72b36e91fc8033d445fc1",
+  "status": "error",
+  "stored_at": "2026-05-16T08:05:47.985580+00:00",
+  "error": {
+    "type": "ValidationError",
+    "message": "1 validation error for FaithfulnessScoreReason\n  Invalid JSON: invalid escape at line 2 column 192 [type=json_invalid, input_value='{\\n    \"reason\": \"The sc...the time evolution.\"\\n}', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid"
+  },
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the Schrödinger equation and what does each term represent?",
+    "output": "The time-dependent Schrödinger equation is iℏ ∂Ψ/∂t = ĤΨ, where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function describing the quantum state of the system, ∂/∂t is the partial derivative with respect to time, and Ĥ is the Hamiltonian operator representing the total energy of the system. The Hamiltonian typically consists of a kinetic energy term (-ℏ²/2m)∇²Ψ and a potential energy term V(r)Ψ. The equation's solutions describe how quantum states evolve over time, with |Ψ|² giving the probability density of finding a particle at a given position.",
+    "context": "The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the quantum state of a physical system changes over time. The time-dependent form is written as iℏ ∂Ψ/∂t = ĤΨ. Here, i is the imaginary unit (√-1), ℏ (h-bar) is the reduced Planck constant (h/2π), Ψ (psi) is the wave function of the system, and Ĥ is the Hamiltonian operator. The Hamiltonian contains a kinetic energy component (-ℏ²/2m)∇² and a potential energy component V(r). The square modulus of the wave function |Ψ(r,t)|² represents the probability density of finding the particle at position r at time t, per the Born rule."
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:ae030d85431617fdab5e49837bee1beaf1bdec3714c72b36e91fc8033d445fc1",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T07:59:08.764535+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the Schrödinger equation and what does each term represent?",
+    "output": "The time-dependent Schrödinger equation is iℏ ∂Ψ/∂t = ĤΨ, where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function describing the quantum state of the system, ∂/∂t is the partial derivative with respect to time, and Ĥ is the Hamiltonian operator representing the total energy of the system. The Hamiltonian typically consists of a kinetic energy term (-ℏ²/2m)∇²Ψ and a potential energy term V(r)Ψ. The equation's solutions describe how quantum states evolve over time, with |Ψ|² giving the probability density of finding a particle at a given position.",
+    "context": "The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the quantum state of a physical system changes over time. The time-dependent form is written as iℏ ∂Ψ/∂t = ĤΨ. Here, i is the imaginary unit (√-1), ℏ (h-bar) is the reduced Planck constant (h/2π), Ψ (psi) is the wave function of the system, and Ĥ is the Hamiltonian operator. The Hamiltonian contains a kinetic energy component (-ℏ²/2m)∇² and a potential energy component V(r). The square modulus of the wave function |Ψ(r,t)|² represents the probability density of finding the particle at position r at time t, per the Born rule."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What is the Schrödinger equation and what does each term represent?",
+      "actual_output": "The time-dependent Schrödinger equation is iℏ ∂Ψ/∂t = ĤΨ, where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function describing the quantum state of the system, ∂/∂t is the partial derivative with respect to time, and Ĥ is the Hamiltonian operator representing the total energy of the system. The Hamiltonian typically consists of a kinetic energy term (-ℏ²/2m)∇²Ψ and a potential energy term V(r)Ψ. The equation's solutions describe how quantum states evolve over time, with |Ψ|² giving the probability density of finding a particle at a given position.",
+      "retrieval_context_len": 621
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5555555555555556,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.56 because the actual output incorrectly implies that the context explicitly defines what ∂/∂t represents, when it only mentions it as part of the time-dependent Schrödinger equation. Additionally, the actual output overlooks the explicit time dependence 't' when discussing the probability density, as the context states that the square modulus of the wave function, |Ψ(r,t)|², represents the probability density.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because all parts of the answer directly address both what the Schrödinger equation is and what each of its terms represents, with no irrelevant statements present.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.80 because while the context provides excellent details about the equation, it slightly misses the direct explanation of *what* the terms represent in a comprehensive way, as noted by the irrelevance reason stating the context 'discusses probability density, which is not directly asked.' However, the context is strong because it explicitly defines the components: 'Here, i is the imaginary unit (√-1), ℏ (h-bar) is the reduced Planck constant (h/2π), Ψ (psi) is the wave function of the system, and Ĥ is the Hamiltonian operator,' and further breaks down $\\hat{H}$ into 'a kinetic energy component (-ℏ²/2m)∇² and a potential energy component V(r).'",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation required extracting the explicit requirement (explaining the Schrödinger equation and what each term represents) and checking if the output addressed it. The actual output successfully defines the equation and comprehensively explains what all the mentioned terms (i, ℏ, Ψ, ∂/∂t, Ĥ, etc.) represent, fully meeting the core requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response is highly specific and directly addresses both parts of the input (\"What is the Schrödinger equation and what does each term represent?\"). It provides the equation itself, and then clearly defines each component (i, ℏ, Ψ, ∂/∂t, Ĥ), fulfilling the criteria to reward concrete relevant details and avoid vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

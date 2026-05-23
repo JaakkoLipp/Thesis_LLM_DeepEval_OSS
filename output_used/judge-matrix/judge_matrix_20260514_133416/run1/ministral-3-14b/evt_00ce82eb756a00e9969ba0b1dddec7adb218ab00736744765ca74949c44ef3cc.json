@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:00ce82eb756a00e9969ba0b1dddec7adb218ab00736744765ca74949c44ef3cc",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:42:11.397708+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes earthquakes?",
+    "output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+    "context": "Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves. They most commonly occur along tectonic plate boundaries where plates converge, diverge, or slide past each other. The point within the Earth where the earthquake originates is called the focus, and the point directly above it on the surface is the epicentre."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What causes earthquakes?",
+      "actual_output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+      "retrieval_context_len": 363
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely failed** to address the input question ('What causes earthquakes?'). Instead, it provided **irrelevant facts about volcanoes** (definitions, eruptions, and unrelated planetary geography), none of which explain seismic activity. The response **missed the core topic entirely**, offering no geological, tectonic, or human-induced causes—just tangential, off-topic details. A score of **0.00** is justified as the output **did not engage with the question at all**.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **three precise, authoritative statements** (e.g., *'Earthquakes are caused by the sudden release of energy in the Earth's crust...'* and *'They most commonly occur along tectonic plate boundaries...'*), covering **causes, mechanisms, and key terminology** (focus/epicenter) without any irrelevant noise. A flawless retrieval!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of explaining the causes of earthquakes. Instead, it provides unrelated information about volcanoes and Olympus Mons, which does not answer the input question. The output lacks any connection to seismic activity, tectonic plates, or geological processes, all of which are core to addressing the user's query.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to address the input question ('What causes earthquakes?') entirely, instead providing irrelevant details about volcanoes and Olympus Mons. There is no alignment with the evaluation steps, as the response lacks specificity, relevance, or useful information to answer the query. The output contains vague filler (e.g., general volcano facts) and no concrete connection to earthquake causes, violating step 2 and 3.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

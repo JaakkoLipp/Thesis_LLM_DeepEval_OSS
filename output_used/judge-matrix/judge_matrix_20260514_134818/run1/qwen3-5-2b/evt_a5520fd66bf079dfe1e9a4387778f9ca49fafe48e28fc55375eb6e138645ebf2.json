@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:a5520fd66bf079dfe1e9a4387778f9ca49fafe48e28fc55375eb6e138645ebf2",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:52:35.862559+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is a closure in programming?",
+    "output": "A closure is a function that captures the lexical scope in which it was defined. This means the function retains access to variables from its enclosing scope even after that scope has finished executing. Closures are not the same as anonymous functions — a named function can also be a closure if it references free variables from an outer scope.",
+    "context": "In programming, a closure is a technique for implementing lexically scoped name binding in a language with first-class functions. A closure is a record storing a function together with an environment: a mapping of each free variable of the function with the value or reference to which the name was bound when the closure was created. A closure, unlike a plain function, allows the function to access those captured variables through the closure's copies of their values or references, even when the function is invoked outside their scope."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is a closure in programming?",
+      "actual_output": "A closure is a function that captures the lexical scope in which it was defined. This means the function retains access to variables from its enclosing scope even after that scope has finished executing. Closures are not the same as anonymous functions — a named function can also be a closure if it references free variables from an outer scope.",
+      "retrieval_context_len": 540
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because the actual output is fully consistent with the retrieval context, as there are no contradictions to report.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The answer is concise and directly explains what a closure is without containing any irrelevant statements.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input asks for the definition of a 'closure', which the retrieval context addresses by explaining its implementation via lexically scoped name binding, its role as a record storing a function with captured values, and its ability to access those values outside the original scope.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement to define a closure as a function that captures the lexical scope of its definition and explains that this retention allows access to variables after execution. It also corrects a common misconception by distinguishing closures from anonymous functions while retaining the free variable reference. All test case parameters regarding the core definition and clarification are met without penalization.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output provides a highly specific and informative explanation of a closure, accurately distinguishing it from anonymous functions and defining its key characteristic (capturing lexical scope). It correctly addresses the input question with precise terminology and relevant examples, meeting the requirement for concrete and relevant details.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

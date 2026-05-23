@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:993b406ff147c916450956f93c4cc9497a64b8810534649539b0c2f9187604f5",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+  "stored_at": "2026-05-16T08:01:49.242857+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the boiling point of water?",
+    "output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+    "context": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run2:gemma4-e4b",
+    "test_case": {
+      "input": "What is the boiling point of water?",
+      "actual_output": "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit) at standard atmospheric pressure. At higher altitudes, the boiling point decreases because atmospheric pressure is lower. For example, on Mount Everest water boils at approximately 70 degrees Celsius.",
+      "retrieval_context_len": 132
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicted the context by implying the boiling point is 100 degrees Celsius or 212 degrees Fahrenheit and stating these values are equal, when the context only stated these are the values at standard atmospheric pressure; furthermore, the actual output incorrectly addressed how the boiling point changes at higher altitudes or specifically for Mount Everest, as the context contained no such information.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score of 1.00 is accurate because the actual output directly and fully answers the input question without any irrelevant statements, indicating perfect relevance.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statement, \"The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure (1 atm or 101.325 kPa).\", directly and completely answers the input question, \"What is the boiling point of water?\". Great job finding the perfect context!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps required extracting explicit requirements, checking if the output addresses them, penalizing missing parts, and returning a score in the specified format. The user input, \"What is the boiling point of water?\", has one core requirement: to state the boiling point of water. The actual output explicitly states this information (\"The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)... \"), fully meeting this single requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully addresses the core question ('What is the boiling point of water?') by providing the specific, useful answer (100 degrees Celsius/212 degrees Fahrenheit). Furthermore, it enhances the quality by offering context and concrete relevant details, such as the dependency on atmospheric pressure and providing the specific example for Mount Everest, fully satisfying the evaluation criteria.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

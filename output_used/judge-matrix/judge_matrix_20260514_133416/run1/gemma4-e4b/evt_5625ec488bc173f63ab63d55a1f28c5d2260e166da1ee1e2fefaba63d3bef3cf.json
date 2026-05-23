@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5625ec488bc173f63ab63d55a1f28c5d2260e166da1ee1e2fefaba63d3bef3cf",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:43:01.720143+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the difference between symmetric and asymmetric encryption?",
+    "output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+    "context": "Symmetric encryption uses a single shared key for both encryption and decryption. Common algorithms include AES (Advanced Encryption Standard) and DES (Data Encryption Standard). It is computationally fast and suitable for encrypting large volumes of data. Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption. RSA and ECC (Elliptic Curve Cryptography) are widely used asymmetric algorithms. Asymmetric encryption is slower due to more complex mathematical operations but solves the key distribution problem. In practice, hybrid systems use asymmetric encryption to exchange a symmetric session key, then symmetric encryption for the bulk data transfer."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the difference between symmetric and asymmetric encryption?",
+      "actual_output": "In symmetric encryption a single key is used for both encryption and decryption. Examples include AES and DES. In asymmetric encryption, AES-256 uses a public and private key pair. RSA and AES are the most common asymmetric algorithms. Symmetric encryption is slower but more secure, while asymmetric is faster but less secure.",
+      "retrieval_context_len": 700
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.4,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.40 because the actual output incorrectly includes AES-256 as an asymmetric algorithm and fails to adhere to the context's scope regarding key pair usages, despite correctly noting that the context lists RSA and ECC.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.50 because while the output attempts to address the core difference, it is significantly weakened by including multiple statements that are factually incorrect or mix concepts improperly (e.g., mischaracterizing AES-256 as asymmetric and making incorrect generalizations about speed). This prevents a higher score as the inaccuracies dilute the helpfulness, but some core comparative information is still present.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context provides excellent, highly relevant details covering both 'Symmetric encryption uses a single shared key for both encryption and decryption' and 'Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption,' directly answering the 'difference' query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require extracting explicit requirements, checking if the output addresses them, penalizing missing parts, and returning a score in a specific format. The response correctly identifies the core topic (difference between symmetric and asymmetric encryption) in the input. However, it fails to structure the output according to the mandatory format specified in the evaluation steps (SCORE: <float> REASON: <text>). The output only provides descriptive text and lacks the required meta-output formatting.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response strongly aligns with the evaluation steps. It directly addresses the 'difference between symmetric and asymmetric encryption' (Step 1), providing specific details like 'single key' for symmetric and 'public and private key pair' for asymmetric (Step 2). The information is highly relevant and concrete, leading to a high score, although a slight inaccuracy in the comparison (stating symmetric is slower but more secure, while asymmetric is faster but less secure, which often reverses security claims) prevents a perfect 10.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

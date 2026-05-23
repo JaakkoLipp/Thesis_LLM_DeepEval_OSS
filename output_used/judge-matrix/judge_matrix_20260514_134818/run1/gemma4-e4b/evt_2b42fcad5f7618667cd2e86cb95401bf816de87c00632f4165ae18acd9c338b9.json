@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:57:10.503786+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output contradicts the context by stating that animals use photosynthesis to convert food into energy and that the process occurs in mitochondria of muscle cells, while the context specifies photosynthesis is used by green plants and certain other organisms and describes its process occurring in chloroplasts with oxygen as a byproduct.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output provided multiple statements that were entirely irrelevant to defining 'What is photosynthesis?'. Instead of explaining the process, the output focused on comparing it incorrectly with animal respiration, suggesting locations like chloroplasts/mitochondria, and stating inputs/outputs in a disjointed manner, which severely lowered the relevancy.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieved statements directly and comprehensively answer the question 'What is photosynthesis?' by stating, \"Photosynthesis is a biological process used by green plants and certain other organisms,\" and detailing the process involving light energy, $\\text{CO}_2$, and water to produce glucose and oxygen.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.1,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation steps require extracting explicit requirements (Step 1) and checking if the actual output addresses them (Step 2). The user input, \"What is photosynthesis?\", explicitly requires a definition or explanation of photosynthesis. The actual output incorrectly defines it as \"the process by which animals convert food into energy\" and mentions mitochondria, failing to explain the actual process of photosynthesis. Therefore, it fails to meet the core requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to answer the question 'What is photosynthesis?' accurately. Instead, it describes a process (energy conversion in animals) that contradicts the actual definition of photosynthesis, which is the process used by plants to convert light energy into chemical energy. Because it provides incorrect, non-specific information, it is penalized according to step 2, resulting in a low score despite being in the required format.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

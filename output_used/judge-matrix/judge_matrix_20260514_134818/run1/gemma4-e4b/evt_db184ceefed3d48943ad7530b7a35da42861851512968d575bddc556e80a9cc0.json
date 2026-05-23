@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:db184ceefed3d48943ad7530b7a35da42861851512968d575bddc556e80a9cc0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:55:47.828147+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes tides?",
+    "output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+    "context": "Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth. The Moon's gravity is the dominant force driving tides because, despite its smaller mass, it is much closer to Earth than the Sun. Spring tides occur when the Sun, Moon, and Earth align, and neap tides occur when they form a right angle."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What causes tides?",
+      "actual_output": "Tides are caused by the gravitational pull of the Moon and to a lesser extent the Sun. According to a 2023 study published in Nature by Dr. Hans Weber, tidal forces have been increasing by 0.3% per decade due to the Moon slowly moving closer to Earth.",
+      "retrieval_context_len": 395
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.5 because the actual output contradicts the retrieval context by mentioning a 2023 study by Dr. Hans Weber in Nature and stating that tidal forces are increasing by 0.3% per decade due to the Moon moving closer, information not present in the context which only attributes tides to the combined gravitational forces of the Moon and Sun and the Earth's rotation.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output was fully relevant to the input; therefore, a higher score is not possible.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the statements directly and comprehensively answer the question about what causes tides, such as stating that \"Tides are the regular rise and fall of sea levels caused by the gravitational forces exerted by the Moon and the Sun combined with the rotation of the Earth.\"",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully addresses the core requirement from the input \"What causes tides?\" by stating the gravitational pull of the Moon and Sun. It fulfills step 2 by providing the necessary information. The only minor deviation from the ideal alignment with step 3 (which implies strict adherence to explicit extraction) is the inclusion of supplementary, potentially unverified details (the 2023 study, specific percentages), which slightly over-delivers but doesn't miss any core requirement, leading to a very high score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response strongly aligns with the evaluation steps. It directly answers the input question, 'What causes tides?', by naming the gravitational pull of the Moon and Sun. Furthermore, it provides concrete, useful, and highly specific information by citing a '2023 study published in Nature by Dr. Hans Weber' and quantifying the increasing rate of tidal forces ('0.3% per decade'), which is rewarded according to the evaluation criteria.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

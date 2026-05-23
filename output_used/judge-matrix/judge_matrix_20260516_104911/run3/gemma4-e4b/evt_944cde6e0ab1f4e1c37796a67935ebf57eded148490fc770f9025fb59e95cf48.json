@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:944cde6e0ab1f4e1c37796a67935ebf57eded148490fc770f9025fb59e95cf48",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+  "stored_at": "2026-05-16T08:07:00.333943+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Is water wet?",
+    "output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+    "context": "Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water. In physics and chemistry, wetness relates to the ability of a liquid to maintain contact with a solid surface through adhesion and surface tension. Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run3:gemma4-e4b",
+    "test_case": {
+      "input": "Is water wet?",
+      "actual_output": "Whether water is wet depends on definition. If wet means having water on a surface, water itself is not wet — it makes other things wet. If wet means being a liquid or being in contact with liquid, then water is wet. There is no single scientifically agreed-upon answer.",
+      "retrieval_context_len": 369
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the actual output incorrectly assumes that 'if wet means being a liquid or being in contact with liquid, then water is wet,' even though the context only provides scientific definitions of wetness (contact with a liquid, adhesion, surface tension) and does not state that the definition of wetness depends on water or discuss whether water itself is wet.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is fully relevant to the question. No irrelevant statements were found to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly address the concept of wetness and the nature of water, as seen in statements like 'Wetness is typically defined as the condition of being covered or saturated with a liquid, most commonly water' and 'Whether water itself is considered wet is a topic of informal debate with no definitive scientific consensus.' These fully support the input question, 'Is water wet?'",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements, checking if the actual output addresses each, penalizing missing parts, and formatting the final result. The provided instructions were for the evaluator, and since no specific task or requirement was given *within* the evaluation steps other than the formatting constraints themselves, the output effectively demonstrated successful understanding and adherence to the required process, leading to a full score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully addresses the philosophical nature of the 'Is water wet?' input by offering multiple definitions ('having water on a surface' vs. 'being a liquid or in contact with liquid'). This provides highly specific and useful information, directly fulfilling Step 1, and avoids vague filler, thus earning full marks according to Step 2.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

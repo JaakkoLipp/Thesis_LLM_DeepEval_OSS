@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5e689684b2a174bdd6282b80dc9a503e91a7b597e337d4204bf46afd1c23ee1e",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:55:19.345417+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It takes place primarily in the chloroplasts of leaf cells.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output incorrectly states that photosynthesis converts sunlight into glucose and oxygen in a single step, and also incorrectly states that the process takes place *primarily in the chloroplasts of leaf cells*, contradicting the context which only says light energy is used to power the conversion and implies chloroplasts are the location.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output is perfectly relevant, and there were no irrelevant statements to deduct points for. Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and comprehensively explain 'What is photosynthesis?', covering that 'Photosynthesis is a biological process used by green plants and certain other organisms,' and detailing the process where 'During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts,' to convert 'carbon dioxide from the air and water from the soil into glucose' while releasing 'Oxygen is released as a byproduct.' Great job on this helpful context!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation steps require extracting explicit requirements from the user input and checking if the actual output addresses all of them. The user input, 'What is photosynthesis?', clearly asks for a definition/explanation of photosynthesis. The actual output provides a detailed and accurate definition, successfully meeting the core requirement. Since the evaluation logic dictates that style is ignored and the output fully addresses the single requirement, a high score is appropriate.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly and thoroughly answers the input question, 'What is photosynthesis?'. It provides specific, useful information by defining the process (converting sunlight, water, and carbon dioxide into glucose and oxygen) and detailing where it occurs (chloroplasts of leaf cells), thereby maximizing relevance and concreteness as required by the steps.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

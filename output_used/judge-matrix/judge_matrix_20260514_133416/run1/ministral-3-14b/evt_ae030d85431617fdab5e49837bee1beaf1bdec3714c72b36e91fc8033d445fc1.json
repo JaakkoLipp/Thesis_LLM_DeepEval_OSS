@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:ae030d85431617fdab5e49837bee1beaf1bdec3714c72b36e91fc8033d445fc1",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:39:52.945534+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the Schrödinger equation and what does each term represent?",
+    "output": "The time-dependent Schrödinger equation is iℏ ∂Ψ/∂t = ĤΨ, where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function describing the quantum state of the system, ∂/∂t is the partial derivative with respect to time, and Ĥ is the Hamiltonian operator representing the total energy of the system. The Hamiltonian typically consists of a kinetic energy term (-ℏ²/2m)∇²Ψ and a potential energy term V(r)Ψ. The equation's solutions describe how quantum states evolve over time, with |Ψ|² giving the probability density of finding a particle at a given position.",
+    "context": "The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the quantum state of a physical system changes over time. The time-dependent form is written as iℏ ∂Ψ/∂t = ĤΨ. Here, i is the imaginary unit (√-1), ℏ (h-bar) is the reduced Planck constant (h/2π), Ψ (psi) is the wave function of the system, and Ĥ is the Hamiltonian operator. The Hamiltonian contains a kinetic energy component (-ℏ²/2m)∇² and a potential energy component V(r). The square modulus of the wave function |Ψ(r,t)|² represents the probability density of finding the particle at position r at time t, per the Born rule."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What is the Schrödinger equation and what does each term represent?",
+      "actual_output": "The time-dependent Schrödinger equation is iℏ ∂Ψ/∂t = ĤΨ, where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function describing the quantum state of the system, ∂/∂t is the partial derivative with respect to time, and Ĥ is the Hamiltonian operator representing the total energy of the system. The Hamiltonian typically consists of a kinetic energy term (-ℏ²/2m)∇²Ψ and a potential energy term V(r)Ψ. The equation's solutions describe how quantum states evolve over time, with |Ψ|² giving the probability density of finding a particle at a given position.",
+      "retrieval_context_len": 621
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.50** because the actual output incorrectly applies the wavefunction **Ψ** to the potential energy term (**V(r)Ψ** instead of just **V(r)**) and omits the explicit **r** and **t** dependencies in the probability density (**|Ψ(r,t)|²**), distorting the core structure of the Hamiltonian and wavefunction interpretation.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and fully aligned** with the input—clearly defining the Schrödinger equation and meticulously breaking down each term (wavefunction, Hamiltonian, potential energy, kinetic energy, and time evolution) without deviation. No irrelevant statements were present, and the explanation was both thorough and accessible. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input by defining the Schrödinger equation, its time-dependent form (*iℏ ∂Ψ/∂t = ĤΨ*), and **every term** (e.g., *i, ℏ, Ψ, Ĥ*), including the kinetic/potential energy components and the probabilistic interpretation (*|Ψ|²*). No irrelevant content exists, and the explanation is **complete and precise**!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirements by providing the **time-dependent Schrödinger equation** (iℏ ∂Ψ/∂t = ĤΨ) and clearly defining each term: **imaginary unit (i)**, **reduced Planck constant (ℏ)**, **wave function (Ψ)**, **partial derivative (∂/∂t)**, and **Hamiltonian operator (Ĥ)**. It further elaborates on the **kinetic and potential energy terms** within the Hamiltonian and explains the physical interpretation of the equation (probability density |Ψ|²). The only minor omission is the **time-independent Schrödinger equation**, which was not explicitly requested but could have been noted as a related form for completeness. The output is technically precise, well-structured, and aligns closely with the input’s focus on the equation and its terms.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a **highly specific and informative** breakdown of the Schrödinger equation, including the equation itself, definitions of each term (e.g., *iℏ*, *Ψ*, *Ĥ*), and the physical interpretation of the Hamiltonian components (kinetic and potential energy terms). It also clarifies the probabilistic meaning of *|Ψ|²* and the equation’s role in describing quantum state evolution. The output directly addresses the input’s request for both the equation and term explanations, avoiding vagueness or filler. Every component aligns with the evaluation steps, particularly the emphasis on **concrete, relevant details** and **useful specificity**.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

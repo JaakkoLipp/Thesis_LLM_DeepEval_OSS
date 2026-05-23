@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:8c529dd2a850363cd5046265456e3a6f2ec171e0246213c9bc3162d01a732675",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:00:35.027064+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Compare the time complexity of quicksort and mergesort, including worst-case scenarios and when each is preferred.",
+    "output": "Quicksort has an average-case time complexity of O(n log n) and a worst-case of O(n²), which occurs when the pivot selection is poor (e.g. already sorted input with first-element pivot). Mergesort guarantees O(n log n) in all cases — best, average, and worst — because it always divides the array in half. However, mergesort requires O(n) auxiliary space for the merge step, while quicksort operates in-place with O(log n) stack space on average. Quicksort is generally preferred for in-memory sorting due to better cache locality and lower constant factors, while mergesort is preferred for linked lists (no random access needed) and external sorting (sequential access patterns). In practice, many libraries use hybrid approaches like Timsort (merge + insertion sort) or introsort (quicksort + heapsort fallback).",
+    "context": "Quicksort is a comparison-based sorting algorithm with average time complexity O(n log n) and worst-case O(n²). The worst case arises from consistently choosing the smallest or largest element as pivot. Mergesort is also comparison-based with guaranteed O(n log n) time complexity in all cases. Mergesort requires O(n) additional memory for merging, whereas quicksort is an in-place algorithm requiring O(log n) auxiliary space on average. Quicksort generally has better cache performance due to sequential memory access patterns within partitions. Mergesort is stable and preferred for linked lists and external sorting. Many modern implementations use hybrid algorithms: Python uses Timsort (mergesort + insertion sort), and C++ STL typically uses introsort (quicksort + heapsort)."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "Compare the time complexity of quicksort and mergesort, including worst-case scenarios and when each is preferred.",
+      "actual_output": "Quicksort has an average-case time complexity of O(n log n) and a worst-case of O(n²), which occurs when the pivot selection is poor (e.g. already sorted input with first-element pivot). Mergesort guarantees O(n log n) in all cases — best, average, and worst — because it always divides the array in half. However, mergesort requires O(n) auxiliary space for the merge step, while quicksort operates in-place with O(log n) stack space on average. Quicksort is generally preferred for in-memory sorting due to better cache locality and lower constant factors, while mergesort is preferred for linked lists (no random access needed) and external sorting (sequential access patterns). In practice, many libraries use hybrid approaches like Timsort (merge + insertion sort) or introsort (quicksort + heapsort fallback).",
+      "retrieval_context_len": 783
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions in the provided retrieval context or actual output, resulting in a perfect alignment and full faithfulness between the two.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output contains no irrelevant statements, as it directly addresses the input by comparing both algorithms' time complexities, worst-case scenarios, and application preferences.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The input requires details on worst-case scenarios for both algorithms; the retrieved context fails to cover the time complexity for mergesort, despite accurately describing quicksort.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully meets all explicit requirements from the input by extracting and addressing both the general time complexity comparison (average vs. worst-case) and the specific context of when each algorithm is preferred. It also effectively details the worst-case scenarios for quicksort (poor pivot selection) and the strengths of mergesort (guaranteed O(n log n), in-place, linked lists), while accurately mentioning auxiliary space differences. The explanation is specific, grounded in technical details, and concise.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response effectively addresses all specified evaluation steps: it explicitly states average-case complexity (n log n), provides worst-case details for both algorithms (O(n^2) for quicksort due to poor pivot selection and unbounded O(n) for mergesort), explains optimal scenarios (when each is preferred), and adds valuable context about hybrid approaches like Timsort and introsort. It avoids vague filler and delivers concrete, informative technical details directly relevant to the query.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

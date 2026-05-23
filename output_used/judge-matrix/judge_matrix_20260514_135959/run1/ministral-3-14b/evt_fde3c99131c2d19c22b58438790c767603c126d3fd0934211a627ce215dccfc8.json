@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:04:04.746981+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.60** because the response partially addressed the core question (e.g., mentioning employee-related metrics) but included **irrelevant details** (growth rates, office locations) that diluted focus. While the answer was *mostly* on-topic, these tangential points lowered precision—hence the mid-range score. A sharper, more direct response (e.g., 'The company employs **X** full-time employees') would have earned a higher mark.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the retrieval context lacks **any** direct or quantifiable data on employee count—only vague references to 'global operations' and 'workforce growth' (*'global operations and workforce growth'*), leaving the input unanswerable.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response partially addresses the explicit requirement ('How many employees does the company have?') by providing a numerical estimate (14,200), but it **fails to isolate or highlight this core figure** in a clear, direct manner. Instead, it includes **irrelevant details** (growth rate, office locations, and employee counts by city), which distract from the primary requirement. The output **does not explicitly state the answer** as a standalone figure (e.g., 'The company has **14,200 employees**'), violating the 'addresses each requirement' criterion. Style or presentation issues (e.g., formatting) are ignored as per instructions, but the **lack of precision** and **extraneous information** significantly reduce alignment with the evaluation steps.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response directly answers the input question with **specific, quantifiable details** (14,200 employees, 37 countries, 12% growth, and regional breakdowns like Singapore and Berlin). It avoids vagueness, provides **actionable context** (e.g., largest offices), and aligns perfectly with the evaluation steps by delivering **highly relevant, concrete information** without filler. The output format and content fully satisfy the requirements for specificity and usefulness.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

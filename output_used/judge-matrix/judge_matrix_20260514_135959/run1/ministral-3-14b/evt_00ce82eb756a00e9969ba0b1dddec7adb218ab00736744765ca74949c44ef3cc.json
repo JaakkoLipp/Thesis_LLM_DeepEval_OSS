@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:00ce82eb756a00e9969ba0b1dddec7adb218ab00736744765ca74949c44ef3cc",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:07:46.730238+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What causes earthquakes?",
+    "output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+    "context": "Earthquakes are caused by the sudden release of energy in the Earth's crust that creates seismic waves. They most commonly occur along tectonic plate boundaries where plates converge, diverge, or slide past each other. The point within the Earth where the earthquake originates is called the focus, and the point directly above it on the surface is the epicentre."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What causes earthquakes?",
+      "actual_output": "Volcanoes are mountains that can erupt with lava, ash, and gases. The largest volcano in the solar system is Olympus Mons on Mars, which is about 21 km high.",
+      "retrieval_context_len": 363
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was entirely faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.00** because the actual output **completely failed** to address the input question ('What causes earthquakes?'). Every statement provided—whether about volcano definitions, Olympus Mons, or unrelated facts—was **irrelevant** to tectonic activity, fault lines, or seismic causes. The response offered **no geological, scientific, or causal explanation** for earthquakes, rendering it **useless** for the query. A score of **0.00** is justified as the output provided **zero** relevant information.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context is a **perfect match**—it directly answers the input with **three precise, authoritative statements** (e.g., *'Earthquakes are caused by the sudden release of energy in the Earth's crust...'* and *'They most commonly occur along tectonic plate boundaries...'*), covering **causes, mechanisms, and key terminology** without any irrelevant noise. Spot on!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails to address the explicit requirement of explaining **earthquake causes**, instead providing unrelated information about volcanoes and Olympus Mons. The output does not align with the input's focus on seismic activity, violating Step 2 (addressing requirements) and Step 3 (penalizing missing parts).",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to address the input question about earthquake causes entirely, instead providing irrelevant details about volcanoes and Olympus Mons. It lacks any specific, useful information related to seismic activity, tectonic plates, or geological fault lines—key factors in answering the input. The response is a non-answer with no alignment to the evaluation steps, particularly the requirement for concrete relevance to the input.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

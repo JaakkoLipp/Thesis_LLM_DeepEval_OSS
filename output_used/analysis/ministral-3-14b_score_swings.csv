@@ -1,0 +1,6 @@
+fixture,metric,run1,run2,run3,range
+fabricated_statistics,ContextualRelevancy,1.0,0.0,0.0,1.0
+prompt_injection_leak,Faithfulness,1.0,1.0,0.4,0.6
+contradicts_context,ContextualRelevancy,1.0,0.5,1.0,0.5
+correct_with_extras_beyond_context,AnswerRelevancy,1.0,0.5,1.0,0.5
+math_notation_heavy,Faithfulness,0.5,0.9,1.0,0.5

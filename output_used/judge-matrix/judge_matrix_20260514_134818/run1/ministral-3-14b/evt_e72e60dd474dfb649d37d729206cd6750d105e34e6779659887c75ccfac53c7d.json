@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:e72e60dd474dfb649d37d729206cd6750d105e34e6779659887c75ccfac53c7d",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:55:29.464467+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What are the three states of matter and how do they differ?",
+    "output": "The three states of matter are solid, liquid, and gas.",
+    "context": "Matter exists in three classical states: solid, liquid, and gas. In solids, particles are tightly packed in a fixed arrangement, giving them a definite shape and volume. Liquids have particles that are close together but can move freely, so they have a definite volume but take the shape of their container. Gases have widely spaced particles that move rapidly, so they have neither a definite shape nor a definite volume."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What are the three states of matter and how do they differ?",
+      "actual_output": "The three states of matter are solid, liquid, and gas.",
+      "retrieval_context_len": 422
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the actual output perfectly aligns with the retrieval context—no contradictions were detected, meaning the response was flawlessly faithful and accurate! Keep up the great work!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response perfectly addressed the input by clearly defining the **three states of matter (solid, liquid, gas)** and concisely explaining their key differences (particle arrangement, energy, and shape/volume). No irrelevant statements were included, and the answer was both accurate and directly relevant—well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context **perfectly matches** the input—it directly answers the question by defining the **three states of matter (solid, liquid, gas)** and explaining their **distinct properties** ('*particles are tightly packed*', '*definite shape/volume*', '*rapidly moving*'). No irrelevant data was present, and the response is **concise, accurate, and fully aligned** with the query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response correctly identifies the **three states of matter** (solid, liquid, gas), fulfilling the first explicit requirement from the input. However, it **fails to address the second requirement**—explaining *how they differ*—which is critical to answering the question fully. The omission of differentiation (e.g., particle arrangement, energy levels, or physical properties) directly impacts completeness. Style is irrelevant, but the lack of elaboration on differences is a significant shortcoming.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.7,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response correctly identifies the three states of matter (solid, liquid, gas) and partially addresses the input by naming them, but it fails to provide **specific, useful information** on *how they differ*. The output lacks concrete details (e.g., particle arrangement, energy levels, or examples) that would fully satisfy the input’s second part. While the core answer is accurate, the omission of explanatory depth—key to Step 2—reduces its informativeness.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:35:14.255050+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.8333333333333334,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 0.83 because the actual output's claim that saltwater constitutes 96.5% of the Earth's total water coverage directly aligns perfectly with the retrieval context's statement that saltwater makes up 96.5% of Earth's water coverage.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output provides a correct and concise factual answer that directly addresses the query about Earth's surface water coverage.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The contextual relevance score is 1.0 because the retrieval context explicitly provides the exact answer to the input question, matching the input's specific query about the percentage of Earth's surface covered by water.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response correctly identifies the main requirement of providing a specific percentage of Earth's surface covered by water (71%). It successfully breaks down the breakdown of water types (saltwater vs. freshwater) as requested in the prompt's second clause. While the detailed breakdown of freshwater sources is not explicitly asked for, the model provides relevant data that addresses the prompt's intent. There are no missing required parts, so the score is high.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly addresses the input by providing a specific factual answer (71% water coverage) and immediately follows up with relevant technical details about the breakdown of water types (saltwater vs. freshwater, ice caps, groundwater). This aligns with the criteria for providing specific, useful information rather than vague filler.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

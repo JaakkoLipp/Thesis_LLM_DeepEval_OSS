@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:36:19.210962+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.8333333333333334,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.83** because the actual output incorrectly **overgeneralized** saltwater distribution by claiming it exists *only* in oceans, ignoring the retrieval context’s broader scope (e.g., saline lakes, underground reservoirs). While the core fact (96.5% saltwater) was correct, the **unjustified restriction** of its location introduced a minor but avoidable contradiction.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response was **perfectly precise, accurate, and directly addressed the input**—no irrelevant details were included, and the answer ('~71%') was both correct and concise. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided the **exact, precise answer** to the input ('*Approximately 71% of the Earth's surface is covered by water*'), with **no irrelevant data** and **full alignment** to the query. Perfect retrieval!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.7,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the explicit requirement of answering the percentage of Earth's surface covered by water (71%), which is the core query. However, it significantly exceeds the scope by providing additional, unrequested details (e.g., saltwater/freshwater breakdown, ice caps, groundwater). While the primary requirement is met, the extra information, though accurate, is irrelevant to the original question and could distract from the core answer. No missing parts exist, but the output lacks conciseness relative to the input's simplicity.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a highly specific and informative breakdown of the Earth's water coverage, directly addressing the input question with a precise percentage (71%) and adding relevant, detailed subcategories (saltwater, freshwater distribution, and ice caps/glaciers). It avoids vagueness and fulfills all evaluation criteria by offering concrete, useful data grounded in scientific context.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

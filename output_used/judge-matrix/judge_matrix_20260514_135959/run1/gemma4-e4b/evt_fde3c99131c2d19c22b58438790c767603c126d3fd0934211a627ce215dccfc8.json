@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T11:07:14.020446+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:gemma4-e4b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output makes several claims that are contradicted by the context; specifically, the context does not specify the current number of employees, the number of countries, or any growth rate, and it also does not specify the largest office or the number of employees in Singapore or Berlin, despite mentioning operations in multiple countries.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.75 because while the output provided some related context, one piece of information given was about the growth rate rather than the actual current total number of employees as requested. The response is partially relevant but misses the core numerical answer.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the provided reasons for irrelevancy, such as \"The context states that the company 'continues to grow its workforce', but it does not specify the number of employees, which is what the input asks for,\" confirm that the context lacks the specific numerical data required by the input.\".",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation correctly identified the sole explicit requirement from the input (\"How many employees does the company have?\"). The actual output directly addresses this by stating \"The company currently employs approximately 14,200 people,\" thereby fulfilling the requirement entirely. The process correctly ignored extraneous details (like growth rate or office sizes) as per step 3 and generated the output in the required format structure, resulting in a high score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The actual output directly and specifically answers the question, \"How many employees does the company have?\" by providing the figure of \"approximately 14,200 people,\" which strongly aligns with step 1. Furthermore, it adds several concrete, relevant details like the number of countries (37), growth rate (12%), and details on the largest offices (Singapore and Berlin), successfully avoiding vague filler and maximizing the reward for concrete information as per step 2 and step 3.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

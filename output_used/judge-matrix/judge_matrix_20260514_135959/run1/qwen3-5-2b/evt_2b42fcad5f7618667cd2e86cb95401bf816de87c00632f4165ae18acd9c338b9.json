@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:2b42fcad5f7618667cd2e86cb95401bf816de87c00632f4165ae18acd9c338b9",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T11:02:56.839895+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is photosynthesis?",
+    "output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+    "context": "Photosynthesis is a biological process used by green plants and certain other organisms. During photosynthesis, light energy from the sun is captured by chlorophyll in chloroplasts. The plant uses this energy to convert carbon dioxide from the air and water from the soil into glucose, a sugar used for energy. Oxygen is released as a byproduct."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is photosynthesis?",
+      "actual_output": "Photosynthesis is the process by which animals convert food into energy. It occurs mainly in the mitochondria of muscle cells and produces carbon dioxide as the primary output.",
+      "retrieval_context_len": 345
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The faithfulness score is 1.00 because there are no contradictions present in the provided data.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the explanation incorrectly identifies photosynthesis as a process that converts food into energy, whereas photosynthesis is the specific process where plants convert light energy into chemical energy, and it clarifies that carbon dioxide is produced by respiration, not photosynthesis.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The input asks for a definition of photosynthesis, which is directly answered by the retrieved statements explaining the biological process. Despite the input being unrelated to these statements, the retrieval is technically irrelevant to the user's specific query.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to address the explicit requirement to define 'photosynthesis'. Instead, it incorrectly describes the process as an animal conversion of food and states that photosynthesis produces carbon dioxide, which is factually incorrect (it consumes carbon dioxide). Additionally, the output mentions mitochondria and muscle cells, which belong to cellular respiration, not photosynthesis.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The response fails on multiple counts. First, the definition of photosynthesis is completely incorrect, stating that animals convert food into energy (anabolic process) instead of plants converting light into energy via chloroplasts. Second, it inaccurately assigns photosynthesis to mitochondria and produces carbon dioxide, whereas the process uses oxygen and releases oxygen. Third, the output contains irrelevant details like 'muscle cells' and non-phototrophic organisms. While it provides the concept 'Photosynthesis' (satisfying step 1 somewhat), the factual inaccuracy and lack of relevance make it a 0-performer, not a 10-performer.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

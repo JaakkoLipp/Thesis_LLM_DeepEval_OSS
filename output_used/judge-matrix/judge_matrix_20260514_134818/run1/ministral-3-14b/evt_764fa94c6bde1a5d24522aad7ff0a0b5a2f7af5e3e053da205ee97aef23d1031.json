@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:764fa94c6bde1a5d24522aad7ff0a0b5a2f7af5e3e053da205ee97aef23d1031",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T10:50:10.997370+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What percentage of the Earth's surface is covered by water?",
+    "output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+    "context": "Approximately 71% of the Earth's surface is covered by water, with the vast majority (about 96.5%) being saltwater found in the oceans."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:ministral-3-14b",
+    "test_case": {
+      "input": "What percentage of the Earth's surface is covered by water?",
+      "actual_output": "About 71% of the Earth's surface is covered by water. However, it is important to note that 96.5% of this is saltwater in the oceans, while only about 2.5% is freshwater. Of that freshwater, roughly 68.7% is locked in ice caps and glaciers, 30.1% is groundwater, and only about 1.2% is surface freshwater in lakes and rivers.",
+      "retrieval_context_len": 135
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.8333333333333334,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.83** because the actual output incorrectly framed Earth's saltwater as *exclusively* oceanic (ignoring saltwater in lakes, groundwater, and other sources), despite the retrieval context only stating oceans are the *primary* source (96.5%). This minor but misleading overgeneralization slightly undermines precision.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 0.5,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is **0.50** because the response partially addressed the question by mentioning water distribution (e.g., ice caps/glaciers, surface freshwater) but **failed to provide the core answer**—the **total percentage of Earth's surface covered by water** (~71%). The irrelevant details (groundwater, freshwater breakdown) distracted from the main query, keeping the score mid-range. A higher score would require a direct, concise answer with no extraneous data.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context provided the **exact, precise answer** ('Approximately 71% of the Earth's surface is covered by water')—directly matching the input and including additional relevant detail (e.g., saltwater distribution). Perfect alignment!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the **explicit requirement** (percentage of Earth's surface covered by water) with the core answer ('About 71%'). However, it **exceeds the scope** by providing additional details (e.g., saltwater/freshwater breakdown, ice caps, groundwater) that were not requested. While these details are accurate and informative, they **distract from the core requirement** and could be seen as unnecessary. The primary requirement is met clearly, but the output lacks precision by including irrelevant data, which slightly reduces alignment with the evaluation steps (specifically Step 2: addressing *only* the explicit requirements).",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a highly specific and informative breakdown of Earth's water coverage, directly answering the input with a precise percentage (71%) and adding layered, relevant details (saltwater/freshwater distribution, ice caps, groundwater, and surface freshwater). It avoids vagueness, fulfills all evaluation steps, and demonstrates strong alignment with the requirement for concrete, useful information.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

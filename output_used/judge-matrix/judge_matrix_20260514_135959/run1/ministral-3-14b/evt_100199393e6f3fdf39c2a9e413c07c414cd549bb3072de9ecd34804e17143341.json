@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:100199393e6f3fdf39c2a9e413c07c414cd549bb3072de9ecd34804e17143341",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+  "stored_at": "2026-05-14T11:06:04.347462+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the relationship between voltage, current, and resistance.",
+    "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+    "context": "voltage = current × resistance"
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_135959:run1:ministral-3-14b",
+    "test_case": {
+      "input": "Explain the relationship between voltage, current, and resistance.",
+      "actual_output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+      "retrieval_context_len": 30
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.75,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **0.75** because the actual output incorrectly named *Ohm's Law* (a specific principle) when the retrieval context only referenced the *mathematical relationship* (voltage = current × resistance) without attribution. This minor but avoidable mislabeling slightly undermines precision, though the core relationship was correctly conveyed.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the response perfectly addressed the input by clearly explaining Ohm’s Law (V = I × R) and the interdependent relationship between voltage, current, and resistance—no irrelevant details were included. Well done!",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is **1.00** because the retrieval context perfectly matched the input with the **exact Ohm’s Law equation** (*'voltage = current × resistance'*), providing a **direct, precise, and complete** answer without any extraneous or irrelevant information.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response correctly identifies **Ohm's Law (V = IR)** as the foundational relationship between voltage, current, and resistance, fully addressing the core requirement. It also explains **how resistance affects current** (inverse relationship) and **how voltage scales with current** (direct proportionality under constant resistance), demonstrating a clear understanding of the qualitative and quantitative dependencies. However, it **lacks explicit mention of the inverse relationship between current and resistance** (e.g., halving resistance doubles current for fixed voltage), which is a critical aspect of the relationship. The output is technically accurate but omits a key nuance in the proportionality between current and resistance.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a **highly specific and informative** explanation of the relationship between voltage, current, and resistance, directly addressing the input. It clearly states **Ohm’s Law (V = IR)** and elaborates on how changes in resistance and voltage affect current, fulfilling the requirement for **concrete, relevant details**. The only minor shortcoming is the lack of a brief contextual introduction (e.g., defining these terms for clarity), but this does not detract significantly from the **precision and utility** of the answer. The output avoids vagueness entirely, aligning strongly with the evaluation steps.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

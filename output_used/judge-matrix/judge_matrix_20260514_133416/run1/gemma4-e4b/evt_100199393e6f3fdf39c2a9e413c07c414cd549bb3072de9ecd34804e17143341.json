@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:100199393e6f3fdf39c2a9e413c07c414cd549bb3072de9ecd34804e17143341",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:42:45.202463+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the relationship between voltage, current, and resistance.",
+    "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+    "context": "voltage = current × resistance"
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Explain the relationship between voltage, current, and resistance.",
+      "actual_output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+      "retrieval_context_len": 30
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.25,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.25 because the actual output contradicts the context by stating that the relationship V=IR is known as Ohm's Law, when the context only provides the formula. Additionally, the actual output incorrectly claims the context explains how resistance affects current for a given voltage and provides information to confirm doubling the voltage doubles the current, neither of which is in the context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output provided a comprehensive explanation covering the relationship between voltage, current, and resistance using Ohm's Law, and there were no irrelevant statements to deduct points for.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statement, 'voltage = current × resistance', directly addresses the relationship between voltage, current, and resistance, making the context perfectly relevant!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully addressed the core request of explaining the relationship between voltage, current, and resistance by stating Ohm's Law (V = IR) and providing descriptive examples (e.g., 'Higher resistance means less current for a given voltage'). It fully meets the implicit requirement to explain the concept without deviation, resulting in a perfect score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly and specifically addresses the relationship between voltage, current, and resistance requested by the input. It correctly states Ohm's Law ($V = IR$) and provides two concrete, relevant details: the inverse relationship between current and resistance given constant voltage, and the direct proportionality between voltage and current given constant resistance, fully satisfying the evaluation steps.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

@@ -1,0 +1,12 @@
+fixture,metric,run1,run2,run3,range
+refusal_answer,AnswerRelevancy,1.0,0.0,1.0,1.0
+empty_output,Informativeness,1.0,0.0,0.2,1.0
+empty_output,Faithfulness,0.0,1.0,1.0,1.0
+contradicts_context,Completeness,0.6,1.0,0.2,0.8
+deep_multi_entity_reasoning,Faithfulness,0.5555555555555556,0.1111111111111111,0.8888888888888888,0.7777777777777777
+nuanced_ambiguous,Faithfulness,0.75,1.0,0.25,0.75
+nuanced_ambiguous,Completeness,1.0,0.3,1.0,0.7
+contradicts_context,AnswerRelevancy,0.3333333333333333,0.3333333333333333,1.0,0.6666666666666667
+sample,ContextualRelevancy,1.0,0.3333333333333333,0.6666666666666666,0.6666666666666667
+unfaithful_extrapolation,Faithfulness,0.0,0.0,0.6666666666666666,0.6666666666666666
+sample,Faithfulness,0.0,0.5,0.5,0.5

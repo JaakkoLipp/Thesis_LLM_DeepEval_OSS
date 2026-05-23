@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:7e3690ccfcfb0b4a26ac1cdee87b354648ce76102afa89ad069e857ce5f4bcdf",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:55:14.188180+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the CAP theorem in distributed systems, how it applies to databases like MongoDB, Cassandra, and Spanner, and what trade-offs each makes.",
+    "output": "The CAP theorem states that a distributed system can only guarantee two of three properties simultaneously: Consistency (all nodes see the same data at the same time), Availability (every request receives a response), and Partition tolerance (the system continues to operate despite network partitions). Since network partitions are inevitable in distributed systems, the real choice is between consistency and availability during a partition.\n\nMongoDB is a CP system by default: during a network partition, it elects a new primary and rejects writes on the minority side, prioritising consistency over availability. However, with read preferences set to secondary, it can trade consistency for availability on reads.\n\nCassandra is an AP system: it uses a peer-to-peer architecture with tunable consistency levels. With eventual consistency, it remains available during partitions. Setting consistency level to QUORUM or ALL moves it toward CP at the cost of availability.\n\nGoogle Spanner aims to provide all three properties in practice through TrueTime (GPS and atomic clock synchronisation), achieving external consistency (linearisability) with high availability. It is technically CP but engineered so that partitions are extremely rare within Google's network, making it effectively CA in practice.",
+    "context": "The CAP theorem, formulated by Eric Brewer, states that any distributed data store can provide only two of the following three guarantees: Consistency (every read receives the most recent write), Availability (every request receives a non-error response), and Partition tolerance (the system continues to operate despite arbitrary message loss between nodes). In practice, partition tolerance is mandatory for distributed systems, so the trade-off is between C and A. MongoDB uses a single-primary replica set architecture and is generally classified as CP: if a partition separates the primary from the majority, writes fail on the minority side until a new primary is elected. Cassandra uses a masterless ring architecture and is classified as AP with tunable consistency; at consistency level ONE it favours availability, while at QUORUM it provides stronger consistency guarantees. Google Spanner uses synchronous replication, Paxos consensus, and a GPS/atomic-clock-based timestamp system called TrueTime to provide external consistency (the strongest form of consistency) with high availability, making it effectively CP, though Google's private network infrastructure minimises partition events to near zero."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Explain the CAP theorem in distributed systems, how it applies to databases like MongoDB, Cassandra, and Spanner, and what trade-offs each makes.",
+      "actual_output": "The CAP theorem states that a distributed system can only guarantee two of three properties simultaneously: Consistency (all nodes see the same data at the same time), Availability (every request receives a response), and Partition tolerance (the system continues to operate despite network partitions). Since network partitions are inevitable in distributed systems, the real choice is between consistency and availability during a partition.\n\nMongoDB is a CP system by default: during a network partition, it elects a new primary and rejects writes on the minority side, prioritising consistency over availability. However, with read preferences set to secondary, it can trade consistency for availability on reads.\n\nCassandra is an AP system: it uses a peer-to-peer architecture with tunable consistency levels. With eventual consistency, it remains available during partitions. Setting consistency level to QUORUM or ALL moves it toward CP at the cost of availability.\n\nGoogle Spanner aims to provide all three properties in practice through TrueTime (GPS and atomic clock synchronisation), achieving external consistency (linearisability) with high availability. It is technically CP but engineered so that partitions are extremely rare within Google's network, making it effectively CA in practice.",
+      "retrieval_context_len": 1215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.7777777777777778,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 0.78 because the contradictions show that the actual output makes conflicting claims: it states Google Spanner provides external consistency and high availability, contradicting the context's implication that it is strictly CP, and it also contradicts the context's description of it being 'effectively CP' by claiming it is 'effectively CA'.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output seems to have addressed all parts of the prompt regarding CAP theorem, its application to the listed databases, and the trade-offs. Since no irrelevant statements were provided, the score reflects a comprehensive and on-topic answer.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and thoroughly explain the CAP theorem, and detail the specific trade-offs for MongoDB, Cassandra, and Spanner as requested in the input.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output successfully addressed all explicit requirements. It first explained the CAP theorem, then specifically addressed MongoDB (noting its CP default and read trade-offs), Cassandra (identifying it as AP with tunable consistency), and Spanner (detailing its approach using TrueTime). No parts were missed, meeting the criteria for a perfect score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response fully addresses the complex prompt by first defining the CAP theorem and then providing specific trade-off analysis for MongoDB (CP), Cassandra (AP), and Spanner (achieving high availability/consistency). This directly aligns with all components requested in the input and demonstrates high informational density.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

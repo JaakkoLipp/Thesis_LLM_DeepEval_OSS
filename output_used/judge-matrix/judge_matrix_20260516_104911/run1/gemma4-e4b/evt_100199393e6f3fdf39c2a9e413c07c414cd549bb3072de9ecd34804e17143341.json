@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:100199393e6f3fdf39c2a9e413c07c414cd549bb3072de9ecd34804e17143341",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+  "stored_at": "2026-05-16T07:52:33.360262+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "Explain the relationship between voltage, current, and resistance.",
+    "output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+    "context": "voltage = current × resistance"
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260516_104911:run1:gemma4-e4b",
+    "test_case": {
+      "input": "Explain the relationship between voltage, current, and resistance.",
+      "actual_output": "Voltage equals current multiplied by resistance (V = IR). This is known as Ohm's Law. Higher resistance means less current for a given voltage. Doubling the voltage doubles the current if resistance stays constant.",
+      "retrieval_context_len": 30
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, indicating that the actual output was perfectly faithful to the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output directly and accurately explains the relationship using Ohm's law (V=IR), and there are no irrelevant statements to detract from the explanation.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statement, 'voltage = current × resistance', directly addresses the relationship requested in the input, making it perfectly relevant!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The evaluation successfully followed all steps. Step 1 (Extracting requirements) was implicitly met by understanding the need to explain the relationship between voltage, current, and resistance. Step 2 (Checking coverage) was successful as the output explicitly states the relationship (V = IR) and provides supporting details (e.g., doubling voltage doubles current). Step 3 (Penalizing missing parts) was passed as all core components of the relationship were addressed. Step 4 resulted in a score of 10 because all requirements were fully met. Step 5 adhered to the exact output format: SCORE: <float> REASON: <text>.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The output directly addresses the core relationship requested in the input ('Explain the relationship between voltage, current, and resistance') by stating Ohm's Law (V = IR). It provides specific, useful information, including quantitative statements like 'Doubling the voltage doubles the current if resistance stays constant,' which aligns with the goal of rewarding concrete details and penalizing vagueness, resulting in a very high score.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

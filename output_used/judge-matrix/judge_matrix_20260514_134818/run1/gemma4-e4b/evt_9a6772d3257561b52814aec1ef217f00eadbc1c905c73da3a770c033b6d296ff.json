@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:9a6772d3257561b52814aec1ef217f00eadbc1c905c73da3a770c033b6d296ff",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:59:05.781550+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the speed of light in a vacuum?",
+    "output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+    "context": "The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second). This value is denoted by the symbol c and is a fundamental physical constant."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:gemma4-e4b",
+    "test_case": {
+      "input": "What is the speed of light in a vacuum?",
+      "actual_output": "The speed of light is very fast. It is one of the fundamental constants in physics and plays an important role in many scientific theories.",
+      "retrieval_context_len": 207
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because there are no contradictions, meaning the actual output perfectly aligns with the retrieval context.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the answer was perfectly relevant to the question asked, and no irrelevant statements were found to detract from the score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the retrieval context directly provides the answer to the input, as shown by the statement: 'The speed of light in a vacuum is exactly 299,792,458 metres per second (approximately 300,000 km/s or 186,000 miles per second).' Great job on finding the perfect context!",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The evaluation required extracting the explicit requirement (\"What is the speed of light in a vacuum?\"), checking if the output addresses it, and scoring based on coverage. The output provided a general description (\"The speed of light is very fast\") instead of the factual numerical answer requested, thus missing the primary requirement. However, it did address the general topic, warranting a partial score.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.3,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output fails to provide the specific, numerical information requested by the input (\"What is the speed of light in a vacuum?\"). It only gives a vague description (\"The speed of light is very fast\"), which aligns with the second step's penalty for vague filler, thus resulting in a low score.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

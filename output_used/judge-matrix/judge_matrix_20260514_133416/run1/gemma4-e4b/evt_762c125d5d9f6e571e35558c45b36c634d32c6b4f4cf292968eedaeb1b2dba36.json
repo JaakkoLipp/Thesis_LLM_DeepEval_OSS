@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:762c125d5d9f6e571e35558c45b36c634d32c6b4f4cf292968eedaeb1b2dba36",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+  "stored_at": "2026-05-14T10:44:48.556402+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "When was penicillin discovered and by whom?",
+    "output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+    "context": "Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London. Fleming noticed that a mould (Penicillium notatum) inhibited bacterial growth in a petri dish. The 1945 Nobel Prize in Physiology or Medicine was awarded jointly to Fleming, Howard Florey, and Ernst Boris Chain for the discovery and development of penicillin."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemma4-e4b",
+    "test_case": {
+      "input": "When was penicillin discovered and by whom?",
+      "actual_output": "Penicillin was discovered in 1928 by Alexander Fleming at St Mary's Hospital in London. He shared the 1942 Nobel Prize in Physiology or Medicine with Howard Florey and Ernst Boris Chain for this discovery.",
+      "retrieval_context_len": 371
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.00 because the actual output makes multiple factual errors compared to the retrieval context. Specifically, the context states the Nobel Prize was awarded in 1945, but the contradiction points out the actual output claims it was awarded in 1942, and it also introduces a misleading contradiction regarding the location and specific attribution of the discovery.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the output fully and accurately answered the question about the discovery of penicillin and by whom, with no irrelevant statements detracting from the high score.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the provided statements directly and completely answer the question: \"When was penicillin discovered and by whom?\" Specifically, the statement \"Penicillin was discovered in 1928 by Scottish bacteriologist Alexander Fleming at St Mary's Hospital in London.\" provides the exact answer sought.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response successfully completed all required evaluation steps. Step 1 was implicitly satisfied as the prompt only asked for extraction and checking of requirements. Step 2 confirmed that the actual output addressed the explicit requirements (discovery date and discoverer) by stating it was discovered in 1928 by Alexander Fleming. Step 3 dictates penalizing missing parts, which were not missing. Step 4 requires a score (10 for full meeting), and Step 5 mandates the exact output format, which was followed conceptually by the scoring logic applied here.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response excels by providing the specific details requested by the input (\"When was penicillin discovered and by whom?\"). It clearly states the year (1928) and the discoverer (Alexander Fleming), fulfilling Step 1. Furthermore, it adds extra, highly relevant context, such as the location (St Mary's Hospital) and the Nobel Prize details, which strongly rewards concrete, useful information as mandated by Step 2.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

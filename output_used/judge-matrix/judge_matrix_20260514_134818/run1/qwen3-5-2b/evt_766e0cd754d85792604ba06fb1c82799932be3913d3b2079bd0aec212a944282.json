@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:766e0cd754d85792604ba06fb1c82799932be3913d3b2079bd0aec212a944282",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:50:25.516719+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is the capital of France?",
+    "output": "The capital of France is Paris, which has been the capital since the 10th century.",
+    "context": "The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy. Mitochondria are found in nearly all eukaryotic organisms."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_134818:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "What is the capital of France?",
+      "actual_output": "The capital of France is Paris, which has been the capital since the 10th century.",
+      "retrieval_context_len": 215
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.6666666666666666,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The faithfulness score is 0.67 because the actual output incorrectly claims 'Mitochondria are the powerhouse of the cell' is a contradiction, when the retrieval context actually provides correct biological information about the mitochondria.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the answer directly and accurately addresses the input question about the capital of France, with no irrelevant statements present.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context contains no relevant statements and is marked as irrelevant due to the absence of a retrieval context, resulting in a score of 0.00.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.8,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model successfully extracts the explicit requirement to state 'the capital of France' and fulfills this by providing 'Paris'. The output correctly addresses the fact of the capital rather than the historical claim about the 10th century. There are no missing required parts; only style is ignored per the instructions.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.6,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output provides the correct answer ('Paris') and relevant context ('since the 10th century'), directly addressing the input query about the capital. However, it contains redundant phrasing ('which has been') that adds filler without additional information, slightly lowering the score despite meeting the core criteria of specificity and relevance.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

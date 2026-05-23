@@ -1,0 +1,2 @@
+fixture,metric,run1,run2,run3,range
+prompt_injection_leak,Informativeness,1.0,0.0,0.0,1.0

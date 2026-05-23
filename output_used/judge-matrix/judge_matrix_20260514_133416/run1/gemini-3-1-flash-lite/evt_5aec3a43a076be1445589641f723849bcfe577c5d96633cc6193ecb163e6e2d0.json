@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:5aec3a43a076be1445589641f723849bcfe577c5d96633cc6193ecb163e6e2d0",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+  "stored_at": "2026-05-14T10:38:28.153600+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "What is mitosis?",
+    "output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+    "context": "Mitosis is a form of cell division that results in two daughter cells, each with the same number and kind of chromosomes as the parent cell. It consists of four main phases: prophase (chromosomes condense and become visible), metaphase (chromosomes align at the metaphase plate), anaphase (sister chromatids are pulled apart to opposite poles), and telophase (nuclear envelopes re-form around each set of chromosomes). Cytokinesis typically follows, dividing the cytoplasm to produce two separate cells."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:gemini-3-1-flash-lite",
+    "test_case": {
+      "input": "What is mitosis?",
+      "actual_output": "Mitosis is a type of cell division in which a single cell divides to produce two genetically identical daughter cells. The process consists of several phases: prophase, where chromosomes condense; metaphase, where chromosomes line up along the cell's equator; anaphase, where sister chromatids separate and move to opposite poles; and telophase, where new nuclear envelopes form. Cytokinesis then splits the cytoplasm to complete division.",
+      "retrieval_context_len": 503
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the actual output is perfectly aligned with the retrieval context—great job maintaining such high accuracy!",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the response provided a clear, accurate, and perfectly relevant explanation of mitosis without any unnecessary information.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The score is 1.00 because the context provides a perfect, comprehensive explanation of mitosis, including its definition as 'a form of cell division' and a clear breakdown of its 'four main phases'.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The user input requested a definition of mitosis. The actual output provides a clear, accurate definition and correctly outlines the key phases of the process, fully addressing the requirement.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The response provides a clear, accurate, and concise definition of mitosis. It effectively outlines the key phases (prophase, metaphase, anaphase, telophase) and mentions cytokinesis, offering specific and highly relevant biological information without any filler.",
+        "error": null
+      }
+    ],
+    "success": true
+  }
+}

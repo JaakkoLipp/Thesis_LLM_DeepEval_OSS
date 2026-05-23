@@ -1,0 +1,68 @@
+{
+  "event_id": "evt:fde3c99131c2d19c22b58438790c767603c126d3fd0934211a627ce215dccfc8",
+  "status": "done",
+  "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+  "stored_at": "2026-05-14T10:36:05.725571+00:00",
+  "meta": {
+    "system": "enterprise-rag-chatbot",
+    "event_type": "ai-event",
+    "session_id": "",
+    "time_stamp": ""
+  },
+  "payload": {
+    "user_input": "How many employees does the company have?",
+    "output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+    "context": "The company has operations in multiple countries and continues to grow its workforce."
+  },
+  "evaluation": {
+    "eval_version": "judge-matrix:judge_matrix_20260514_133416:run1:qwen3-5-2b",
+    "test_case": {
+      "input": "How many employees does the company have?",
+      "actual_output": "The company currently employs approximately 14,200 people across 37 countries, with a 12% year-over-year growth rate. The largest office is in Singapore with 3,100 employees, followed by Berlin with 2,800.",
+      "retrieval_context_len": 85
+    },
+    "metrics": [
+      {
+        "name": "Faithfulness",
+        "score": 0.3333333333333333,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The score is 0.33 because the actual output contradicts the context by specifically quantifying 37 countries and 14,200 employees, while the context only vaguely states operations in multiple countries without specific numbers.",
+        "error": null
+      },
+      {
+        "name": "AnswerRelevancy",
+        "score": 1.0,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The answer is highly relevant and directly addresses the query, providing a precise numerical value as requested.",
+        "error": null
+      },
+      {
+        "name": "ContextualRelevancy",
+        "score": 0.0,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The retrieval context contains no information related to employee count, as explicitly stated that the list of relevant statements is empty.",
+        "error": null
+      },
+      {
+        "name": "Completeness",
+        "score": 0.65,
+        "threshold": 0.7,
+        "success": false,
+        "reason": "The output provides a specific count of employees (14,200) which satisfies the implicit numeric requirement of 'how many', but fails to give an explicit exact integer as the user specifically asked 'How many', implying a definitive number rather than an estimate. Additionally, the output includes irrelevant details about offices and growth rates that were not part of the explicit user question.",
+        "error": null
+      },
+      {
+        "name": "Informativeness",
+        "score": 0.9,
+        "threshold": 0.7,
+        "success": true,
+        "reason": "The model directly answers the specific question about the number of employees (14,200) and provides relevant supporting details such as the country count (37), growth rate, and major office locations with employee counts. While it could be more precise regarding the year, these concrete numbers constitute high-quality informative content rather than vague filler.",
+        "error": null
+      }
+    ],
+    "success": false
+  }
+}

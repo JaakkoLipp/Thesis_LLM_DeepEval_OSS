@@ -1,0 +1,6 @@
+metric,kappa,pct_agree,n
+Faithfulness,0.35897435897435903,0.68,25
+AnswerRelevancy,0.41860465116279066,0.8,25
+ContextualRelevancy,0.5161290322580645,0.88,25
+Completeness,0.6551724137931034,0.84,25
+Informativeness,0.2946708463949844,0.64,25
