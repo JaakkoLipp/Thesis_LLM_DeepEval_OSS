@@ -232,7 +232,9 @@ For a full list, see `docs/usage.md` or search for `os.getenv(` and `env_*(` in 
 - `src/deepeval_mvp/` — service, protocols, evaluation, storage
 - `tests/` — unit/integration/system tests + fixture samples
 - `docs/` — architecture, features, flowcharts, UML, logging, usage, testing, changing I/O
+- `scripts/` — analysis scripts (judge-matrix analysis, fixture queue helpers)
 - `output/` — optional demo output artifacts (if enabled)
+- `output_used/` — data used in the thesis: raw judge-matrix outputs (`judge-matrix/`) and derived analysis artifacts (`analysis/` — CSVs, figures)
 
 
 ## Thesis & contact
@@ -242,4 +244,4 @@ For a full list, see `docs/usage.md` or search for `os.getenv(` and `env_*(` in 
 
 ---
 
-_Last updated: 2026-02-27_
+_Last updated: 2026-05-24_
